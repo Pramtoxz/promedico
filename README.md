@@ -1,6 +1,14 @@
-# CodeIgniter 4 Application Starter
+<p align="center">
+   <a href="https://instagram.com/pramuditometra" target="_blank">
+      <img src="https://cdn.themeselection.com/ts-assets/materio/logo/logo.png" alt="materio-logo" width="40px" height="auto">
+   </a>
+</p>
 
-## What is CodeIgniter?
+<h1 align="center">
+   <a href="https://instagram.com/pramuditometra" target="_blank" align="center">
+      Template Master
+   </a>
+</h1>
 
 CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
 More information can be found at the [official site](https://codeigniter.com).
