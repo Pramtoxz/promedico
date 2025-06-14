@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\UserModel;
+use Hermawan\DataTables\DataTable;
 
 class Admin extends BaseController
 {
@@ -17,180 +18,220 @@ class Admin extends BaseController
     public function index()
     {
         $title = 'Dashboard';
-        return view('admin/dashboard', compact('title'));
+        return view('dashboard/admin', compact('title'));
     }
 
-    // User Management
     public function users()
     {
-        $title = 'User Management';
-        return view('admin/users/index', compact('title'));
+        $title = 'Manajemen User';
+        return view('Admin/users', compact('title'));
     }
 
-    public function getUsers()
+    public function usersDatatable()
     {
-        $request = $this->request;
+        $db = db_connect();
+        $builder = $db->table('users')
+            ->select('users.id, users.username, users.email, tamu.nama as name, users.status')
+            ->join('tamu', 'tamu.iduser = users.id', 'left');
 
-        // Parameters for DataTables
-        $start = $request->getGet('start') ?? 0;
-        $length = $request->getGet('length') ?? 10;
-        $search = $request->getGet('search')['value'] ?? '';
-        $order = $request->getGet('order') ?? [];
-        $roleFilter = $request->getGet('role') ?? '';
-        $statusFilter = $request->getGet('status') ?? '';
+        return DataTable::of($builder)
+            ->addNumbering()
+            ->edit('status', function ($row) {
+                $badge = $row->status == 'active' ? 'bg-label-success' : 'bg-label-danger';
+                return '<span class="badge rounded-pill ' . $badge . '">' . ucfirst($row->status) . '</span>';
+            })
+            ->add('action', function ($row) {
+                return '<div class="action-wrapper">
+                    <div class="action-dropdown">
+                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow shadow-none" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="icon-base ri ri-more-2-line icon-18px"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item btn-detail" href="javascript:void(0);" data-id="' . $row->id . '">
+                                <i class="icon-base ri ri-eye-line icon-18px me-1"></i> Detail
+                            </a>
+                            <a class="dropdown-item" href="' . base_url('admin/users/edit/' . $row->id) . '">
+                                <i class="icon-base ri ri-pencil-line icon-18px me-1"></i> Edit
+                            </a>
+                            <a class="dropdown-item btn-delete" href="javascript:void(0);" data-id="' . $row->id . '" data-name="' . ($row->name ? $row->name : 'User ID ' . $row->id) . '">
+                                <i class="icon-base ri ri-delete-bin-6-line icon-18px me-1"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>';
+            }, 'last')
+            ->hide('id')
+            ->toJson();
+    }
 
-        $orderColumn = $order[0]['column'] ?? 0;
-        $orderDir = $order[0]['dir'] ?? 'asc';
-
-        // Columns for ordering
-        $columns = ['id', 'username', 'email', 'name', 'role', 'status', 'last_login'];
-        $orderBy = $columns[$orderColumn] ?? 'id';
-
-        // Build query
-        $builder = $this->userModel->builder();
-
-        // Filtering
-        if (!empty($search)) {
-            $builder->groupStart()
-                ->like('username', $search)
-                ->orLike('email', $search)
-                ->orLike('name', $search)
-                ->orLike('role', $search)
-                ->groupEnd();
+    public function getUserDetail()
+    {
+        if ($this->request->isAJAX()) {
+            $id = $this->request->getPost('id');
+            $db = db_connect();
+            $user = $db->table('users')
+                ->select('users.*, tamu.nama as name')
+                ->join('tamu', 'tamu.iduser = users.id', 'left')
+                ->where('users.id', $id)
+                ->get()
+                ->getRowArray();
+            
+            if ($user) {
+                return $this->response->setJSON([
+                    'success' => true,
+                    'data' => $user,
+                    'role_badge' => $this->getRoleBadge($user['role']),
+                    'status_badge' => $this->getStatusBadge($user['status'])
+                ]);
+            } else {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'User tidak ditemukan'
+                ]);
+            }
         }
+        return redirect()->to('admin/users');
+    }
 
-        // Role filter
-        if (!empty($roleFilter)) {
-            $builder->where('role', $roleFilter);
-        }
-
-        // Status filter
-        if (!empty($statusFilter)) {
-            $builder->where('status', $statusFilter);
-        }
-
-        // Count total records (without filters)
-        $totalRecords = $this->userModel->countAll();
-
-        // Count filtered records
-        $filteredRecords = $builder->countAllResults(false);
-
-        // Get data with limit, offset, order
-        $data = $builder->orderBy($orderBy, $orderDir)
-            ->limit($length, $start)
-            ->get()
-            ->getResultArray();
-
-        // Prepare response for DataTables
-        $response = [
-            'draw' => $request->getGet('draw') ?? 1,
-            'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $filteredRecords,
-            'data' => $data
+    private function getRoleBadge($role)
+    {
+        $badges = [
+            'admin' => '<span class="badge rounded-pill bg-label-primary">Admin</span>',
+            'manager' => '<span class="badge rounded-pill bg-label-info">Manager</span>',
+            'user' => '<span class="badge rounded-pill bg-label-secondary">User</span>'
         ];
-
-        return $this->response->setJSON($response);
+        
+        return $badges[$role] ?? '<span class="badge rounded-pill bg-label-secondary">' . ucfirst($role) . '</span>';
     }
-
-    protected function handleUserSave($data, $isNew = true)
+    
+    private function getStatusBadge($status)
     {
-        if ($this->userModel->save($data)) {
-            return $this->response->setJSON([
-                'status' => 'success',
-                'message' => $isNew ? 'User berhasil ditambahkan' : 'User berhasil diperbarui'
-            ]);
-        }
-
-        return $this->response->setStatusCode(400)->setJSON([
-            'status' => 'error',
-            'message' => $isNew ? 'Gagal menambahkan user' : 'Gagal memperbarui user',
-            'errors' => $this->userModel->errors()
-        ]);
-    }
-
-    public function addUser()
-    {
-        return $this->handleUserSave($this->request->getPost(), true);
+        return $status == 'active' 
+            ? '<span class="badge rounded-pill bg-label-success">Active</span>'
+            : '<span class="badge rounded-pill bg-label-danger">Inactive</span>';
     }
 
     public function createUser()
     {
-        return $this->handleUserSave($this->request->getJSON(true), true);
+        $title = 'Tambah User Baru';
+        return view('Admin/users_create', compact('title'));
     }
 
-    public function getUser($id = null)
+    public function storeUser()
     {
-        $data = $this->userModel->find($id);
-
-        if ($data) {
-            return $this->response->setJSON([
-                'status' => 'success',
-                'data' => $data
-            ]);
+        $rules = $this->userModel->getValidationRules();
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        return $this->response->setStatusCode(404)->setJSON([
-            'status' => 'error',
-            'message' => 'User tidak ditemukan'
-        ]);
+        $data = [
+            'username' => $this->request->getPost('username'),
+            'email' => $this->request->getPost('email'),
+            'password' => $this->request->getPost('password'),
+            'role' => $this->request->getPost('role'),
+            'status' => $this->request->getPost('status'),
+        ];
+
+        if ($this->userModel->save($data)) {
+            return redirect()->to('admin/users')->with('message', 'User berhasil ditambahkan');
+        }
+        
+        return redirect()->back()->withInput()->with('errors', $this->userModel->errors());
+    }
+
+    public function editUser($id = null)
+    {
+        if ($id == null) {
+            return redirect()->to('admin/users')->with('error', 'User tidak ditemukan');
+        }
+
+        $db = db_connect();
+        $user = $db->table('users')
+            ->select('users.*, tamu.nama as name')
+            ->join('tamu', 'tamu.iduser = users.id', 'left')
+            ->where('users.id', $id)
+            ->get()
+            ->getRowArray();
+            
+        if (!$user) {
+            return redirect()->to('admin/users')->with('error', 'User tidak ditemukan');
+        }
+
+        $title = 'Edit User';
+        return view('Admin/users_edit', compact('title', 'user'));
     }
 
     public function updateUser($id = null)
     {
-        $data = $this->request->getPost();
-
-        // Pastikan ID selalu diset dengan benar
-        if (!empty($id)) {
-            $data['id'] = $id;
-        } elseif (!empty($data['id'])) {
-            $id = $data['id'];
+        if ($id == null) {
+            return redirect()->to('admin/users')->with('error', 'User tidak ditemukan');
         }
 
-        // Validasi ID
-        if (empty($id)) {
-            return $this->response->setStatusCode(400)->setJSON([
-                'status' => 'error',
-                'message' => 'ID user tidak valid',
-                'errors' => ['id' => 'ID user tidak ditemukan']
-            ]);
+        $user = $this->userModel->find($id);
+        if (!$user) {
+            return redirect()->to('admin/users')->with('error', 'User tidak ditemukan');
         }
 
-        // Cek apakah user exists
-        $existingUser = $this->userModel->find($id);
-        if (!$existingUser) {
-            return $this->response->setStatusCode(404)->setJSON([
-                'status' => 'error',
-                'message' => 'User tidak ditemukan',
-                'errors' => ['id' => 'User dengan ID tersebut tidak ditemukan']
-            ]);
+        // Get form input
+        $input = [
+            'id' => $id,
+            'role' => $this->request->getPost('role'),
+            'status' => $this->request->getPost('status'),
+        ];
+
+        // Only include username and email if they've changed
+        $username = $this->request->getPost('username');
+        $email = $this->request->getPost('email');
+        
+        if ($username != $user['username']) {
+            $input['username'] = $username;
+        }
+        
+        if ($email != $user['email']) {
+            $input['email'] = $email;
+        }
+        
+        // Password is optional for update
+        if ($password = $this->request->getPost('password')) {
+            $input['password'] = $password;
+        }
+        
+        // Get only rules for fields that are being updated
+        $rules = [];
+        $validationRules = $this->userModel->getValidationRules();
+        foreach ($input as $field => $value) {
+            if (isset($validationRules[$field])) {
+                $rules[$field] = $validationRules[$field];
+                
+                // Make password validation optional
+                if ($field === 'password') {
+                    $rules['password']['rules'] = 'permit_empty|min_length[6]';
+        }
+            }
+        }
+        
+        // Validate only the fields being updated
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        return $this->handleUserSave($data, false);
+        // Update user
+        if ($this->userModel->save($input)) {
+            return redirect()->to('admin/users')->with('message', 'User berhasil diupdate');
+        }
+        
+        return redirect()->back()->withInput()->with('errors', $this->userModel->errors());
     }
 
-    public function deleteUser($id = null)
+    public function deleteUser()
     {
-        if ($this->userModel->delete($id)) {
-            return $this->response->setJSON([
-                'status' => 'success',
-                'message' => 'User berhasil dihapus'
-            ]);
+        if ($this->request->isAJAX()) {
+            $id = $this->request->getPost('id');
+            if ($this->userModel->delete($id)) {
+                return $this->response->setJSON(['success' => true, 'message' => 'User berhasil dihapus']);
+            }
+            return $this->response->setJSON(['success' => false, 'message' => 'Gagal menghapus user']);
         }
-
-        return $this->response->setStatusCode(400)->setJSON([
-            'status' => 'error',
-            'message' => 'Gagal menghapus user'
-        ]);
-    }
-
-    public function getRoles()
-    {
-        // Daftar role yang tersedia
-        $roles = ['admin', 'manager', 'user'];
-
-        return $this->response->setJSON([
-            'status' => 'success',
-            'data' => $roles
-        ]);
+        return redirect()->to('admin/users');
     }
 }

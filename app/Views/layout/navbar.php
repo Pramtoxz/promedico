@@ -1,4 +1,3 @@
-
 <nav
             class="layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme"
             id="layout-navbar">
@@ -43,7 +42,7 @@
                     href="javascript:void(0);"
                     data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="<?php base_url() ?>/assets/img/avatars/1.png" alt="alt" class="rounded-circle" />
+                      <img src="<?= base_url() ?>/assets/img/avatars/1.png" alt="user avatar" class="rounded-circle" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -52,12 +51,12 @@
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                              <img src="<?php base_url() ?>/assets/img/avatars/1.png" alt="alt" class="w-px-40 h-auto rounded-circle" />
+                              <img src="<?= base_url() ?>/assets/img/avatars/1.png" alt="user avatar" class="w-px-40 h-auto rounded-circle" />
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <h6 class="mb-0">John Doe</h6>
-                            <small class="text-body-secondary">Admin</small>
+                            <h6 class="mb-0">Admin</h6>
+                            <small class="text-body-secondary">Administrator</small>
                           </div>
                         </div>
                       </a>
@@ -91,7 +90,7 @@
                     </li>
                     <li>
                       <div class="d-grid px-4 pt-2 pb-1">
-                        <a class="btn btn-danger d-flex" href="javascript:void(0);">
+                        <a class="btn btn-danger d-flex" href="<?= base_url('auth/logout') ?>">
                           <small class="align-middle">Logout</small>
                           <i class="ri ri-logout-box-r-line ms-2 ri-xs"></i>
                         </a>

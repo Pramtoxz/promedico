@@ -39,6 +39,7 @@ class Autoload extends AutoloadConfig
      */
     public $psr4 = [
         APP_NAMESPACE => APPPATH,
+        'Hermawan\DataTables' => ROOTPATH . 'vendor/hermawan/codeigniter4-datatables/src',
     ];
 
     /**

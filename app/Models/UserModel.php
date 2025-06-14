@@ -13,7 +13,7 @@ class UserModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['username', 'email', 'password', 'role', 'name', 'status', 'last_login', 'remember_token'];
+    protected $allowedFields    = ['username', 'email', 'password', 'role', 'status', 'last_login', 'remember_token'];
 
     // Dates
     protected $useTimestamps = true;
@@ -74,14 +74,7 @@ class UserModel extends Model
                     'in_list' => 'Role tidak valid'
                 ]
             ],
-            'name' => [
-                'rules' => 'required|min_length[3]|max_length[100]',
-                'errors' => [
-                    'required' => 'Nama lengkap harus diisi',
-                    'min_length' => 'Nama lengkap minimal 3 karakter',
-                    'max_length' => 'Nama lengkap maksimal 100 karakter'
-                ]
-            ],
+
             'status' => [
                 'rules' => 'required|in_list[active,inactive]',
                 'errors' => [
@@ -91,6 +84,11 @@ class UserModel extends Model
             ],
 
         ];
+    }
+
+    public function getValidationRules(array $options = []): array
+    {
+        return $this->validationRules;
     }
 
     public function save($data): bool
