@@ -52,3 +52,16 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->post('users/update/(:num)', 'Admin::updateUser/$1');
     $routes->post('users/delete', 'Admin::deleteUser');
 });
+
+// Tamu Routes - dipisahkan dari admin routes
+$routes->group('tamu', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'Tamu::index');
+    $routes->get('viewtamu', 'Tamu::viewTamu');
+    $routes->post('detail', 'Tamu::getTamuDetail');
+    $routes->get('create', 'Tamu::createTamu'); 
+    $routes->post('store', 'Tamu::storeTamu');
+    $routes->get('edit/(:segment)', 'Tamu::editTamu/$1');
+    $routes->post('update/(:segment)', 'Tamu::updateTamu/$1');
+    $routes->post('delete', 'Tamu::deleteTamu');
+    $routes->post('createUserForTamu', 'Tamu::createUserForTamu');
+});

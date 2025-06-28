@@ -90,10 +90,18 @@
             <!-- Users -->
             <li class="menu-item <?= strpos(current_url(), base_url('admin/users')) !== false ? 'active' : '' ?>">
               <a href="<?= base_url('admin/users') ?>" class="menu-link">
-                <i class="menu-icon icon-base ri ri-user-line"></i>
+                <i class="menu-icon icon-base ri ri-admin-line"></i>
                 <div data-i18n="Users">User</div>
               </a>
             </li>
+
+            <li class="menu-item <?= strpos(current_url(), base_url('tamu')) !== false ? 'active' : '' ?>">
+              <a href="<?= base_url('tamu') ?>" class="menu-link">
+                <i class="menu-icon icon-base ri ri-user-line"></i>
+                <div data-i18n="Tamu">Tamu</div>
+              </a>
+            </li>
+
 
             <!-- Settings -->
             <li class="menu-header mt-4">
