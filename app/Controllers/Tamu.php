@@ -29,6 +29,14 @@ class Tamu extends BaseController
 
         return DataTable::of($builder)
             ->addNumbering()
+            ->format('jenkel', function ($value) {
+                $val = strtoupper(trim($value));
+                return match ($val) {
+                    'L' => 'Laki-laki',
+                    'P' => 'Perempuan',
+                    default => 'Tidak diketahui'
+                };
+            })
             ->format('iduser', function($value) {
                 return ''; // Agar iduser tidak tampil sebagai kolom
             })
@@ -63,9 +71,6 @@ class Tamu extends BaseController
                 return $actionButtons;
             }, 'last')
             ->hide('iduser') // Sembunyikan kolom iduser
-            ->edit('jenkel', function($value) {
-                return $value == 'L' ? 'Perempuan' : 'Laki-laki';
-            })
             ->toJson();
     }
 
@@ -120,11 +125,8 @@ class Tamu extends BaseController
             'alamat' => $this->request->getPost('alamat')
         ];
         
-        if ($this->tamuModel->save($data)) {
-            return redirect()->to('tamu')->with('message', 'Tamu berhasil ditambahkan');
-        }
-        
-        return redirect()->back()->withInput()->with('errors', $this->tamuModel->errors());
+        $this->tamuModel->insert($data);
+        return redirect()->to('tamu')->with('message', 'Tamu berhasil ditambahkan');
     }
 
     public function editTamu($nik = null)
@@ -142,44 +144,50 @@ class Tamu extends BaseController
         return view('Tamu/edit', compact('title', 'tamu'));
     }
 
-    public function updateTamu($nik = null)
-    {
-        if ($nik === null) {
-            return redirect()->to('tamu')->with('error', 'Tamu tidak ditemukan');
-        }
-        
-        $tamu = $this->tamuModel->find($nik);
-        if (!$tamu) {
-            return redirect()->to('tamu')->with('error', 'Tamu tidak ditemukan');
-        }
-        
-        $rules = [
-            'nama' => 'required',
-            'nohp' => 'required',
-            'jenkel' => 'required',
-            'tgllahir' => 'required|valid_date',
-            'alamat' => 'required'
-        ];
-        
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-        
-        $data = [
-            'nik' => $nik, // NIK sebagai primary key, tidak bisa diubah
-            'nama' => $this->request->getPost('nama'),
-            'nohp' => $this->request->getPost('nohp'),
-            'jenkel' => $this->request->getPost('jenkel'),
-            'tgllahir' => $this->request->getPost('tgllahir'),
-            'alamat' => $this->request->getPost('alamat')
-        ];
-        
-        if ($this->tamuModel->save($data)) {
-            return redirect()->to('tamu')->with('message', 'Tamu berhasil diupdate');
-        }
-        
-        return redirect()->back()->withInput()->with('errors', $this->tamuModel->errors());
+   public function updateTamu($nik = null)
+{
+    if ($nik === null) {
+        return redirect()->to('tamu')->with('error', 'NIK tidak ditemukan.');
     }
+
+    $existing = $this->tamuModel->find($nik);
+    if (!$existing) {
+        return redirect()->to('tamu')->with('error', 'Data tamu tidak ditemukan.');
+    }
+
+    $rules = [
+        'nama'     => 'required',
+        'nohp'     => 'required',
+        'jenkel'   => 'required|in_list[L,P]',
+        'tgllahir' => 'required|valid_date',
+        'alamat'   => 'required'
+    ];
+
+    if (!$this->validate($rules)) {
+        return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+    }
+
+    $data = [
+        'nik'      => $nik, // sebagai primary key (tidak bisa diganti)
+        'nama'     => $this->request->getPost('nama'),
+        'nohp'     => $this->request->getPost('nohp'),
+        'jenkel'   => $this->request->getPost('jenkel'),
+        'tgllahir' => $this->request->getPost('tgllahir'),
+        'alamat'   => $this->request->getPost('alamat')
+    ];
+
+    // Bandingkan apakah ada perubahan
+    if ($existing == $data) {
+        return redirect()->to('tamu')->with('info', 'Tidak ada perubahan data.');
+    }
+
+    if ($this->tamuModel->update($nik, $data)) {
+        return redirect()->to('tamu')->with('message', 'Data tamu berhasil diperbarui.');
+    }
+
+    log_message('error', 'Gagal update tamu NIK: ' . $nik . ', error: ' . print_r($this->tamuModel->errors(), true));
+    return redirect()->back()->withInput()->with('errors', $this->tamuModel->errors());
+}
 
     public function deleteTamu()
     {

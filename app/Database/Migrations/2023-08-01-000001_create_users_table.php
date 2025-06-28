@@ -29,10 +29,6 @@ class CreateUsersTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'name' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 100,
-            ],
             'role' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 20,
@@ -74,7 +70,6 @@ class CreateUsersTable extends Migration
             'username'   => 'admin',
             'email'      => 'admin@example.com',
             'password'   => password_hash('admin123', PASSWORD_DEFAULT),
-            'name'       => 'Administrator',
             'role'       => 'admin',
             'status'     => 'active',
             'created_at' => date('Y-m-d H:i:s'),
