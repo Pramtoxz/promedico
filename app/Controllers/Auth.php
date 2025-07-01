@@ -157,7 +157,7 @@ class Auth extends BaseController
         // Destroy session
         session()->destroy();
 
-        return redirect()->to('auth')->with('message', 'Anda telah berhasil logout');
+        return redirect()->to('/')->with('message', 'Anda telah berhasil logout');
     }
 
     protected function setRememberMeCookie($userId)
