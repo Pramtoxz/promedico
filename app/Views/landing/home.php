@@ -23,7 +23,7 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
-                <img src="/assets/img/elements/18.png" alt="About Wisma" class="img-fluid rounded-4 shadow">
+                <img src="<?= base_url('assets/img/layouts/home.jpg') ?>" alt="About Wisma" class="img-fluid rounded-4 shadow">
             </div>
             <div class="col-lg-6" data-aos="fade-left">
                 <h2 class="section-title">Tentang Wisma Citra Sabaleh</h2>
@@ -92,7 +92,7 @@
         <div class="row">
             <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
                 <div class="card h-100 d-flex flex-column">
-                    <img src="/assets/img/elements/4.png" class="card-img-top" alt="Standard Room">
+                    <img src="<?= base_url('assets/img/elements/4.png') ?>" class="card-img-top" alt="Standard Room">
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h5 class="card-title mb-0">Standard Room</h5>
@@ -111,7 +111,7 @@
             </div>
             <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
                 <div class="card h-100 d-flex flex-column">
-                    <img src="/assets/img/elements/3.png" class="card-img-top" alt="Deluxe Room">
+                    <img src="<?= base_url('assets/img/elements/3.png') ?>" class="card-img-top" alt="Deluxe Room">
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h5 class="card-title mb-0">Deluxe Room</h5>
@@ -131,7 +131,7 @@
             </div>
             <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
                 <div class="card h-100 d-flex flex-column">
-                    <img src="/assets/img/elements/2.png" class="card-img-top" alt="Suite Room">
+                    <img src="<?= base_url('assets/img/elements/2.png') ?>" class="card-img-top" alt="Suite Room">
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h5 class="card-title mb-0">Suite Room</h5>
@@ -252,32 +252,32 @@
         <div class="row g-3">
             <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
                 <div class="gallery-item">
-                    <img src="/assets/img/elements/1.png" alt="Gallery Image" class="img-fluid rounded-3">
+                    <img src="<?= base_url('assets/img/elements/1.png') ?>" alt="Gallery Image" class="img-fluid rounded-3">
                 </div>
             </div>
             <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
                 <div class="gallery-item">
-                    <img src="/assets/img/elements/5.png" alt="Gallery Image" class="img-fluid rounded-3">
+                    <img src="<?= base_url('assets/img/elements/5.png') ?>" alt="Gallery Image" class="img-fluid rounded-3">
                 </div>
             </div>
             <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
                 <div class="gallery-item">
-                    <img src="/assets/img/elements/7.png" alt="Gallery Image" class="img-fluid rounded-3">
+                    <img src="<?= base_url('assets/img/elements/7.png') ?>" alt="Gallery Image" class="img-fluid rounded-3">
                 </div>
             </div>
             <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
                 <div class="gallery-item">
-                    <img src="/assets/img/elements/8.png" alt="Gallery Image" class="img-fluid rounded-3">
+                    <img src="<?= base_url('assets/img/elements/8.png') ?>" alt="Gallery Image" class="img-fluid rounded-3">
                 </div>
             </div>
             <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="500">
                 <div class="gallery-item">
-                    <img src="/assets/img/elements/10.png" alt="Gallery Image" class="img-fluid rounded-3">
+                    <img src="<?= base_url('assets/img/elements/10.png') ?>" alt="Gallery Image" class="img-fluid rounded-3">
                 </div>
             </div>
             <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="600">
                 <div class="gallery-item">
-                    <img src="/assets/img/elements/19.png" alt="Gallery Image" class="img-fluid rounded-3">
+                    <img src="<?= base_url('assets/img/elements/19.png') ?>" alt="Gallery Image" class="img-fluid rounded-3">
                 </div>
             </div>
         </div>
@@ -307,7 +307,7 @@
                     </div>
                     <p class="card-text">"Pelayanan sangat baik, kamar bersih dan nyaman. Fasilitas lengkap dan lokasi strategis dekat dengan tempat wisata. Sangat direkomendasikan!"</p>
                     <div class="d-flex align-items-center mt-3">
-                        <img src="/assets/img/avatars/1.png" alt="User" class="rounded-circle me-3" width="50">
+                        <img src="<?= base_url('assets/img/avatars/1.png') ?>" alt="User" class="rounded-circle me-3" width="50">
                         <div>
                             <h6 class="mb-0">Ahmad Rizki</h6>
                             <small class="text-muted">Jakarta</small>
@@ -328,7 +328,7 @@
                     </div>
                     <p class="card-text">"Saya sangat puas dengan pengalaman menginap di Wisma. Kamar luas, bersih, dan fasilitas yang disediakan sangat lengkap. Staff juga sangat ramah dan membantu."</p>
                     <div class="d-flex align-items-center mt-3">
-                        <img src="/assets/img/avatars/2.png" alt="User" class="rounded-circle me-3" width="50">
+                        <img src="<?= base_url('assets/img/avatars/2.png') ?>" alt="User" class="rounded-circle me-3" width="50">
                         <div>
                             <h6 class="mb-0">Siti Nurhayati</h6>
                             <small class="text-muted">Bandung</small>
@@ -349,7 +349,7 @@
                     </div>
                     <p class="card-text">"Lokasi strategis, dekat dengan pusat perbelanjaan dan kuliner. Kamar nyaman dengan pemandangan kota yang indah. Sarapan pagi juga enak dengan menu yang bervariasi."</p>
                     <div class="d-flex align-items-center mt-3">
-                        <img src="/assets/img/avatars/3.png" alt="User" class="rounded-circle me-3" width="50">
+                        <img src="<?= base_url('assets/img/avatars/3.png') ?>" alt="User" class="rounded-circle me-3" width="50">
                         <div>
                             <h6 class="mb-0">Budi Santoso</h6>
                             <small class="text-muted">Surabaya</small>
@@ -400,7 +400,7 @@
 </section>
 
 <!-- CTA Section -->
-<section class="py-5 bg-primary text-white">
+<!-- <section class="py-5 bg-primary text-white">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-9 mb-4 mb-lg-0" data-aos="fade-right">
@@ -412,7 +412,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <?= $this->endSection() ?>
 

@@ -20,7 +20,7 @@
     <!-- Custom CSS -->
     <style>
         :root {
-            --primary-color: #4e73df;
+            --primary-color: #8C57FF;
             --secondary-color: #1cc88a;
             --dark-color: #5a5c69;
             --light-color: #f8f9fc;
@@ -80,7 +80,7 @@
         }
         
         .btn-primary:hover {
-            background-color: #3a5dd0;
+            background-color: #8C57FF;
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
         }
@@ -89,7 +89,7 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/assets/img/backgrounds/18.jpg');
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/assets/img/backgrounds/home.jpg');
             background-size: cover;
             background-position: center;
             color: #fff;

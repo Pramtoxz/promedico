@@ -1,9 +1,9 @@
-<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-dark">
           <div class="app-brand demo">
-            <a href="<?= base_url('admin') ?>" class="app-brand-link">
+            <a href="index.html" class="app-brand-link">
               <span class="app-brand-logo demo me-1">
                 <span class="text-primary">
-                  <svg width="30" height="24" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg width="30" height="24" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(180deg);">
                     <path
                       fill-rule="evenodd"
                       clip-rule="evenodd"
@@ -63,10 +63,10 @@
                   </svg>
                 </span>
               </span>
-              <span class="app-brand-text demo menu-text fw-semibold ms-2">Sistem</span>
+              <span class="app-brand-text demo menu-text fw-semibold ms-2 text-white">CITRA 11</span>
             </a>
 
-            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto text-white">
               <i class="menu-toggle-icon d-xl-inline-block align-middle"></i>
             </a>
           </div>
@@ -74,57 +74,28 @@
           <div class="menu-inner-shadow"></div>
 
           <ul class="menu-inner py-1">
-            <!-- Dashboard -->
+            <!-- Dashboards -->
             <li class="menu-item <?= current_url() == base_url('admin') ? 'active' : '' ?>">
-              <a href="<?= base_url('admin') ?>" class="menu-link">
+              <a href="<?= base_url('admin') ?>" class="menu-link text-white">
                 <i class="menu-icon icon-base ri ri-home-smile-line"></i>
                 <div data-i18n="Dashboard">Dashboard</div>
               </a>
             </li>
 
-            <!-- Management -->
-            <li class="menu-header mt-4">
-              <span class="menu-header-text">Management</span>
-            </li>
-
             <!-- Users -->
             <li class="menu-item <?= strpos(current_url(), base_url('admin/users')) !== false ? 'active' : '' ?>">
-              <a href="<?= base_url('admin/users') ?>" class="menu-link">
-                <i class="menu-icon icon-base ri ri-admin-line"></i>
-                <div data-i18n="Users">User</div>
+              <a href="<?= base_url('admin/users') ?>" class="menu-link text-white">
+                <i class="menu-icon icon-base ri ri-user-line"></i>
+                <div data-i18n="Users">Users</div>
               </a>
             </li>
 
+            <!-- Tamu -->
             <li class="menu-item <?= strpos(current_url(), base_url('tamu')) !== false ? 'active' : '' ?>">
-              <a href="<?= base_url('tamu') ?>" class="menu-link">
-                <i class="menu-icon icon-base ri ri-user-line"></i>
+              <a href="<?= base_url('tamu') ?>" class="menu-link text-white">
+                <i class="menu-icon icon-base ri ri-team-line"></i>
                 <div data-i18n="Tamu">Tamu</div>
               </a>
-            </li>
-
-
-            <!-- Settings -->
-            <li class="menu-header mt-4">
-              <span class="menu-header-text">Settings</span>
-            </li>
-
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base ri ri-settings-4-line"></i>
-                <div data-i18n="Account Settings">Pengaturan</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="javascript:void(0);" class="menu-link">
-                    <div data-i18n="Account">Akun</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="javascript:void(0);" class="menu-link">
-                    <div data-i18n="System">Sistem</div>
-                  </a>
-                </li>
-              </ul>
             </li>
           </ul>
         </aside>
