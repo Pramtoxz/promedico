@@ -151,13 +151,13 @@ class KamarController extends BaseController
     }
 
     $data = [
-        'nik'      => $nik, // sebagai primary key (tidak bisa diganti)
+        'nik'      => $nik,
         'nama'     => $this->request->getPost('nama'),
         'nohp'     => $this->request->getPost('nohp'),
         'jenkel'   => $this->request->getPost('jenkel'),
         'tgllahir' => $this->request->getPost('tgllahir'),
         'alamat'   => $this->request->getPost('alamat')
-    ];
+    ];  
 
     // Bandingkan apakah ada perubahan
     if ($existing == $data) {
