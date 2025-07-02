@@ -54,15 +54,27 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->post('users/delete', 'Admin::deleteUser');
 });
 
-// Tamu Routes - dipisahkan dari admin routes
 $routes->group('tamu', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'Tamu::index');
-    $routes->get('viewtamu', 'Tamu::viewTamu');
-    $routes->post('detail', 'Tamu::getTamuDetail');
-    $routes->get('create', 'Tamu::createTamu'); 
-    $routes->post('store', 'Tamu::storeTamu');
-    $routes->get('edit/(:segment)', 'Tamu::editTamu/$1');
-    $routes->post('update/(:segment)', 'Tamu::updateTamu/$1');
-    $routes->post('delete', 'Tamu::deleteTamu');
-    $routes->post('createUserForTamu', 'Tamu::createUserForTamu');
+    $routes->get('/', 'TamuController::index');
+    $routes->get('viewtamu', 'TamuController::viewTamu');
+    $routes->post('detail', 'TamuController::getTamuDetail');
+    $routes->get('create', 'TamuController::createTamu');
+    $routes->post('store', 'TamuController::storeTamu');
+    $routes->get('edit/(:segment)', 'TamuController::editTamu/$1');
+    $routes->post('update/(:segment)', 'TamuController::updateTamu/$1');
+    $routes->post('delete', 'TamuController::deleteTamu');
+    $routes->post('createUserForTamu', 'TamuController::createUserForTamu');
+
+});
+
+$routes->group('kamar', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'KamarController::index');
+    $routes->get('viewkamar', 'KamarController::viewKamar');
+    $routes->post('detail', 'KamarController::getKamarDetail');
+    $routes->get('create', 'KamarController::createKamar');
+    $routes->post('store', 'KamarController::storeKamar');
+    $routes->get('edit/(:segment)', 'KamarController::editKamar/$1');
+    $routes->post('update/(:segment)', 'KamarController::updateKamar/$1');
+    $routes->post('delete', 'KamarController::deleteKamar');
+    $routes->post('createUserForKamar', 'KamarController::createUserForKamar');
 });

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class TamuModel extends Model
+class Tamu extends Model
 {
     protected $table            = 'tamu';
     protected $primaryKey       = 'nik';

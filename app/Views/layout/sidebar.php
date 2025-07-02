@@ -1,5 +1,5 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-dark">
-          <div class="app-brand demo">
+          <div class="app-brand demo bg-white">
             <a href="index.html" class="app-brand-link">
               <span class="app-brand-logo demo me-1">
                 <span class="text-primary">
@@ -63,7 +63,7 @@
                   </svg>
                 </span>
               </span>
-              <span class="app-brand-text demo menu-text fw-semibold ms-2 text-white">CITRA 11</span>
+              <span class="app-brand-text demo menu-text fw-semibold ms-2 text-white">-Citra</span>
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto text-white">
@@ -81,7 +81,9 @@
                 <div data-i18n="Dashboard">Dashboard</div>
               </a>
             </li>
-
+  <li class="menu-header mt-7">
+              <span class="menu-header-text">Master</span>
+            </li>
             <!-- Users -->
             <li class="menu-item <?= strpos(current_url(), base_url('admin/users')) !== false ? 'active' : '' ?>">
               <a href="<?= base_url('admin/users') ?>" class="menu-link text-white">
@@ -95,6 +97,41 @@
               <a href="<?= base_url('tamu') ?>" class="menu-link text-white">
                 <i class="menu-icon icon-base ri ri-team-line"></i>
                 <div data-i18n="Tamu">Tamu</div>
+              </a>
+            </li>
+
+              <!-- Kamar -->
+            <li class="menu-item <?= strpos(current_url(), base_url('kamar')) !== false ? 'active' : '' ?>">
+              <a href="<?= base_url('kamar') ?>" class="menu-link text-white">
+                <i class="menu-icon icon-base ri ri-hotel-bed-line"></i>
+                <div data-i18n="Kamar">Kamar</div>
+              </a>
+            </li>
+<!-------------------------------------- Transaksi ----------------------------------------------------------------------------->
+              <li class="menu-header mt-7">
+              <span class="menu-header-text">Transaksi</span>
+            </li>
+              <!-- Users -->
+            <li class="menu-item <?= strpos(current_url(), base_url('admin/reservasi')) !== false ? 'active' : '' ?>">
+              <a href="<?= base_url('admin/reservasi') ?>" class="menu-link text-white">
+                <i class="menu-icon icon-base ri ri-calendar-schedule-line"></i>
+                <div data-i18n="Users">reservasi</div>
+              </a>
+            </li>
+
+            <!-- Tamu -->
+            <li class="menu-item <?= strpos(current_url(), base_url('checkin')) !== false ? 'active' : '' ?>">
+              <a href="<?= base_url('checkin') ?>" class="menu-link text-white">
+                <i class="menu-icon icon-base ri ri-calendar-check-line"></i>
+                <div data-i18n="Tamu">Check-In</div>
+              </a>
+            </li>
+
+              <!-- Kamar -->
+            <li class="menu-item <?= strpos(current_url(), base_url('checkout')) !== false ? 'active' : '' ?>">
+              <a href="<?= base_url('checkout') ?>" class="menu-link text-white">
+                <i class="menu-icon icon-base ri ri-hotel-line"></i>
+                <div data-i18n="Kamar">Check-Out</div>
               </a>
             </li>
           </ul>

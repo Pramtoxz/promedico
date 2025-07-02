@@ -3,43 +3,32 @@
 namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
-use App\Models\TamuModel;
+use App\Models\Kamar;
 use Hermawan\DataTables\DataTable;
 
-class Tamu extends BaseController
+class KamarController extends BaseController
 {
-    protected $tamuModel;
+    protected $Kamar;
 
     public function __construct()
     {
-        $this->tamuModel = new TamuModel();
+        $this->Kamar = new Kamar();
     }
 
     public function index()
     {
-        $title = 'Data Tamu';
-        return view('Tamu/datatamu', compact('title'));
+        $title = 'Data Kamar';
+        return view('Kamar/datakamar', compact('title'));
     }
 
-    public function viewTamu()
+    public function viewKamar()
     {
         $db = db_connect();
-        $builder = $db->table('tamu')
-            ->select('nik, nama, jenkel, tgllahir,nohp, alamat, iduser');
+        $builder = $db->table('kamar')
+            ->select('idkamar, nama, harga, status_kamar');
 
         return DataTable::of($builder)
             ->addNumbering()
-            ->format('jenkel', function ($value) {
-                $val = strtoupper(trim($value));
-                return match ($val) {
-                    'L' => 'Laki-laki',
-                    'P' => 'Perempuan',
-                    default => 'Tidak diketahui'
-                };
-            })
-            ->format('iduser', function($value) {
-                return ''; // Agar iduser tidak tampil sebagai kolom
-            })
             ->add('action', function ($row) {
                 $actionButtons = '<div class="action-wrapper">
                     <div class="action-dropdown">
@@ -47,55 +36,49 @@ class Tamu extends BaseController
                             <i class="icon-base ri ri-more-2-line icon-18px"></i>
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item btn-detail" href="javascript:void(0);" data-id="' . $row->nik . '">
+                            <a class="dropdown-item btn-detail" href="javascript:void(0);" data-id="' . $row->idkamar . '">
                                 <i class="icon-base ri ri-eye-line icon-18px me-1"></i> Detail
                             </a>
-                            <a class="dropdown-item" href="' . base_url('tamu/edit/' . $row->nik) . '">
+                            <a class="dropdown-item" href="' . base_url('kamar/edit/' . $row->idkamar) . '">
                                 <i class="icon-base ri ri-pencil-line icon-18px me-1"></i> Edit
                             </a>
-                            <a class="dropdown-item btn-delete" href="javascript:void(0);" data-id="' . $row->nik . '" data-name="' . ($row->nama ? $row->nama : 'Tamu ID ' . $row->nik) . '">
+                            <a class="dropdown-item btn-delete" href="javascript:void(0);" data-id="' . $row->idkamar . '" data-name="' . ($row->nama ? $row->nama : 'Kamar ID ' . $row->idkamar) . '">
                                 <i class="icon-base ri ri-delete-bin-6-line icon-18px me-1"></i> Delete
                             </a>
                         </div>
                     </div>';
                 
-                // Tambahkan tombol kunci jika iduser masih kosong
-                if (empty($row->iduser)) {
-                    $actionButtons .= ' <button type="button" class="btn p-0 btn-create-user" data-id="' . $row->nik . '" data-name="' . $row->nama . '" title="Buat User">
-                        <i class="icon-base ri ri-key-2-line icon-18px"></i>
-                    </button>';
-                }
-                
                 $actionButtons .= '</div>';
-                
                 return $actionButtons;
             }, 'last')
-            ->hide('iduser') // Sembunyikan kolom iduser
+            ->edit('status_kamar', function ($row) {
+                return $row->status_kamar == 1 ? 'Tersedia' : 'Tidak Tersedia';
+            })
             ->toJson();
     }
 
-    public function getTamuDetail()
+    public function getKamarDetail()
     {
         if ($this->request->isAJAX()) {
-            $nik = $this->request->getPost('id');
-            $tamu = $this->tamuModel->find($nik);
-            
-            if ($tamu) {
+            $id = $this->request->getPost('id');
+            $kamar = $this->Kamar->find($id);
+
+            if ($kamar) {
                 return $this->response->setJSON([
                     'success' => true,
-                    'data' => $tamu
+                    'data' => $kamar
                 ]);
             } else {
                 return $this->response->setJSON([
                     'success' => false,
-                    'message' => 'Tamu tidak ditemukan'
+                    'message' => 'Kamar tidak ditemukan'
                 ]);
             }
         }
-        return redirect()->to('tamu');
+        return redirect()->to('kamar');
     }
 
-    public function createTamu()
+    public function createKamar()
     {
         $title = 'Tambah Tamu';
         return view('Tamu/tambah', compact('title'));
@@ -125,7 +108,7 @@ class Tamu extends BaseController
             'alamat' => $this->request->getPost('alamat')
         ];
         
-        $this->tamuModel->insert($data);
+        $this->Tamu->insert($data);
         return redirect()->to('tamu')->with('message', 'Tamu berhasil ditambahkan');
     }
 
@@ -135,7 +118,7 @@ class Tamu extends BaseController
             return redirect()->to('tamu')->with('error', 'Tamu tidak ditemukan');
         }
         
-        $tamu = $this->tamuModel->find($nik);
+        $tamu = $this->Tamu->find($nik);
         if (!$tamu) {
             return redirect()->to('tamu')->with('error', 'Tamu tidak ditemukan');
         }
@@ -150,7 +133,7 @@ class Tamu extends BaseController
         return redirect()->to('tamu')->with('error', 'NIK tidak ditemukan.');
     }
 
-    $existing = $this->tamuModel->find($nik);
+    $existing = $this->Tamu->find($nik);
     if (!$existing) {
         return redirect()->to('tamu')->with('error', 'Data tamu tidak ditemukan.');
     }
@@ -181,19 +164,19 @@ class Tamu extends BaseController
         return redirect()->to('tamu')->with('info', 'Tidak ada perubahan data.');
     }
 
-    if ($this->tamuModel->update($nik, $data)) {
+    if ($this->Tamu->update($nik, $data)) {
         return redirect()->to('tamu')->with('message', 'Data tamu berhasil diperbarui.');
     }
 
-    log_message('error', 'Gagal update tamu NIK: ' . $nik . ', error: ' . print_r($this->tamuModel->errors(), true));
-    return redirect()->back()->withInput()->with('errors', $this->tamuModel->errors());
+    log_message('error', 'Gagal update tamu NIK: ' . $nik . ', error: ' . print_r($this->Tamu->errors(), true));
+    return redirect()->back()->withInput()->with('errors', $this->Tamu->errors());
 }
 
     public function deleteTamu()
     {
         if ($this->request->isAJAX()) {
             $nik = $this->request->getPost('id');
-            if ($this->tamuModel->delete($nik)) {
+            if ($this->Tamu->delete($nik)) {
                 return $this->response->setJSON(['success' => true, 'message' => 'Tamu berhasil dihapus']);
             }
             return $this->response->setJSON(['success' => false, 'message' => 'Gagal menghapus tamu']);
@@ -205,7 +188,7 @@ class Tamu extends BaseController
     {
         if ($this->request->isAJAX()) {
             $nik = $this->request->getPost('nik');
-            $tamu = $this->tamuModel->find($nik);
+            $tamu = $this->Tamu->find($nik);
             
             if (!$tamu) {
                 return $this->response->setJSON(['success' => false, 'message' => 'Tamu tidak ditemukan']);
@@ -238,7 +221,7 @@ class Tamu extends BaseController
             
             if ($userId) {
                 // Update tamu dengan iduser baru
-                $this->tamuModel->update($nik, ['iduser' => $userId]);
+                $this->Tamu->update($nik, ['iduser' => $userId]);
                 
                 return $this->response->setJSON([
                     'success' => true, 
