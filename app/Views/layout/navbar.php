@@ -1,104 +1,81 @@
-<nav
-            class="layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme"
-            id="layout-navbar">
-            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
-              <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)">
-                <i class="icon-base ri ri-menu-line icon-md"></i>
-              </a>
-            </div>
+<nav class="main-header navbar navbar-expand navbar-light bg-teal">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link text-white" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
 
-            <div class="navbar-nav-right d-flex align-items-center justify-content-end" id="navbar-collapse">
-              <!-- Search -->
-              <div class="navbar-nav align-items-center">
-                <div class="nav-item d-flex align-items-center">
-                  <i class="icon-base ri ri-search-line icon-lg lh-0"></i>
-                  <input
-                    type="text"
-                    class="form-control border-0 shadow-none"
-                    placeholder="Search..."
-                    aria-label="Search..." />
-                </div>
-              </div>
-              <!-- /Search -->
 
-              <ul class="navbar-nav flex-row align-items-center ms-md-auto">
-                <!-- Place this tag where you want the button to render. -->
-                <li class="nav-item lh-1 me-4">
-                  <a
-                    class="github-button"
-                    href="https://github.com/themeselection/materio-bootstrap-html-admin-template-free"
-                    data-icon="octicon-star"
-                    data-size="large"
-                    data-show-count="true"
-                    aria-label="Star themeselection/materio-html-admin-template-free on GitHub"
-                    >Star</a
-                  >
-                </li>
+    </ul>
 
-                <!-- User -->
-                <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                  <a
-                    class="nav-link dropdown-toggle hide-arrow p-0"
-                    href="javascript:void(0);"
-                    data-bs-toggle="dropdown">
-                    <div class="avatar avatar-online">
-                      <img src="<?= base_url() ?>/assets/img/avatars/1.png" alt="user avatar" class="rounded-circle" />
-                    </div>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <div class="d-flex">
-                          <div class="flex-shrink-0 me-3">
-                            <div class="avatar avatar-online">
-                              <img src="<?= base_url() ?>/assets/img/avatars/1.png" alt="user avatar" class="w-px-40 h-auto rounded-circle" />
-                            </div>
-                          </div>
-                          <div class="flex-grow-1">
-                            <h6 class="mb-0">Admin</h6>
-                            <small class="text-body-secondary">Administrator</small>
-                          </div>
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+        <!-- Navbar Search -->
+        <li class="nav-item">
+            <a class="nav-link text-white" data-widget="navbar-search" href="#" role="button">
+                <i class="fas fa-search"></i>
+            </a>
+            <div class="navbar-search-block">
+                <form class="form-inline">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                            aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-navbar" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="dropdown-divider my-1"></div>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="icon-base ri ri-user-line icon-md me-3"></i>
-                        <span>My Profile</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="icon-base ri ri-settings-4-line icon-md me-3"></i>
-                        <span>Settings</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <span class="d-flex align-items-center align-middle">
-                          <i class="flex-shrink-0 icon-base ri ri-bank-card-line icon-md me-3"></i>
-                          <span class="flex-grow-1 align-middle ms-1">Billing Plan</span>
-                          <span class="flex-shrink-0 badge rounded-pill bg-danger">4</span>
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="dropdown-divider my-1"></div>
-                    </li>
-                    <li>
-                      <div class="d-grid px-4 pt-2 pb-1">
-                        <a class="btn btn-danger d-flex" href="<?= base_url('auth/logout') ?>">
-                          <small class="align-middle">Logout</small>
-                          <i class="ri ri-logout-box-r-line ms-2 ri-xs"></i>
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-                <!--/ User -->
-              </ul>
+                    </div>
+                </form>
             </div>
-          </nav>
+        </li>
+
+        <!-- Messages Dropdown Menu -->
+        <!-- Notifications Dropdown Menu -->
+
+        <li class="nav-item dropdown">
+            <a class="nav-link text-white" data-toggle="dropdown" href="#">
+                <div class="d-flex align-items-center">
+                    <img src="<?= base_url() ?>assets\img\default.jpg" class="img-circle elevation-2 mr-2"
+                        alt="User Image" width="28" height="28">
+                    <span class="d-none d-md-inline text-black">Admin</span>
+                </div>
+
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right bg-navy">
+                <span class="dropdown-item dropdown-header text-white">Hallo, Admin</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item text-white" style="transition: background-color 0.3s;">
+                    <i class="fas fa-user mr-2"></i> My Profile
+                    <style>
+                    .dropdown-item:hover {
+                        background-color: black;
+                    }
+                    </style>
+                </a>
+                <a href="#" class="dropdown-item text-white" style="transition: background-color 0.3s;">
+                    <i class="fas fa-cog mr-2"></i> Settings
+                    <style>
+                    .dropdown-item:hover {
+                        background-color: black;
+                    }
+                    </style>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="<?= base_url('auth/logout') ?>" class="dropdown-item dropdown-footer btnLogout"
+                    style="color: red; font-weight: bold; transition: background-color 0.3s;">
+                    Logout
+                    <style>
+                    .dropdown-item:hover {
+                        background-color: black;
+                    }
+                    </style>
+                </a>
+            </div>
+        </li>
+
+    </ul>
+</nav>

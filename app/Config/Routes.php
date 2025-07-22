@@ -5,8 +5,9 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
+// Default route
 $routes->get('/', 'Home::index');
-$routes->get('booking', 'Home::booking', ['filter' => 'auth']);
 
 // Auth Routes
 $routes->get('auth', 'Auth::index');
@@ -27,54 +28,98 @@ $routes->post('auth/reset-password', 'Auth::resetPassword');
 // Resend OTP
 $routes->post('auth/resend-otp', 'Auth::resendOTP');
 
-// Admin Routes
+// Admin & Dokter & Pimpinan dashboard (protected by auth filter)
 $routes->group('admin', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'Admin::index', ['filter' => 'role:admin,manager']);
-
-    // User Management (hanya admin)
-    $routes->group('', ['filter' => 'role:admin'], function ($routes) {
-        $routes->get('users', 'Admin::users');
-        $routes->get('getUsers', 'Admin::getUsers');
-        $routes->get('getUser/(:num)', 'Admin::getUser/$1');
-        $routes->post('createUser', 'Admin::createUser');
-        $routes->post('addUser', 'Admin::addUser');
-        $routes->post('updateUser/(:num)', 'Admin::updateUser/$1');
-        $routes->post('deleteUser/(:num)', 'Admin::deleteUser/$1');
-        $routes->get('getRoles', 'Admin::getRoles');
-    });
-
-    // Add routes for user management
-    $routes->get('users', 'Admin::users');
-    $routes->get('users/datatable', 'Admin::usersDatatable');
-    $routes->post('users/detail', 'Admin::getUserDetail');
-    $routes->get('users/create', 'Admin::createUser');
-    $routes->post('users/store', 'Admin::storeUser');
-    $routes->get('users/edit/(:num)', 'Admin::editUser/$1');
-    $routes->post('users/update/(:num)', 'Admin::updateUser/$1');
-    $routes->post('users/delete', 'Admin::deleteUser');
+    $routes->get('/', 'Dashboard::index');
 });
 
-$routes->group('tamu', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'TamuController::index');
-    $routes->get('viewtamu', 'TamuController::viewTamu');
-    $routes->post('detail', 'TamuController::getTamuDetail');
-    $routes->get('create', 'TamuController::createTamu');
-    $routes->post('store', 'TamuController::storeTamu');
-    $routes->get('edit/(:segment)', 'TamuController::editTamu/$1');
-    $routes->post('update/(:segment)', 'TamuController::updateTamu/$1');
-    $routes->post('delete', 'TamuController::deleteTamu');
-    $routes->post('createUserForTamu', 'TamuController::createUserForTamu');
-
+// Pasien routes (protected by auth filter and role filter)
+$routes->group('pasien', ['filter' => ['auth', 'role:pasien,admin,dokter,pimpinan']], function ($routes) {
+    $routes->get('/', 'PasienController::index');
+    $routes->get('view', 'PasienController::viewPasien');
+    $routes->post('detail', 'PasienController::getPasienDetail');
+    $routes->get('formtambah', 'PasienController::formtambah');
+    $routes->post('save', 'PasienController::save');
+    $routes->get('formedit/(:segment)', 'PasienController::formedit/$1');
+    $routes->post('updatedata/(:segment)', 'PasienController::updatedata/$1');
+    $routes->get('detail/(:segment)', 'PasienController::detail/$1');
+    $routes->post('delete', 'PasienController::delete');
+    $routes->post('createUser/(:segment)', 'PasienController::createUser/$1');
+    $routes->post('updatePassword/(:segment)', 'PasienController::updatePassword/$1');
 });
 
-$routes->group('kamar', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'KamarController::index');
-    $routes->get('viewkamar', 'KamarController::viewKamar');
-    $routes->post('detail', 'KamarController::getKamarDetail');
-    $routes->get('create', 'KamarController::createKamar');
-    $routes->post('store', 'KamarController::storeKamar');
-    $routes->get('edit/(:segment)', 'KamarController::editKamar/$1');
-    $routes->post('update/(:segment)', 'KamarController::updateKamar/$1');
-    $routes->post('delete', 'KamarController::deleteKamar');
-    $routes->post('createUserForKamar', 'KamarController::createUserForKamar');
+
+// Dokter routes (protected by auth filter and role filter)
+$routes->group('dokter', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+    $routes->get('/', 'DokterController::index');
+    $routes->get('view', 'DokterController::viewDokter');
+    $routes->post('detail', 'DokterController::getDokterDetail');
+    $routes->get('formtambah', 'DokterController::formtambah');
+    $routes->post('save', 'DokterController::save');
+    $routes->get('formedit/(:segment)', 'DokterController::formedit/$1');
+    $routes->post('updatedata/(:segment)', 'DokterController::updatedata/$1');
+    $routes->get('detail/(:segment)', 'DokterController::detail/$1');
+    $routes->post('delete', 'DokterController::delete');
+    $routes->post('createUser/(:segment)', 'DokterController::createUser/$1');
+    $routes->post('updatePassword/(:segment)', 'DokterController::updatePassword/$1');
 });
+
+// Jadwal routes (protected by auth filter and role filter)
+$routes->group('jadwal', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+    $routes->get('/', 'JadwalController::index');
+    $routes->get('view', 'JadwalController::viewJadwal');
+    $routes->get('formtambah', 'JadwalController::formtambah');
+    $routes->post('save', 'JadwalController::save');
+    $routes->get('formedit/(:segment)', 'JadwalController::formedit/$1');
+    $routes->post('updatedata/(:segment)', 'JadwalController::updatedata/$1');
+    $routes->get('detail/(:segment)', 'JadwalController::detail/$1');
+    $routes->post('delete', 'JadwalController::delete');
+    $routes->post('toggleStatus', 'JadwalController::toggleStatus');
+    $routes->get('getdokter', 'JadwalController::getdokter');
+    $routes->get('viewGetDokter', 'JadwalController::viewGetDokter');
+});
+
+// Jadwal routes (protected by auth filter and role filter)
+$routes->group('jenis', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+    $routes->get('/', 'JenisController::index');
+    $routes->get('view', 'JenisController::viewJenis');
+    $routes->get('formtambah', 'JenisController::formtambah');
+    $routes->post('save', 'JenisController::save');
+    $routes->get('formedit/(:segment)', 'JenisController::formedit/$1');
+    $routes->post('updatedata/(:segment)', 'JenisController::updatedata/$1');
+    $routes->get('detail/(:segment)', 'JenisController::detail/$1');
+    $routes->post('delete', 'JenisController::delete');
+});
+
+// Obat routes (protected by auth filter and role filter)
+$routes->group('obat', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+    $routes->get('/', 'ObatController::index');
+    $routes->get('view', 'ObatController::viewObat');
+    $routes->get('formtambah', 'ObatController::formtambah');
+    $routes->post('save', 'ObatController::save');
+    $routes->get('formedit/(:segment)', 'ObatController::formedit/$1');
+    $routes->post('updatedata/(:segment)', 'ObatController::updatedata/$1');
+    $routes->get('detail/(:segment)', 'ObatController::detail/$1');
+    $routes->post('delete', 'ObatController::delete');
+});
+
+// Booking routes (protected by auth filter and role filter)
+$routes->group('booking', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+    $routes->get('/', 'BookingController::index');
+    $routes->get('view', 'BookingController::viewBooking');
+    $routes->get('formtambah', 'BookingController::formtambah');
+    $routes->post('save', 'BookingController::save');
+    $routes->get('formedit/(:segment)', 'BookingController::formedit/$1');
+    $routes->post('updatedata/(:segment)', 'BookingController::updatedata/$1');
+    $routes->get('detail/(:segment)', 'BookingController::detail/$1');
+    $routes->post('delete', 'BookingController::delete');
+    $routes->post('updateStatus', 'BookingController::updateStatus');
+    $routes->post('checkSlotAvailability', 'BookingController::checkSlotAvailability');
+    $routes->post('findAvailableSlot', 'BookingController::findAvailableSlot');
+    $routes->post('checkDayMatch', 'BookingController::checkDayMatch'); // New route
+    $routes->get('getPasien', 'BookingController::getPasien');
+    $routes->get('viewGetPasien', 'BookingController::viewGetPasien');
+    $routes->get('getJadwal', 'BookingController::getJadwal');
+    $routes->get('viewGetJadwal', 'BookingController::viewGetJadwal');
+});
+

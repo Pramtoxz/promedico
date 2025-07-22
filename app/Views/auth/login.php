@@ -1,301 +1,205 @@
-<!doctype html>
-
-<html
-  lang="en"
-  class="layout-wide customizer-hide"
-  data-assets-path="<?= base_url() ?>/assets/"
-  data-template="vertical-menu-template-free">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-
-    <title>Login - Application</title>
-
-    <meta name="description" content="" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="<?= base_url() ?>/assets/img/favicon/favicon.ico" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&ampdisplay=swap"
-      rel="stylesheet" />
-
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/fonts/iconify-icons.css" />
-
-    <!-- Core CSS -->
-    <!-- build:css assets/vendor/css/theme.css -->
-
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/libs/node-waves/node-waves.css" />
-
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/css/core.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/css/demo.css" />
-
-    <!-- Vendors CSS -->
-
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-
-    <!-- endbuild -->
-
-    <!-- Page CSS -->
-    <!-- Page -->
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/css/pages/page-auth.css" />
-
-    <!-- Helpers -->
-    <script src="<?= base_url() ?>/assets/vendor/js/helpers.js"></script>
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-
-    <!--? Config: Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file. -->
-
-    <script src="<?= base_url() ?>/assets/js/config.js"></script>
-  </head>
-
-  <body>
-    <!-- Content -->
-
-    <div class="position-relative">
-      <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner py-6 mx-4">
-          <!-- Login -->
-          <div class="card p-sm-7 p-2">
-            <!-- Logo -->
-            <div class="app-brand justify-content-center mt-5">
-              <a href="<?= base_url() ?>" class="app-brand-link gap-3">
-                <span class="app-brand-logo demo">
-                  <span class="text-primary">
-                    <svg width="30" height="24" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12.3002 1.25469L56.655 28.6432C59.0349 30.1128 60.4839 32.711 60.4839 35.5089V160.63C60.4839 163.468 58.9941 166.097 56.5603 167.553L12.2055 194.107C8.3836 196.395 3.43136 195.15 1.14435 191.327C0.395485 190.075 0 188.643 0 187.184V8.12039C0 3.66447 3.61061 0.0522461 8.06452 0.0522461C9.56056 0.0522461 11.0271 0.468577 12.3002 1.25469Z"
-                        fill="currentColor" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M0 65.2656L60.4839 99.9629V133.979L0 65.2656Z"
-                        fill="black" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M0 65.2656L60.4839 99.0795V119.859L0 65.2656Z"
-                        fill="black" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M237.71 1.22393L193.355 28.5207C190.97 29.9889 189.516 32.5905 189.516 35.3927V160.631C189.516 163.469 191.006 166.098 193.44 167.555L237.794 194.108C241.616 196.396 246.569 195.151 248.856 191.328C249.605 190.076 250 188.644 250 187.185V8.09597C250 3.64006 246.389 0.027832 241.935 0.027832C240.444 0.027832 238.981 0.441882 237.71 1.22393Z"
-                        fill="currentColor" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M250 65.2656L189.516 99.8897V135.006L250 65.2656Z"
-                        fill="black" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M250 65.2656L189.516 99.0497V120.886L250 65.2656Z"
-                        fill="black" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12.2787 1.18923L125 70.3075V136.87L0 65.2465V8.06814C0 3.61223 3.61061 0 8.06452 0C9.552 0 11.0105 0.411583 12.2787 1.18923Z"
-                        fill="currentColor" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12.2787 1.18923L125 70.3075V136.87L0 65.2465V8.06814C0 3.61223 3.61061 0 8.06452 0C9.552 0 11.0105 0.411583 12.2787 1.18923Z"
-                        fill="white"
-                        fill-opacity="0.15" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z"
-                        fill="currentColor" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z"
-                        fill="white"
-                        fill-opacity="0.3" />
-                    </svg>
-                  </span>
-                </span>
-                <span class="app-brand-text demo text-heading fw-semibold">Materio</span>
-              </a>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .bg-gradient-teal {
+                background-image: linear-gradient(to right, #0d9488, #14b8a6, #5eead4);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+            <!-- Header with Teal Gradient -->
+            <div class="bg-gradient-teal p-6 text-white text-center">
+                <h1 class="text-2xl font-bold">Selamat Datang</h1>
+                <p class="mt-2 text-teal-100">Silakan login untuk melanjutkan</p>
             </div>
-            <!-- /Logo -->
 
-            <div class="card-body mt-1">
-              <h4 class="mb-1">Welcome to Materio! 👋🏻</h4>
-              <p class="mb-5">Please sign-in to your account and start the adventure</p>
-
-              <form id="formAuthentication" class="mb-5">
-                <div class="form-floating form-floating-outline mb-5 form-control-validation">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="username"
-                    name="username"
-                    placeholder="Enter your email or username"
-                    autofocus />
-                  <label for="username">Email or Username</label>
-                </div>
-                <div class="mb-5">
-                  <div class="form-password-toggle form-control-validation">
-                    <div class="input-group input-group-merge">
-                      <div class="form-floating form-floating-outline">
-                        <input
-                          type="password"
-                          id="password"
-                          class="form-control"
-                          name="password"
-                          placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                          aria-describedby="password" />
-                        <label for="password">Password</label>
-                      </div>
-                      <span class="input-group-text cursor-pointer"
-                        ><i class="icon-base ri ri-eye-off-line icon-20px"></i
-                      ></span>
+            <!-- Login Form -->
+            <div class="p-6">
+                <form id="formAuthentication" class="space-y-6">
+                    <!-- Alert Messages -->
+                    <?php if(session()->getFlashdata('error')): ?>
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+                        <p><?= session()->getFlashdata('error'); ?></p>
                     </div>
-                  </div>
-                </div>
-                <div class="mb-5 pb-2 d-flex justify-content-between pt-2 align-items-center">
-                  <div class="form-check mb-0">
-                    <input class="form-check-input" type="checkbox" id="remember" name="remember" />
-                    <label class="form-check-label" for="remember"> Remember Me </label>
-                  </div>
-                  <a href="<?= site_url('auth/forgot-password') ?>" class="float-end mb-1">
-                    <span>Forgot Password?</span>
-                  </a>
-                </div>
-                <div class="mb-5">
-                  <button class="btn btn-primary d-grid w-100" type="submit" id="login-btn">Login</button>
-                </div>
-              </form>
+                    <?php endif; ?>
+                    
+                    <div id="alert-message" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 hidden" role="alert">
+                        <!-- Error message will be displayed here -->
+                    </div>
+                    
+                    <?php if(session()->getFlashdata('message')): ?>
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+                        <p><?= session()->getFlashdata('message'); ?></p>
+                    </div>
+                    <?php endif; ?>
 
-              <?php if(session()->getFlashdata('error')): ?>
-              <div class="alert alert-danger" role="alert">
-                <?= session()->getFlashdata('error'); ?>
-              </div>
-              <?php endif; ?>
-              
-              <div id="alert-message" class="alert alert-danger d-none" role="alert">
-                <!-- Error message will be displayed here -->
-              </div>
-              
-              <?php if(session()->getFlashdata('message')): ?>
-              <div class="alert alert-success" role="alert">
-                <?= session()->getFlashdata('message'); ?>
-              </div>
-              <?php endif; ?>
+                    <!-- Username/Email Field -->
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700">Email atau Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            placeholder="Masukkan email atau username Anda"
+                            required
+                            autofocus
+                        />
+                    </div>
 
-              <p class="text-center mb-5">
-                <span>New on our platform?</span>
-                <a href="<?= site_url('auth/register') ?>">
-                  <span>Create an account</span>
-                </a>
-              </p>
+                    <!-- Password Field -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <div class="relative mt-1">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                                placeholder="••••••••"
+                                required
+                            />
+                            <button 
+                                type="button" 
+                                id="toggle-password" 
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-gray-500"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input
+                                type="checkbox"
+                                id="remember"
+                                name="remember"
+                                class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
+                            />
+                            <label for="remember" class="ml-2 block text-sm text-gray-700">
+                                Ingat Saya
+                            </label>
+                        </div>
+                        <a href="<?= site_url('auth/forgot-password') ?>" class="text-sm text-teal-600 hover:text-teal-500">
+                            Lupa Password?
+                        </a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <div>
+                        <button
+                            type="submit"
+                            id="login-btn"
+                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-teal hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                        >
+                            Login
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Register Link -->
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Belum memiliki akun?
+                        <a href="<?= site_url('auth/register') ?>" class="font-medium text-teal-600 hover:text-teal-500">
+                            Daftar disini
+                        </a>
+                    </p>
+                </div>
             </div>
-          </div>
-          <!-- /Login -->
-          <img
-            src="<?= base_url() ?>/assets/img/illustrations/tree-3.png"
-            alt="auth-tree"
-            class="authentication-image-object-left d-none d-lg-block" />
-          <img
-            src="<?= base_url() ?>/assets/img/illustrations/auth-basic-mask-light.png"
-            class="authentication-image d-none d-lg-block scaleX-n1-rtl"
-            height="172"
-            alt="triangle-bg" />
-          <img
-            src="<?= base_url() ?>/assets/img/illustrations/tree.png"
-            alt="auth-tree"
-            class="authentication-image-object-right d-none d-lg-block" />
         </div>
-      </div>
     </div>
 
-    <!-- / Content -->
-
-    <!-- Core JS -->
-
-    <script src="<?= base_url() ?>/assets/vendor/libs/jquery/jquery.js"></script>
-
-    <script src="<?= base_url() ?>/assets/vendor/libs/popper/popper.js"></script>
-    <script src="<?= base_url() ?>/assets/vendor/js/bootstrap.js"></script>
-    <script src="<?= base_url() ?>/assets/vendor/libs/node-waves/node-waves.js"></script>
-
-    <script src="<?= base_url() ?>/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-
-    <script src="<?= base_url() ?>/assets/vendor/js/menu.js"></script>
-
-    <!-- endbuild -->
-
-    <!-- Vendors JS -->
-
-    <!-- Main JS -->
-
-    <script src="<?= base_url() ?>/assets/js/main.js"></script>
-
-    <!-- Page JS -->
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    $(document).ready(function() {
-        $('#formAuthentication').on('submit', function(e) {
-            e.preventDefault();
-            
-            const username = $('#username').val();
-            const password = $('#password').val();
-            const remember = $('#remember').is(':checked') ? 'on' : 'off';
-            
-            // Hide previous alert if exists
-            $('#alert-message').addClass('d-none');
-            
-            $.ajax({
-                url: '<?= site_url('auth/login') ?>',
-                type: 'POST',
-                data: {
-                    username: username,
-                    password: password,
-                    remember: remember
-                },
-                success: function(response) {
-                    if (response.status === 'success') {
-                        window.location.href = response.redirect;
-                    } else {
-                        $('#alert-message').removeClass('d-none').text(response.message);
-                    }
-                },
-                error: function() {
-                    $('#alert-message').removeClass('d-none').text('An error occurred. Please try again.');
+        $(document).ready(function() {
+            // Toggle password visibility
+            $('#toggle-password').on('click', function() {
+                const $input = $('#password');
+                const $icon = $(this).find('svg');
+                
+                if ($input.attr('type') === 'password') {
+                    $input.attr('type', 'text');
+                    // Change to eye-off icon
+                    $(this).html('<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>');
+                } else {
+                    $input.attr('type', 'password');
+                    // Change back to eye icon
+                    $(this).html('<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>');
                 }
             });
-        });
-        
-        // Toggle password visibility
-        $('.form-password-toggle .input-group-text').on('click', function() {
-            const $input = $(this).closest('.input-group').find('input');
-            const $icon = $(this).find('i');
-            
-            if ($input.attr('type') === 'password') {
-                $input.attr('type', 'text');
-                $icon.removeClass('ri-eye-off-line').addClass('ri-eye-line');
-            } else {
-                $input.attr('type', 'password');
-                $icon.removeClass('ri-eye-line').addClass('ri-eye-off-line');
-            }
-        });
-    });
-    </script>
 
-    <!-- Place this tag before closing body tag for github widget button. -->
-    <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
-  </body>
+            // Form submission
+            $('#formAuthentication').on('submit', function(e) {
+                e.preventDefault();
+                
+                const username = $('#username').val();
+                const password = $('#password').val();
+                const remember = $('#remember').is(':checked') ? 'on' : 'off';
+                
+                // Hide previous alert if exists
+                $('#alert-message').addClass('hidden');
+                
+                $.ajax({
+                    url: '<?= site_url('auth/login') ?>',
+                    type: 'POST',
+                    data: {
+                        username: username,
+                        password: password,
+                        remember: remember
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            window.location.href = response.redirect;
+                        } else {
+                            $('#alert-message').removeClass('hidden').text(response.message);
+                        }
+                    },
+                    error: function() {
+                        $('#alert-message').removeClass('hidden').text('Terjadi kesalahan. Silakan coba lagi.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
 </html> 

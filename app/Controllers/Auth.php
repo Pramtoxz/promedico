@@ -41,8 +41,8 @@ class Auth extends BaseController
         if ($rememberToken && $userId) {
             $db = db_connect();
             $user = $db->table('users')
-                ->select('users.*, tamu.nama')
-                ->join('tamu', 'tamu.iduser = users.id', 'left')
+                ->select('users.*, pasien.nama')
+                ->join('pasien', 'pasien.iduser = users.id', 'left')
                 ->where('users.id', $userId)
                 ->where('users.remember_token', $rememberToken)
                 ->where('users.status', 'active')
@@ -90,8 +90,8 @@ class Auth extends BaseController
 
         $db = db_connect();
         $user = $db->table('users')
-            ->select('users.*, tamu.nama')
-            ->join('tamu', 'tamu.iduser = users.id', 'left')
+            ->select('users.*, pasien.nama')
+            ->join('pasien', 'pasien.iduser = users.id', 'left')
             ->where('users.username', $username)
             ->orWhere('users.email', $username)
             ->get()
@@ -132,10 +132,20 @@ class Auth extends BaseController
                     $this->setRememberMeCookie($user['id']);
                 }
 
+                // Redirect berdasarkan role
+                $redirect = '';
+                if ($user['role'] == 'pasien') {
+                    $redirect = site_url('/'); // welcome_message
+                } else if (in_array($user['role'], ['admin', 'dokter', 'pimpinan'])) {
+                    $redirect = site_url('admin'); // dashboard
+                } else {
+                    $redirect = site_url('admin'); // default
+                }
+
                 return $this->response->setJSON([
                     'status' => 'success',
                     'message' => 'Login berhasil',
-                    'redirect' => site_url('admin')
+                    'redirect' => $redirect
                 ]);
             }
         }
