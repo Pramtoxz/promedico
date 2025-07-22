@@ -55,7 +55,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
 });
 
 // Pasien routes (protected by auth filter and role filter)
-$routes->group('pasien', ['filter' => ['auth', 'role:pasien,admin,dokter,pimpinan']], function ($routes) {
+$routes->group('pasien', ['filter' => ['auth', 'role:admin']], function ($routes) {
     $routes->get('/', 'PasienController::index');
     $routes->get('view', 'PasienController::viewPasien');
     $routes->post('detail', 'PasienController::getPasienDetail');
@@ -71,7 +71,7 @@ $routes->group('pasien', ['filter' => ['auth', 'role:pasien,admin,dokter,pimpina
 
 
 // Dokter routes (protected by auth filter and role filter)
-$routes->group('dokter', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+$routes->group('dokter', ['filter' => ['auth', 'role:admin']], function ($routes) {
     $routes->get('/', 'DokterController::index');
     $routes->get('view', 'DokterController::viewDokter');
     $routes->post('detail', 'DokterController::getDokterDetail');
@@ -86,7 +86,7 @@ $routes->group('dokter', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], f
 });
 
 // Jadwal routes (protected by auth filter and role filter)
-$routes->group('jadwal', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+$routes->group('jadwal', ['filter' => ['auth', 'role:admin']], function ($routes) {
     $routes->get('/', 'JadwalController::index');
     $routes->get('view', 'JadwalController::viewJadwal');
     $routes->get('formtambah', 'JadwalController::formtambah');
@@ -101,7 +101,7 @@ $routes->group('jadwal', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], f
 });
 
 // Jadwal routes (protected by auth filter and role filter)
-$routes->group('jenis', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+$routes->group('jenis', ['filter' => ['auth', 'role:admin']], function ($routes) {
     $routes->get('/', 'JenisController::index');
     $routes->get('view', 'JenisController::viewJenis');
     $routes->get('formtambah', 'JenisController::formtambah');
@@ -113,7 +113,7 @@ $routes->group('jenis', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], fu
 });
 
 // Obat routes (protected by auth filter and role filter)
-$routes->group('obat', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+$routes->group('obat', ['filter' => ['auth', 'role:admin']], function ($routes) {
     $routes->get('/', 'ObatController::index');
     $routes->get('view', 'ObatController::viewObat');
     $routes->get('formtambah', 'ObatController::formtambah');
@@ -122,6 +122,24 @@ $routes->group('obat', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], fun
     $routes->post('updatedata/(:segment)', 'ObatController::updatedata/$1');
     $routes->get('detail/(:segment)', 'ObatController::detail/$1');
     $routes->post('delete', 'ObatController::delete');
+});
+
+// Obat Masuk routes (protected by auth filter and role filter)
+$routes->group('obatmasuk', ['filter' => ['auth', 'role:admin']], function ($routes) {
+    $routes->get('/', 'ObatMasukController::index');
+    $routes->get('view', 'ObatMasukController::view');
+    $routes->get('formtambah', 'ObatMasukController::formtambah');
+    $routes->get('getobat', 'ObatMasukController::getobat');
+    $routes->get('viewtemp', 'ObatMasukController::viewTemp');
+    $routes->post('addtemp', 'ObatMasukController::addTemp');
+    $routes->post('deletetemp', 'ObatMasukController::deleteTemp', ['as' => 'obatmasuk.deletetemp']);
+    $routes->post('deletetemp/(:num)', 'ObatMasukController::deleteTemp/$1', ['as' => 'obatmasuk.deletetempnum']);
+    $routes->post('deletealltemp', 'ObatMasukController::deleteAllTemp', ['as' => 'obatmasuk.deletealltemp']);
+    $routes->post('save', 'ObatMasukController::save');
+    $routes->get('edit/(:segment)', 'ObatMasukController::formedit/$1');
+    $routes->post('updatedata', 'ObatMasukController::updatedata');
+    $routes->post('delete', 'ObatMasukController::delete', ['as' => 'obatmasuk.delete']);
+    $routes->get('detail/(:segment)', 'ObatMasukController::DetailObatMasuk/$1');
 });
 
 // Booking routes (protected by auth filter and role filter)
@@ -168,7 +186,7 @@ $routes->group('perawatan', ['filter' => ['auth', 'role:admin,dokter,pimpinan']]
     $routes->get('detail/(:segment)', 'PerawatanController::detail/$1');
     $routes->get('viewtemp', 'PerawatanController::viewTemp');
     $routes->post('addtemp', 'PerawatanController::addtemp');
-    $routes->post('deletetemp/(:segment)', 'PerawatanController::deleteTemp/$1');
+    $routes->post('deletetemp/(:num)', 'PerawatanController::deleteTemp/$1', ['as' => 'perawatan.deletetempnum']);
     $routes->post('deletetempall', 'PerawatanController::deleteAllTemp');
     $routes->post('save', 'PerawatanController::save');
     $routes->get('formedit/(:segment)', 'PerawatanController::formedit/$1');

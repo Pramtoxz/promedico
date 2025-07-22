@@ -92,6 +92,15 @@
                              </p>
                          </a>
                      </li>
+                     <li class="nav-item">
+                         <a href="<?php base_url() ?>/obatmasuk" class="nav-link">
+                             <i class="nav-icon fas fa-truck"></i>
+                             <p>
+                                 Obat Masuk
+                             </p>
+                         </a>
+                     </li>
+
 
                      <li class="nav-header">Laporan</li>
                      <li class="nav-item">

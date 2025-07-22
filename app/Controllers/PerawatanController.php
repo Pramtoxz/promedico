@@ -146,11 +146,24 @@ class PerawatanController extends BaseController
                 ];
             } else {
                     $db = db_connect();
+                    $db->transStart();
+                    
+                    // Tambahkan ke tabel temp
                     $db->table('temp')->insert([
                         'qty' => $qty,
                         'total' => $total,
                         'idobat' => $idobat,
                     ]);
+                    
+                    // Update stok obat - kurangi stok saat menambahkan ke temp
+                    $modelObat = new Obat();
+                    $obat = $modelObat->find($idobat);
+                    if ($obat) {
+                        $stokBaru = $obat['stok'] - $qty;
+                        $modelObat->update($idobat, ['stok' => $stokBaru]);
+                    }
+                    
+                    $db->transComplete();
 
                     $json = [
                         'sukses' => 'Berhasil Ditambahkan'
@@ -181,25 +194,66 @@ class PerawatanController extends BaseController
         }
     }
 
-    public function deleteTemp($id)
+    public function deleteTemp($id = null)
     {
         if ($this->request->isAJAX()) {
+            // Ambil ID dari parameter segment URL atau dari POST data
+            $idToDelete = $id ?? $this->request->getPost('id');
 
             $db = db_connect();
-                $db->table('temp')->where('id', $id)->delete();
-                $json = [
-                    'sukses' => 'Data berhasil dihapus'
-                ];
-             
+            $db->transStart();
+            
+            // Ambil data temp sebelum dihapus untuk revert stok
+            $tempData = $db->table('temp')->where('id', $idToDelete)->get()->getRowArray();
+            if ($tempData) {
+                // Kembalikan stok obat yang telah dikurangi
+                $modelObat = new Obat();
+                $obat = $modelObat->find($tempData['idobat']);
+                if ($obat) {
+                    $stokBaru = $obat['stok'] + $tempData['qty']; // Tambahkan kembali stok (+)
+                    $modelObat->update($tempData['idobat'], ['stok' => $stokBaru]);
+                }
+                
+                // Hapus dari temp
+                $db->table('temp')->where('id', $idToDelete)->delete();
+            }
+            
+            $db->transComplete();
+            
+            $json = [
+                'sukses' => 'Data berhasil dihapus'
+            ];
+            
             return $this->response->setJSON($json);
         }
     }
     public function deleteAllTemp()
     {
         if ($this->request->isAJAX()) {
-
             $db = db_connect();
+            $db->transStart();
+            
+            // Ambil semua data temp sebelum dihapus untuk revert stok
+            $allTempData = $db->table('temp')->get()->getResultArray();
+            
+            if (!empty($allTempData)) {
+                $modelObat = new Obat();
+                
+                // Revert stok untuk semua item di temp
+                foreach ($allTempData as $temp) {
+                    $obat = $modelObat->find($temp['idobat']);
+                    if ($obat) {
+                        $stokBaru = $obat['stok'] + $temp['qty']; // Tambahkan kembali stok (+)
+                        $modelObat->update($temp['idobat'], ['stok' => $stokBaru]);
+                    }
+                }
+            }
+            
+            // Kosongkan tabel temp
             $db->table('temp')->emptyTable();
+            
+            $db->transComplete();
+            
             $json = [
                 'sukses' => 'Semua data berhasil dihapus'
             ];
@@ -237,15 +291,6 @@ class PerawatanController extends BaseController
                         // Insert detail baru jika belum ada
                         $modelDetail->insert($dataDetail);
                     }
-
-                    // Update jumlah stok barang
-                    $obat = $modelObat->find($item['idobat']);
-                    if ($obat) {
-                        $updatedJumlah = $obat['stok'] - $item['qty'];
-                        $modelObat->update($item['idobat'], ['stok' => $updatedJumlah]);
-                    }
-
-                    // Update status booking menjadi 'selesai' berdasarkan idbooking
                     $modelBooking->update($idbooking, ['status' => 'selesai']);
 
                     $modelPerawatan->update($idperawatan, ['total' => $grandtotal]);
@@ -342,13 +387,7 @@ class PerawatanController extends BaseController
                         $modelDetail->insert($dataDetail);
                     }
 
-                    // Update jumlah stok barang
-                    $obat = $modelObat->find($item['idobat']);
-                    if ($obat) {
-                        $updatedJumlah = $obat['stok'] - $item['qty'];
-                        $modelObat->update($item['idobat'], ['stok' => $updatedJumlah]);
-                    }
-
+                
                     // Update status booking menjadi 'selesai' berdasarkan idbooking
                     $modelBooking->update($idbooking, ['status' => 'selesai']);
 
