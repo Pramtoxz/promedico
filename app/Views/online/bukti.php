@@ -199,7 +199,7 @@
             <!-- Tambahkan tombol untuk upload bukti pembayaran -->
             <div class="mt-8 mb-4 text-center no-print">
                 <?php if (isset($booking['status'])): ?>
-                    <?php if ($booking['status'] == 'pending' || $booking['status'] == 'ditolak'): ?>
+                    <?php if ($booking['status'] == 'ditolak' || empty($booking['bukti_bayar'])): ?>
                         <div class="mb-4">
                             <?php if ($booking['status'] == 'ditolak'): ?>
                                 <div class="bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
@@ -209,7 +209,7 @@
                                     </div>
                                 </div>
                             <?php endif; ?>
-                            <a href="<?= base_url('booking/uploadBukti/' . $booking['idbooking']) ?>" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg inline-flex items-center font-medium transition-colors">
+                            <a href="<?= base_url('online/uploadBukti/' . $booking['idbooking']) ?>" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg inline-flex items-center font-medium transition-colors">
                                 <i class="fas fa-upload mr-2"></i> Upload Bukti Pembayaran
                             </a>
                         </div>

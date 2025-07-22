@@ -73,7 +73,34 @@
                 <a href="#kontak" class="text-teal-800 hover:text-teal-600 font-medium">Kontak</a>
             </div>
             <div>
-                <a href="<?= base_url('online/booking'); ?>" class="bg-gradient-to-r from-teal-500 to-teal-700 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition duration-300">Booking Sekarang</a>
+                <?php if (session()->get('logged_in')): ?>
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2 bg-gradient-to-r from-teal-500 to-teal-700 text-white px-4 py-2 rounded-full font-medium hover:shadow-lg transition duration-300">
+                            <i class="fas fa-user-circle text-xl"></i>
+                            <span><?= session()->get('nama') ? session()->get('nama') : 'Profil' ?></span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-20 hidden group-hover:block">
+                            <a href="<?= base_url('online/booking'); ?>" class="block px-4 py-2 text-teal-800 hover:bg-teal-50">
+                                <i class="fas fa-calendar-plus mr-2"></i> Booking Baru
+                            </a>
+                            <a href="<?= base_url('pasien/histori'); ?>" class="block px-4 py-2 text-teal-800 hover:bg-teal-50">
+                                <i class="fas fa-history mr-2"></i> Histori Booking
+                            </a>
+                            <a href="<?= base_url('pasien/edit-profil'); ?>" class="block px-4 py-2 text-teal-800 hover:bg-teal-50">
+                                <i class="fas fa-user-edit mr-2"></i> Edit Profil
+                            </a>
+                            <div class="border-t border-gray-100 my-1"></div>
+                            <a href="<?= base_url('auth/logout'); ?>" class="block px-4 py-2 text-red-600 hover:bg-red-50">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <a href="<?= base_url('auth'); ?>" class="bg-gradient-to-r from-teal-500 to-teal-700 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition duration-300">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
@@ -85,7 +112,15 @@
                 <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">Senyum Sehat, Hidup Bahagia</h1>
                 <p class="text-lg md:text-xl mb-8 opacity-90">Temukan perawatan gigi berkualitas tinggi dengan dokter gigi profesional kami. Jadwalkan kunjungan Anda sekarang!</p>
                 <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="<?= base_url('online/booking'); ?>" class="bg-white text-teal-700 px-8 py-3 rounded-full font-semibold text-center hover:bg-teal-50 transition duration-300 shadow-lg">Booking Online</a>
+                    <?php if (session()->get('logged_in')): ?>
+                        <a href="<?= base_url('online/booking'); ?>" class="bg-white text-teal-700 px-8 py-3 rounded-full font-semibold text-center hover:bg-teal-50 transition duration-300 shadow-lg">
+                            <i class="fas fa-calendar-plus mr-2"></i>Booking Online
+                        </a>
+                    <?php else: ?>
+                        <a href="<?= base_url('auth'); ?>" class="bg-white text-teal-700 px-8 py-3 rounded-full font-semibold text-center hover:bg-teal-50 transition duration-300 shadow-lg">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login untuk Booking
+                        </a>
+                    <?php endif; ?>
                     <a href="#jadwal" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold text-center hover:bg-white hover:text-teal-700 transition duration-300">Lihat Jadwal</a>
                 </div>
             </div>
@@ -211,7 +246,15 @@
                                 <td class="py-3 px-4"><?= $jdwl['waktu_mulai'] ?></td>
                                 <td class="py-3 px-4"><?= $jdwl['waktu_selesai'] ?></td>
                                 <td class="py-3 px-4">
-                                    <a href="<?= base_url('online/booking') ?>" class="bg-teal-600 text-white px-4 py-1 rounded hover:bg-teal-700 transition">Booking</a>
+                                    <?php if (session()->get('logged_in')): ?>
+                                        <a href="<?= base_url('online/booking') ?>" class="bg-teal-600 text-white px-4 py-1 rounded hover:bg-teal-700 transition">
+                                            <i class="fas fa-calendar-plus mr-1"></i> Booking
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="<?= base_url('auth') ?>" class="bg-teal-600 text-white px-4 py-1 rounded hover:bg-teal-700 transition">
+                                            <i class="fas fa-sign-in-alt mr-1"></i> Login
+                                        </a>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -298,7 +341,15 @@
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Jadwalkan Kunjungan Anda Sekarang!</h2>
             <p class="text-white opacity-90 max-w-2xl mx-auto mb-8 text-lg">Dapatkan senyum yang sehat dan indah dengan perawatan gigi profesional dari tim dokter kami</p>
-            <a href="<?= base_url('online/booking'); ?>" class="inline-block bg-white text-teal-700 px-8 py-3 rounded-full font-semibold text-lg hover:bg-teal-50 transition duration-300 shadow-lg">Booking Online</a>
+            <?php if (session()->get('logged_in')): ?>
+                <a href="<?= base_url('online/booking'); ?>" class="inline-block bg-white text-teal-700 px-8 py-3 rounded-full font-semibold text-lg hover:bg-teal-50 transition duration-300 shadow-lg">
+                    <i class="fas fa-calendar-plus mr-2"></i>Booking Online
+                </a>
+            <?php else: ?>
+                <a href="<?= base_url('auth'); ?>" class="inline-block bg-white text-teal-700 px-8 py-3 rounded-full font-semibold text-lg hover:bg-teal-50 transition duration-300 shadow-lg">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Login untuk Booking
+                </a>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -490,6 +541,27 @@
                     behavior: 'smooth'
                 });
             });
+        });
+
+        // Handle profile dropdown on mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileDropdown = document.querySelector('.group button');
+            const dropdownMenu = document.querySelector('.group .absolute');
+            
+            if (profileDropdown && dropdownMenu) {
+                // For mobile - toggle on click
+                profileDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('hidden');
+                });
+                
+                // Close when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!profileDropdown.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.classList.add('hidden');
+                    }
+                });
+            }
         });
     </script>
 </body>

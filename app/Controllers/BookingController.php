@@ -1162,14 +1162,15 @@ class BookingController extends BaseController
             $newName = 'bukti-' . date('Ymd') . '-' . $idbooking . '.' . $bukti_bayar->getClientExtension();
             $bukti_bayar->move('uploads/bukti_bayar', $newName);
             
-            // Update status menjadi 'diproses' dan simpan bukti
+            // Update status menjadi 'diproses', simpan bukti, dan set online menjadi 1
             $model->update($idbooking, [
                 'bukti_bayar' => $newName,
-                'status' => 'diproses'
+                'status' => 'diproses',
+                'online' => 1
             ]);
             
             return $this->response->setJSON([
-                'success' => 'Bukti pembayaran berhasil diunggah. Status booking menjadi "diproses"'
+                'success' => 'Bukti pembayaran berhasil diunggah. Mohon Bersabar Menunggu Konfirmasi Dari Admin'
             ]);
         }
         
@@ -1329,7 +1330,7 @@ class BookingController extends BaseController
             'waktu_mulai' => $this->request->getPost('waktu_mulai'),
             'waktu_selesai' => $this->request->getPost('waktu_selesai'),
             'keluhan' => $this->request->getPost('keluhan'),
-            'status' => 'pending',
+            'status' => 'diproses',
             'online' => 1,
             'created_at' => date('Y-m-d H:i:s'),
         ];

@@ -42,6 +42,91 @@
         .preview-image {
             max-height: 300px;
             object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .preview-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+        
+        #upload-area {
+            transition: all 0.3s ease;
+        }
+        
+        #upload-area:hover {
+            border-color: #0d9488;
+            background-color: #f0fdfa;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        #submit-button {
+            transition: all 0.3s ease;
+        }
+        
+        #submit-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+        }
+        
+        #submit-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .preview-image {
+                max-height: 250px;
+            }
+            
+            #upload-area {
+                padding: 1rem !important;
+            }
+            
+            header {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+            
+            header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .text-3xl {
+                font-size: 1.5rem;
+            }
+            
+            .text-2xl {
+                font-size: 1.25rem;
+            }
+            
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        
+        /* Untuk highlight elemen yang wajib diisi */
+        .required-field {
+            position: relative;
+        }
+        
+        .required-field::after {
+            content: '*';
+            color: #ef4444;
+            position: absolute;
+            right: -10px;
+            top: 0;
         }
     </style>
 </head>
@@ -148,7 +233,7 @@
                         </div>
                         <?php endif; ?>
                         
-                        <?php if (in_array($booking['status'], ['pending', 'ditolak'])): ?>
+                        <?php if ($booking['status'] == 'ditolak' || empty($booking['bukti_bayar'])): ?>
                         <form id="upload-form" enctype="multipart/form-data">
                             <input type="hidden" name="idbooking" value="<?= $booking['idbooking'] ?>">
                             
@@ -156,17 +241,18 @@
                                 <div class="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-8 text-center" id="upload-area">
                                     <div id="upload-prompt">
                                         <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
-                                        <h4 class="font-medium text-gray-700 mb-2">Unggah Bukti Pembayaran</h4>
+                                        <h4 class="font-medium text-gray-700 mb-2 required-field">Unggah Bukti Pembayaran</h4>
                                         <p class="text-sm text-gray-500 mb-4">File gambar (JPG, PNG) atau PDF. Maks 2MB</p>
-                                        <label for="bukti_bayar" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md cursor-pointer transition-colors">
+                                        <label for="bukti_bayar" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-md cursor-pointer transition-all hover:shadow-lg hover:shadow-teal-500/30 inline-block">
                                             <i class="fas fa-file-upload mr-2"></i>Pilih File
                                         </label>
-                                        <input type="file" name="bukti_bayar" id="bukti_bayar" class="hidden" accept="image/jpeg,image/jpg,image/png,application/pdf">
+                                        <input type="file" name="bukti_bayar" id="bukti_bayar" class="hidden" accept="image/jpeg,image/jpg,image/png,application/pdf" required>
+                                        <p class="text-red-500 text-sm mt-2">* Bukti pembayaran wajib diupload</p>
                                     </div>
                                     
                                     <div id="preview-container" class="hidden">
                                         <div class="mb-4">
-                                            <img id="image-preview" class="mx-auto preview-image hidden">
+                                            <img id="image-preview" class="mx-auto preview-image hidden border border-gray-200 rounded-lg shadow-sm">
                                             <div id="pdf-preview" class="hidden">
                                                 <i class="far fa-file-pdf text-red-500 text-5xl"></i>
                                                 <p class="mt-2 font-medium" id="pdf-filename">filename.pdf</p>
@@ -179,7 +265,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="error_bukti_bayar" class="text-red-500 text-sm mt-1"></div>
+                                <div id="error_bukti_bayar" class="text-red-500 text-sm mt-2 bg-red-50 p-2 rounded-md hidden"></div>
                             </div>
                             
                             <div class="text-center">
@@ -285,19 +371,24 @@
                 const maxSize = 2 * 1024 * 1024; // 2MB
                 
                 if (!validTypes.includes(file.type)) {
-                    document.getElementById('error_bukti_bayar').textContent = 'Format file tidak didukung. Gunakan JPG, JPEG, PNG, atau PDF';
+                    const errorElement = document.getElementById('error_bukti_bayar');
+                    errorElement.textContent = 'Format file tidak didukung. Gunakan JPG, JPEG, PNG, atau PDF';
+                    errorElement.classList.remove('hidden');
                     fileInput.value = '';
                     return;
                 }
                 
                 if (file.size > maxSize) {
-                    document.getElementById('error_bukti_bayar').textContent = 'Ukuran file maksimal 2MB';
+                    const errorElement = document.getElementById('error_bukti_bayar');
+                    errorElement.textContent = 'Ukuran file maksimal 2MB';
+                    errorElement.classList.remove('hidden');
                     fileInput.value = '';
                     return;
                 }
                 
                 // Clear error message
                 document.getElementById('error_bukti_bayar').textContent = '';
+                document.getElementById('error_bukti_bayar').classList.add('hidden');
                 
                 // Preview the file
                 if (file.type.startsWith('image/')) {
@@ -306,12 +397,26 @@
                         imagePreview.src = e.target.result;
                         imagePreview.classList.remove('hidden');
                         pdfPreview.classList.add('hidden');
+                       
+                        // Tambahkan animasi sederhana untuk preview
+                        imagePreview.style.opacity = '0';
+                        setTimeout(() => {
+                            imagePreview.style.transition = 'opacity 0.5s ease';
+                            imagePreview.style.opacity = '1';
+                        }, 100);
                     }
                     reader.readAsDataURL(file);
                 } else if (file.type === 'application/pdf') {
                     imagePreview.classList.add('hidden');
                     pdfPreview.classList.remove('hidden');
                     pdfFilename.textContent = file.name;
+
+                    // Tambahkan animasi sederhana untuk preview PDF
+                    pdfPreview.style.opacity = '0';
+                    setTimeout(() => {
+                        pdfPreview.style.transition = 'opacity 0.5s ease';
+                        pdfPreview.style.opacity = '1';
+                    }, 100);
                 }
                 
                 // Show preview container, hide upload prompt
@@ -325,6 +430,7 @@
                 uploadPrompt.classList.remove('hidden');
                 previewContainer.classList.add('hidden');
                 document.getElementById('error_bukti_bayar').textContent = '';
+                document.getElementById('error_bukti_bayar').classList.add('hidden');
             });
             
             // Handle form submission
@@ -333,7 +439,14 @@
                 
                 // Check if file is selected
                 if (!fileInput.files.length) {
-                    document.getElementById('error_bukti_bayar').textContent = 'Silakan pilih file bukti pembayaran';
+                    const errorElement = document.getElementById('error_bukti_bayar');
+                    errorElement.textContent = 'Bukti pembayaran wajib diupload';
+                    errorElement.classList.remove('hidden');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Bukti pembayaran wajib diupload'
+                    });
                     return;
                 }
                 
@@ -344,7 +457,7 @@
                 // Send form data via AJAX
                 const formData = new FormData(uploadForm);
                 
-                fetch('<?= base_url('booking/prosesUploadBukti') ?>', {
+                fetch('<?= base_url('online/prosesUploadBukti') ?>', {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -360,7 +473,14 @@
                     if (data.error) {
                         // Display validation errors
                         if (data.error.error_bukti_bayar) {
-                            document.getElementById('error_bukti_bayar').textContent = data.error.error_bukti_bayar;
+                            const errorElement = document.getElementById('error_bukti_bayar');
+                            errorElement.textContent = data.error.error_bukti_bayar;
+                            errorElement.classList.remove('hidden');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.error.error_bukti_bayar
+                            });
                         }
                         
                         if (data.error.error_global) {
@@ -376,7 +496,7 @@
                             icon: 'success',
                             title: 'Berhasil',
                             text: data.success,
-                            timer: 2000,
+                            timer: 2500,
                             timerProgressBar: true
                         }).then(() => {
                             window.location.reload();

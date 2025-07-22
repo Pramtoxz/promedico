@@ -28,8 +28,10 @@ CREATE TABLE `booking` (
   `tanggal` date NOT NULL,
   `waktu_mulai` time NOT NULL,
   `waktu_selesai` time NOT NULL,
-  `status` enum('diproses','diterima','ditolak','periksa','selesai') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'diproses',
+  `status` enum('diproses','diterima','ditolak','diperiksa','selesai') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'diproses',
   `bukti_bayar` varchar(255) DEFAULT NULL,
+  `online` tinyint(1) DEFAULT '0',
+  `bayar` double DEFAULT NULL,
   `catatan` text,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
@@ -39,9 +41,8 @@ CREATE TABLE `booking` (
 
 /*Data for the table `booking` */
 
-insert  into `booking`(`idbooking`,`id_pasien`,`idjadwal`,`idjenis`,`tanggal`,`waktu_mulai`,`waktu_selesai`,`status`,`bukti_bayar`,`catatan`,`created_at`,`updated_at`,`deleted_at`) values 
-('BK0001','PS0003','JD0001','JP0001','2025-07-22','14:16:00','14:46:00','diterima',NULL,'oke','2025-07-22 14:16:20','2025-07-22 14:16:20',NULL),
-('BK0002','PS0001','JD0003','JP0001','2025-07-24','09:00:00','09:30:00','diproses',NULL,'oke','2025-07-22 14:17:40','2025-07-22 14:17:40',NULL);
+insert  into `booking`(`idbooking`,`id_pasien`,`idjadwal`,`idjenis`,`tanggal`,`waktu_mulai`,`waktu_selesai`,`status`,`bukti_bayar`,`online`,`bayar`,`catatan`,`created_at`,`updated_at`,`deleted_at`) values 
+('BK0001','PS0002','JD0003','JP0001','2025-07-24','09:00:00','09:30:00','selesai',NULL,0,NULL,'sakit gigi sebelah','2025-07-22 21:51:21','2025-07-22 22:06:32',NULL);
 
 /*Table structure for table `detail_perawatan` */
 
@@ -54,9 +55,12 @@ CREATE TABLE `detail_perawatan` (
   `qty` int DEFAULT NULL,
   `total` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `detail_perawatan` */
+
+insert  into `detail_perawatan`(`id`,`idperawatan`,`idobat`,`qty`,`total`) values 
+(3,'PRW0001','OB0001',3,15000);
 
 /*Table structure for table `dokter` */
 
@@ -103,7 +107,7 @@ CREATE TABLE `jadwal` (
 
 insert  into `jadwal`(`idjadwal`,`hari`,`waktu_mulai`,`waktu_selesai`,`iddokter`,`is_active`,`created_at`,`updated_at`,`deleted_at`) values 
 ('JD0001','Selasa','14:00:00','17:00:00','DK0001',1,'2025-07-15 15:53:53','2025-07-22 02:27:28',NULL),
-('JD0002','Sabtu','03:00:00','03:05:00','DK0001',1,'2025-07-15 16:27:55','2025-07-18 20:07:21',NULL),
+('JD0002','Selasa','23:00:00','23:59:00','DK0001',1,'2025-07-15 16:27:55','2025-07-18 20:07:21',NULL),
 ('JD0003','Kamis','09:00:00','10:00:00','DK0001',1,'2025-07-16 14:51:31','2025-07-16 14:51:31',NULL);
 
 /*Table structure for table `jenis_perawatan` */
@@ -158,6 +162,7 @@ CREATE TABLE `obat` (
   `nama` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `stok` int DEFAULT NULL,
   `jenis` enum('minum','bahan') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `harga` double DEFAULT NULL,
   `keterangan` text,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -167,8 +172,24 @@ CREATE TABLE `obat` (
 
 /*Data for the table `obat` */
 
-insert  into `obat`(`idobat`,`nama`,`stok`,`jenis`,`keterangan`,`created_at`,`updated_at`,`deleted_at`) values 
-('OB0001','DELUXE',0,'bahan','sadasd','2025-07-16 03:53:05','2025-07-16 03:53:05',NULL);
+insert  into `obat`(`idobat`,`nama`,`stok`,`jenis`,`harga`,`keterangan`,`created_at`,`updated_at`,`deleted_at`) values 
+('OB0001','DELUXE',1,'bahan',5000,'sadasd','2025-07-16 03:53:05','2025-07-22 22:06:32',NULL);
+
+/*Table structure for table `obatmasuk` */
+
+DROP TABLE IF EXISTS `obatmasuk`;
+
+CREATE TABLE `obatmasuk` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `faktur` varchar(50) DEFAULT NULL,
+  `idobat` char(30) DEFAULT NULL,
+  `tglmasuk` date DEFAULT NULL,
+  `tglexpired` date DEFAULT NULL,
+  `qty` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `obatmasuk` */
 
 /*Table structure for table `otp_codes` */
 
@@ -223,7 +244,7 @@ CREATE TABLE `pasien` (
 insert  into `pasien`(`id_pasien`,`nama`,`alamat`,`tgllahir`,`nohp`,`jenkel`,`foto`,`iduser`,`created_at`,`updated_at`,`deleted_at`) values 
 ('PS0001','Pramudito Metra','Jl. Padang','2025-07-03','08129323923','','foto-20250722-PS0001.png',3,'2025-07-03 06:30:48','2025-07-22 01:28:15',NULL),
 ('PS0002','Cimul','ss','2025-07-09','081234256734','P',NULL,5,'2025-07-09 02:20:38','2025-07-15 14:32:09',NULL),
-('PS0003','Tari','asdasd','2025-07-15','08743557687','L',NULL,NULL,'2025-07-15 16:16:54','2025-07-15 16:16:54',NULL),
+('PS0003','Tari','asdasd','2025-07-15','08743557687','L','foto-20250723-PS0003.png',NULL,'2025-07-15 16:16:54','2025-07-23 00:44:18',NULL),
 ('PS0004','Agus Saputra','asdasd','2025-07-15','06754343212','L',NULL,17,'2025-07-15 16:25:30','2025-07-22 02:05:44',NULL),
 ('PS0005','Taris','sdsds','2025-07-16','08123123123123','P',NULL,16,'2025-07-16 14:10:56','2025-07-16 14:46:45',NULL),
 ('PS0006','Agus Saputra','Amerika','2025-07-22','08743557687','',NULL,NULL,'2025-07-21 18:10:29','2025-07-21 18:10:29',NULL);
@@ -237,14 +258,14 @@ CREATE TABLE `perawatan` (
   `idbooking` varchar(30) DEFAULT NULL,
   `tanggal` date DEFAULT NULL,
   `resep` text,
-  `total_bayar` double DEFAULT NULL,
+  `total` double DEFAULT NULL,
   PRIMARY KEY (`idperawatan`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `perawatan` */
 
-insert  into `perawatan`(`idperawatan`,`idbooking`,`tanggal`,`resep`,`total_bayar`) values 
-('PRW0001','BK0002','2025-07-22','hello',NULL);
+insert  into `perawatan`(`idperawatan`,`idbooking`,`tanggal`,`resep`,`total`) values 
+('PRW0001','BK0001','2025-07-22','',15000);
 
 /*Table structure for table `temp` */
 
@@ -256,12 +277,9 @@ CREATE TABLE `temp` (
   `qty` int DEFAULT NULL,
   `total` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=209 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=240 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `temp` */
-
-insert  into `temp`(`id`,`idobat`,`qty`,`total`) values 
-(1,'OB0001',10,10);
 
 /*Table structure for table `users` */
 
@@ -287,12 +305,12 @@ CREATE TABLE `users` (
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`username`,`email`,`password`,`role`,`status`,`last_login`,`remember_token`,`created_at`,`updated_at`,`deleted_at`) values 
-(1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-22 12:22:14',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
+(1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-22 23:17:40',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
 (3,'pramudito','pramuditometra2@gmail.com','$2y$10$/sKJ3nocDTaEBZwfqWvNj.H08jfcrWSolaA7F6buM7Tq2hYdwg.cK','user','active','2025-06-14 22:14:59',NULL,'2025-06-14 22:14:50','2025-06-14 22:14:50',NULL),
 (4,'boss','bossrentalpadang@gmail.com','$2y$10$x1Sb65DdkNNlpU02EiOHcuP.YW1BbF29e4HB8LD14jMqbnV8k4vpG','user','active',NULL,NULL,'2025-06-14 22:20:22','2025-06-14 22:20:22',NULL),
 (5,'cimul','srimulyarni2@gmail.com','$2y$10$qLdPOp12x6mohcK9q3FG1.5l/pymdxPRhOVTSuf7PWKDHjuiEZ6Fm','user','active','2025-06-14 22:46:26',NULL,'2025-06-14 22:45:35','2025-06-14 22:45:35',NULL),
 (7,'pramtoxz','pramtoxz@gmail.com','$2y$10$/mOhlx0mFM/sLkcdDI7ijOdu48p9dg.j3FZLqtnqZtJawqB24w1le','dokter','active',NULL,NULL,'2025-06-23 19:32:30','2025-06-23 19:32:30',NULL),
-(8,'prarram','prararm@gmail.com','$2y$10$Oa66DQC76UttSvugCcqxFeYM0yRC/1cp9dyQwKPQAHeA/KLepSE8.','user','active',NULL,NULL,'2025-06-23 19:36:13','2025-06-23 19:36:13',NULL),
+(8,'prarram','pra@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','pasien','active','2025-07-22 23:27:08',NULL,'2025-06-23 19:36:13','2025-06-23 19:36:13',NULL),
 (9,'Rindiani','rindianir573@gmail.com','$2y$10$iF4y9bw3chbQ//818ZYDkuX4JsjHLCqdgP39YZPFRR.oFueUc7vNq','user','active','2025-06-28 10:42:11',NULL,'2025-06-28 10:30:11','2025-06-28 10:30:11',NULL),
 (10,'akademis','03xa8cfygp@cross.edu.pl','$2y$10$XDoOZvMEUQ424rV4VXBkhOlbc52IVwTwTJpqzSp5ItkOmk/hmE9ZC','user','active','2025-07-03 07:22:37',NULL,'2025-07-03 07:22:22','2025-07-03 07:22:22',NULL),
 (11,'balqisa','putrialifianoerbalqis@gmail.com','$2y$10$LDX08rQsEptfP1g/fp5kGuHBL70c99FOjCJeD0d6RvRm3sxQwR9hW','user','active','2025-07-03 14:27:34',NULL,'2025-07-03 14:26:15','2025-07-03 14:26:15',NULL),

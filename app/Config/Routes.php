@@ -39,6 +39,16 @@ $routes->post('auth/reset-password', 'Auth::resetPassword');
 // Resend OTP
 $routes->post('auth/resend-otp', 'Auth::resendOTP');
 
+// Dashboard Pasien Routes
+$routes->group('pasien', ['filter' => 'auth'], function ($routes) {
+    $routes->get('dashboard', 'PasienDashboardController::index');
+    $routes->get('histori', 'PasienDashboardController::histori');
+    $routes->get('edit-profil', 'PasienDashboardController::editProfil');
+    $routes->post('update-profil', 'PasienDashboardController::updateProfil');
+    $routes->get('booking/(:segment)', 'PasienDashboardController::detailBooking/$1');
+    $routes->get('faktur/(:segment)', 'PasienDashboardController::detailBooking/$1');
+});
+
 // Admin & Dokter & Pimpinan dashboard (protected by auth filter)
 $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'Dashboard::index');
