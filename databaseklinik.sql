@@ -42,7 +42,7 @@ CREATE TABLE `booking` (
 /*Data for the table `booking` */
 
 insert  into `booking`(`idbooking`,`id_pasien`,`idjadwal`,`idjenis`,`tanggal`,`waktu_mulai`,`waktu_selesai`,`status`,`bukti_bayar`,`online`,`bayar`,`catatan`,`created_at`,`updated_at`,`deleted_at`) values 
-('BK0001','PS0002','JD0003','JP0001','2025-07-24','09:00:00','09:30:00','selesai',NULL,0,NULL,'sakit gigi sebelah','2025-07-22 21:51:21','2025-07-22 22:06:32',NULL);
+('BK0001','PS0002','JD0003','JP0001','2025-07-24','09:00:00','09:30:00','diperiksa',NULL,0,NULL,'sakit gigi sebelah','2025-07-22 21:51:21','2025-07-22 22:06:32',NULL);
 
 /*Table structure for table `detail_perawatan` */
 
@@ -58,9 +58,6 @@ CREATE TABLE `detail_perawatan` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `detail_perawatan` */
-
-insert  into `detail_perawatan`(`id`,`idperawatan`,`idobat`,`qty`,`total`) values 
-(3,'PRW0001','OB0001',3,15000);
 
 /*Table structure for table `dokter` */
 
@@ -173,7 +170,8 @@ CREATE TABLE `obat` (
 /*Data for the table `obat` */
 
 insert  into `obat`(`idobat`,`nama`,`stok`,`jenis`,`harga`,`keterangan`,`created_at`,`updated_at`,`deleted_at`) values 
-('OB0001','DELUXE',1,'bahan',5000,'sadasd','2025-07-16 03:53:05','2025-07-22 22:06:32',NULL);
+('OB0001','DELUXE',11,'bahan',5000,'sadasd','2025-07-16 03:53:05','2025-07-23 01:43:15',NULL),
+('OB0002','Migra',15,'minum',100,'sdadad','2025-07-23 02:06:13','2025-07-23 02:17:40',NULL);
 
 /*Table structure for table `obatmasuk` */
 
@@ -182,14 +180,19 @@ DROP TABLE IF EXISTS `obatmasuk`;
 CREATE TABLE `obatmasuk` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `faktur` varchar(50) DEFAULT NULL,
-  `idobat` char(30) DEFAULT NULL,
   `tglmasuk` date DEFAULT NULL,
+  `idobat` char(30) DEFAULT NULL,
   `tglexpired` date DEFAULT NULL,
   `qty` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `obatmasuk` */
+
+insert  into `obatmasuk`(`id`,`faktur`,`tglmasuk`,`idobat`,`tglexpired`,`qty`) values 
+(1,'FA2020','2025-07-23','OB0001','2028-07-23',10),
+(2,'FA2020','2025-07-23','OB0002','2025-07-23',22),
+(4,'FK2020','2025-07-23','OB0001','2025-07-22',10);
 
 /*Table structure for table `otp_codes` */
 
@@ -265,7 +268,7 @@ CREATE TABLE `perawatan` (
 /*Data for the table `perawatan` */
 
 insert  into `perawatan`(`idperawatan`,`idbooking`,`tanggal`,`resep`,`total`) values 
-('PRW0001','BK0001','2025-07-22','',15000);
+('PRW0001','BK0001','2025-07-23','sdasdadad',NULL);
 
 /*Table structure for table `temp` */
 
@@ -277,9 +280,25 @@ CREATE TABLE `temp` (
   `qty` int DEFAULT NULL,
   `total` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=240 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=242 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `temp` */
+
+/*Table structure for table `temp_masuk` */
+
+DROP TABLE IF EXISTS `temp_masuk`;
+
+CREATE TABLE `temp_masuk` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `faktur` varchar(255) DEFAULT NULL,
+  `tglmasuk` date DEFAULT NULL,
+  `idobat` char(30) DEFAULT NULL,
+  `tglexpired` date DEFAULT NULL,
+  `qty` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `temp_masuk` */
 
 /*Table structure for table `users` */
 
@@ -305,7 +324,7 @@ CREATE TABLE `users` (
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`username`,`email`,`password`,`role`,`status`,`last_login`,`remember_token`,`created_at`,`updated_at`,`deleted_at`) values 
-(1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-22 23:17:40',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
+(1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-23 01:00:34',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
 (3,'pramudito','pramuditometra2@gmail.com','$2y$10$/sKJ3nocDTaEBZwfqWvNj.H08jfcrWSolaA7F6buM7Tq2hYdwg.cK','user','active','2025-06-14 22:14:59',NULL,'2025-06-14 22:14:50','2025-06-14 22:14:50',NULL),
 (4,'boss','bossrentalpadang@gmail.com','$2y$10$x1Sb65DdkNNlpU02EiOHcuP.YW1BbF29e4HB8LD14jMqbnV8k4vpG','user','active',NULL,NULL,'2025-06-14 22:20:22','2025-06-14 22:20:22',NULL),
 (5,'cimul','srimulyarni2@gmail.com','$2y$10$qLdPOp12x6mohcK9q3FG1.5l/pymdxPRhOVTSuf7PWKDHjuiEZ6Fm','user','active','2025-06-14 22:46:26',NULL,'2025-06-14 22:45:35','2025-06-14 22:45:35',NULL),
