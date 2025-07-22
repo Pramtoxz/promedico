@@ -9,7 +9,7 @@ class Obat extends Model
     protected $table            = 'obat';
     protected $primaryKey       = 'idobat';
     protected $protectFields    = true;
-    protected $allowedFields    = ['idobat', 'nama', 'stok', 'jenis','keterangan'];
+    protected $allowedFields    = ['idobat', 'nama', 'stok', 'jenis','keterangan','harga'];
 
     // Dates
     protected $useTimestamps = true;

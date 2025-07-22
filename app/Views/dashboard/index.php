@@ -62,7 +62,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="text-center">
-                    <img src="<?= base_url() ?>/assets/img/logo.png" alt="Logo Farhan" class="img-fluid"
+                    <img src="<?= base_url() ?>/assets/img/logo.png" alt="Logo Promedico" class="img-fluid"
                         style="max-width: 50%;">
                 </div>
             </div>

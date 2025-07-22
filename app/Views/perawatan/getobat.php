@@ -1,12 +1,12 @@
-<div class="table-responsive datatable-minimal mt-6">
+<div class="table-responsive datatable-minimal mt-4">
     <table class="table table-hover" id="tabelObat">
         <thead>
             <tr>
                 <th>No</th>
-                <th>Nomor Faktur</th>
-                <th>Tanggal Masuk</th>
-                <th>Tanggal Selesai</th>
-                <th>Grandtotal</th>
+                <th>ID Obat</th>
+                <th>Nama Obat</th>
+                <th>Harga</th>
+                <th>Stok</th>
                 <th class="no-short">Aksi</th>
             </tr>
         </thead>
@@ -16,7 +16,7 @@
 $('#tabelObat').DataTable({
     processing: true,
     serverSide: true,
-    ajax: '/cuciankeluar/viewgetmasuk',
+    ajax: '/perawatan/viewgetobat',
     info: true,
     ordering: true,
     paging: true,
@@ -31,17 +31,16 @@ $('#tabelObat').DataTable({
 
 $(document).ready(function() {
     $(document).on('click', '.btn-pilihobat', function() {
-        var nofak = $(this).data('nofak');
-        var tglmasuk = $(this).data('tglmasuk');
-        var tglkeluar = $(this).data('tglkeluar');
-        var grandtotal = $(this).data('grandtotal');
-        $('#nofak').val(nofak);
-        $('#tglmasuk').val(tglmasuk);
-        $('#tglkeluar').val(tglkeluar);
-        $('#grandtotal').val(grandtotal);
-
+        var idobat = $(this).data('idobat');
+        var nama = $(this).data('nama');
+        var harga = $(this).data('harga');
+        var stok = $(this).data('stok');
+        $('#idobat').val(idobat);
+        $('#namaobat').val(nama);
+        $('#harga').val(harga);
+        $('#stok').val(stok);
         $('#modalObat').modal('hide').on('hidden.bs.modal', function() {
-            tampilMasuk();
+            $('').focus();
         });
     });
 });

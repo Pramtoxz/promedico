@@ -9,7 +9,7 @@ class Perawatan extends Model
     protected $table            = 'perawatan';
     protected $primaryKey       = 'idperawatan';
     protected $protectFields    = true;
-    protected $allowedFields    = ['idperawatan','tanggal', 'idbooking', 'resep','total_bayar'];
+    protected $allowedFields    = ['idperawatan','tanggal', 'idbooking', 'resep','total'];
 
     // Dates
     protected $useTimestamps = false;

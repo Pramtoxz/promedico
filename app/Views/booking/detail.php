@@ -1,104 +1,133 @@
-<div class="card shadow-sm">
-    <div class="card-header bg-teal text-white">
-        <h5 class="card-title mb-0"><i class="fas fa-calendar-check mr-2"></i> Detail Booking #<?= $booking['idbooking'] ?></h5>
+<?= $this->extend('layout/main') ?>
+<?= $this->section('content') ?>
+<!-- isi konten Start -->
+<div class="invoice p-3 mb-3" style="background-color: #f4f6f9; color: #333;">
+    <!-- title row -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <h4>
+                <i class="fas fa-tooth"></i> PROMEDICO DENTAL CARE
+            </h4>
+            <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                <b style="font-size: 18px;">Booking Receipt #<?= $booking['idbooking'] ?></b><br>
+                <small><strong>Status: </strong>
+                    <span class="badge <?= ($booking['status'] == 'pending') ? 'badge-warning' : (($booking['status'] == 'diterima') ? 'badge-success' : 'badge-danger') ?>">
+                        <?= ucfirst($booking['status']) ?>
+                    </span>
+                </small>
+            </div>
+        </div>
+        <!-- /.col -->
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-borderless">
+    
+    <!-- info row -->
+    <div class="row invoice-info mt-4">
+        <div class="col-sm-4 invoice-col">
+            <h5>Clinic Information:</h5>
+            <address>
+                <strong>Promedico Dental</strong><br>
+                Jl. Maransi Aie Pacah Padang<br>
+                Kota Padang, Sumatera Barat<br>
+                Phone: 081234567890<br>
+                Email: promedico@gmail.com
+            </address>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-4 invoice-col">
+            <h5>Appointment Details:</h5>
+            <address>
+                <strong>Date:</strong> <?= date('d F Y', strtotime($booking['tanggal'])) ?><br>
+                <strong>Time:</strong> <?= substr($booking['waktu_mulai'], 0, 5) ?> - <?= substr($booking['waktu_selesai'], 0, 5) ?><br>
+                <strong>Treatment:</strong> <?= $booking['namajenis'] ?><br>
+                <strong>Duration:</strong> <?= $booking['estimasi'] ?> minutes<br>
+                <strong>Doctor:</strong> <?= $booking['nama_dokter'] ?><br>
+                <strong>Day:</strong> <?= $booking['hari'] ?>
+            </address>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-4 invoice-col">
+            <h5>Patient Information:</h5>
+            <address>
+                <strong><?= $booking['nama_pasien'] ?></strong><br>
+                <?= isset($booking['alamat']) ? $booking['alamat'] : 'Address not provided' ?><br>
+                Phone: <?= isset($booking['nohp']) ? $booking['nohp'] : 'Phone not provided' ?><br>
+            </address>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    
+    <!-- Treatment row -->
+    <div class="row mt-4">
+        <div class="col-12 table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Treatment</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
                 <tbody>
                     <tr>
-                        <td width="30%" class="font-weight-bold">Kode Booking</td>
-                        <td width="5%">:</td>
-                        <td><?= $booking['idbooking'] ?></td>
-                    </tr>
-                    <tr>
-                        <td class="font-weight-bold">Tanggal</td>
-                        <td>:</td>
-                        <td><?= date('d F Y', strtotime($booking['tanggal'])) ?></td>
-                    </tr>
-                    <tr>
-                        <td class="font-weight-bold">Waktu</td>
-                        <td>:</td>
-                        <td><?= $booking['waktu_mulai'] ?> - <?= $booking['waktu_selesai'] ?> (<?= $booking['hari'] ?>)</td>
-                    </tr>
-                    <tr>
-                        <td class="font-weight-bold">Status</td>
-                        <td>:</td>
-                        <td>
-                            <?php 
-                            $badgeClass = '';
-                            switch($booking['status']) {
-                                case 'pending':
-                                    $badgeClass = 'badge badge-warning';
-                                    break;
-                                case 'diterima':
-                                    $badgeClass = 'badge badge-success';
-                                    break;
-                                case 'ditolak':
-                                    $badgeClass = 'badge badge-danger';
-                                    break;
-                                default:
-                                    $badgeClass = 'badge badge-secondary';
-                            }
-                            ?>
-                            <span class="<?= $badgeClass ?>"><?= ucfirst($booking['status']) ?></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-weight-bold">Pasien</td>
-                        <td>:</td>
-                        <td><?= $booking['nama_pasien'] ?></td>
-                    </tr>
-                    <tr>
-                        <td class="font-weight-bold">Dokter</td>
-                        <td>:</td>
-                        <td><?= $booking['nama_dokter'] ?></td>
-                    </tr>
-                    <tr>
-                        <td class="font-weight-bold">Jenis Perawatan</td>
-                        <td>:</td>
                         <td><?= $booking['namajenis'] ?></td>
-                    </tr>
-                    <tr>
-                        <td class="font-weight-bold">Estimasi Durasi</td>
-                        <td>:</td>
-                        <td><?= $booking['estimasi'] ?> menit</td>
-                    </tr>
-                    <tr>
-                        <td class="font-weight-bold">Biaya</td>
-                        <td>:</td>
+                        <td>Dental treatment - <?= $booking['estimasi'] ?> minutes</td>
                         <td>Rp <?= number_format($booking['harga'], 0, ',', '.') ?></td>
-                    </tr>
-                    <?php if (!empty($booking['catatan'])) : ?>
-                    <tr>
-                        <td class="font-weight-bold">Catatan</td>
-                        <td>:</td>
-                        <td><?= $booking['catatan'] ?></td>
-                    </tr>
-                    <?php endif; ?>
-                    <?php if (!empty($booking['bukti_bayar'])) : ?>
-                    <tr>
-                        <td class="font-weight-bold">Bukti Pembayaran</td>
-                        <td>:</td>
-                        <td>
-                            <a href="<?= base_url('uploads/bukti_bayar/' . $booking['bukti_bayar']) ?>" target="_blank" class="btn btn-sm btn-info">
-                                <i class="fas fa-eye mr-1"></i> Lihat Bukti Pembayaran
-                            </a>
-                        </td>
-                    </tr>
-                    <?php endif; ?>
-                    <tr>
-                        <td class="font-weight-bold">Dibuat pada</td>
-                        <td>:</td>
-                        <td><?= date('d F Y H:i', strtotime($booking['created_at'])) ?></td>
-                    </tr>
-                    <tr>
-                        <td class="font-weight-bold">Diperbarui pada</td>
-                        <td>:</td>
-                        <td><?= date('d F Y H:i', strtotime($booking['updated_at'])) ?></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+    
+    <!-- QR and signature row -->
+    <div class="row mt-4">
+        <div class="col-6">
+            <div class="text-center">
+                <p><strong>Scan QR Code for Check-in:</strong></p>
+                <img src="<?= $qrCodeImage ?>" alt="Check-in QR Code" style="width: 150px; margin-top: 20px;">
+                <p class="mt-2 text-muted">Present this QR code when you arrive at the clinic</p>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="text-center">
+                <p><strong>Padang, <?= date('d F Y') ?></strong></p>
+                <br><br>
+                <p class="mt-4"><strong>Promedico Dental</strong></p>
+                <p>Management</p>
+            </div>
+        </div>
+    </div>
+    
+    <?php if (isset($booking['catatan']) && !empty($booking['catatan'])): ?>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="callout callout-info">
+                <h5><i class="fas fa-info"></i> Notes:</h5>
+                <?= $booking['catatan'] ?>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+    
+    <!-- this row will not appear when printing -->
+    <div class="row no-print mt-4">
+        <div class="col-12">
+            <a href="#" onclick="window.print();" class="btn btn-default">
+                <i class="fas fa-print"></i> Print
+            </a>
+            <a href="<?= base_url() ?>/booking" class="btn btn-primary float-right" style="margin-right: 5px;">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+    </div>
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('script') ?>
+<!-- Additional scripts if needed -->
+<script>
+    $(function() {
+        // Any additional JavaScript can be added here
+    });
+</script>
+<?= $this->endSection() ?>

@@ -84,6 +84,14 @@
                              </p>
                          </a>
                      </li>
+                     <li class="nav-item">
+                         <a href="<?php base_url() ?>/perawatan" class="nav-link">
+                             <i class="nav-icon fas fa-notes-medical"></i>
+                             <p>
+                                 Perawatan
+                             </p>
+                         </a>
+                     </li>
 
                      <li class="nav-header">Laporan</li>
                      <li class="nav-item">

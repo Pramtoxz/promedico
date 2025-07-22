@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-navy">
+            <div class="card card-teal">
                 <div class="card-header">
                     <h5 class="card-title">
                         <?= $title ?>
@@ -12,17 +12,17 @@
                 </div>
                 <div class="card-body">
                     <div class="buttons">
-                        <a href="<?= site_url('satuan/formtambah') ?>" class="btn"
-                            style="background-color: navy; color: white;">Tambah Data</a>
+                        <a href="<?= site_url('perawatan/formtambah') ?>" class="btn btn-danger">Tambah Perawatan</a>
                     </div>
                     <div class="table-responsive datatable-minimal mt-4">
-                        <table class="table table-hover" id="tabelAset">
+                        <table class="table table-hover" id="tabelPerawatan">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Kode Satuan</th>
-                                    <th>Nama Satuan</th>
-                                    <th>Harga</th>
+                                    <th>Kode Perawatan</th>
+                                    <th>Pasien</th>
+                                    <th>Tanggal</th>
+                                    <th>Dokter</th>
                                     <th class="no-short">Aksi</th>
                                 </tr>
                             </thead>
@@ -33,36 +33,19 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 800px;">
-        <div class="modal-content" style="background-color: #f4f4f2; border-radius: 20px;">
-            <div class="modal-header"
-                style="background-color: #131842; color: white; border-top-left-radius: 20px; border-top-right-radius: 20px;">
-                <h5 class="modal-title" id="detailModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" style="color: white;">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="detail-content" style="overflow-y: auto;">
-                <!-- Detail pelanggan akan dimuat melalui AJAX -->
-            </div>
-        </div>
-    </div>
-</div>
+
 <!-- isi konten end -->
 <?= $this->endSection() ?>
 <?= $this->section('script') ?>
 <script>
 $(document).ready(function() {
-    $('#tabelAset').DataTable({
+    $('#tabelPerawatan').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '/satuan/view',
+        ajax: '/perawatan/view',
         info: true,
         ordering: true,
         paging: true,
-        responsive: true,
         order: [
             [0, 'desc']
         ],
@@ -73,10 +56,10 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.btn-delete', function() {
-        var kdsatuan = $(this).data('kdsatuan');
+        var idperawatan = $(this).data('idperawatan');
 
         Swal.fire({
-            title: 'Apakah Anda yakin ingin menghapus data ini?',
+            title: 'Apakah Anda yakin ingin menghapus perawatan ini?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -87,9 +70,10 @@ $(document).ready(function() {
             if (result.isConfirmed) {
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo route_to('satuan.delete'); ?>",
+                    url: "<?php echo site_url('perawatan/delete'); ?>",
                     data: {
-                        kdsatuan: kdsatuan
+                        idperawatan: idperawatan,
+                        <?= csrf_token() ?>: '<?= csrf_hash() ?>'
                     },
                     dataType: 'json',
                     success: function(response) {
@@ -100,11 +84,11 @@ $(document).ready(function() {
                                 icon: 'success'
                             });
                             // Refresh DataTable
-                            $('#tabelAset').DataTable().ajax.reload();
+                            $('#tabelPerawatan').DataTable().ajax.reload();
                         } else {
                             Swal.fire({
                                 title: 'Error!',
-                                text: 'Gagal menghapus data',
+                                text: response.error || 'Gagal menghapus perawatan',
                                 icon: 'error'
                             });
                         }
@@ -113,7 +97,7 @@ $(document).ready(function() {
                         console.error(xhr.responseText);
                         Swal.fire({
                             title: 'Error!',
-                            text: 'Gagal menghapus data',
+                            text: 'Gagal menghapus perawatan',
                             icon: 'error'
                         });
                     }
@@ -124,24 +108,14 @@ $(document).ready(function() {
 });
 
 $(document).on('click', '.btn-edit', function() {
-    var kdsatuan = $(this).data('kdsatuan');
-    window.location.href = "<?php echo site_url('satuan/edit/'); ?>" + kdsatuan;
+    var idperawatan = $(this).data('idperawatan');
+    window.location.href = "<?php echo site_url('perawatan/formedit/'); ?>" + idperawatan;
+});
+$(document).on('click', '.btn-detail', function() {
+    var idperawatan = $(this).data('idperawatan');
+    window.location.href = "<?php echo site_url('perawatan/detail/'); ?>" + idperawatan;
 });
 
-$(document).on('click', '.btn-detail', function() {
-    var kdsatuan = $(this).data('kdsatuan');
-    $.ajax({
-        type: "GET",
-        url: "<?= site_url('satuan/detail/') ?>" + kdsatuan,
-        dataType: 'html',
-        success: function(response) {
-            $('#detail-content').html(response);
-            $('#detailModal').modal('show');
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-        }
-    });
-});
+
 </script>
 <?= $this->endSection() ?>

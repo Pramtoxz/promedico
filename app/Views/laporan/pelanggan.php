@@ -24,7 +24,7 @@
 
             <div class="row-sm-12" id="printHalaman">
                 <div class="text-center">
-                    <img src="<?= base_url() ?>/assets/img/logo.png" alt="Logo Farhan" style="height: 100px;">
+                    <img src="<?= base_url() ?>/assets/img/logo.png" alt="Logo Promedico" style="height: 100px;">
                     <h4><b>Laporan Pelanggan</b></h4>
                 </div>
                 <div class="tabelPelanggan">

@@ -38,10 +38,10 @@
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed">
     <!-- Site wrapper -->
     <div class="wrapper">
-        <div class="preloader flex-column justify-content-center align-items-center">
+        <!-- <div class="preloader flex-column justify-content-center align-items-center">
             <img class="animation__wobble" src="<?= base_url() ?>/assets/img/logo.png" alt="AdminLTELogo"
                 height="120" width="400">
-        </div>
+        </div> -->
         <!-- Navbar -->
         <?= $this->include('layout/navbar') ?>
         <!-- /.navbar -->

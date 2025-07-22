@@ -90,7 +90,7 @@
         <div class="row">
             <div class="col-md-12" id="printHalaman" style="font-size: 13px;">
                 <div class="text-center">
-                    <img src="<?= base_url() ?>/assets/img/logo.png" alt="Logo Farhan" style="height: 100px;">
+                    <img src="<?= base_url() ?>/assets/img/logo.png" alt="Logo Promedico" style="height: 100px;">
                     <h4><b>Laporan Pengambilan</b></h4>
                 </div>
                 <div class="tabelViewAllWedding"></div>

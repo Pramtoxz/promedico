@@ -6,8 +6,19 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-// Default route
+// Landing page routes
 $routes->get('/', 'Home::index');
+$routes->get('online/booking', 'BookingController::booking');
+$routes->post('online/simpanbooking', 'BookingController::simpanbooking');
+$routes->get('online/bukti', 'BookingController::bukti');
+$routes->get('online/bukti/(:segment)', 'BookingController::bukti/$1');
+$routes->get('online/uploadBukti/(:segment)', 'BookingController::uploadBukti/$1');
+$routes->post('online/prosesUploadBukti', 'BookingController::prosesUploadBukti');
+$routes->get('online/faktur/(:segment)', 'BookingController::faktur/$1');
+$routes->post('booking/checkDayMatch', 'BookingController::checkDayMatch');
+$routes->post('booking/findAvailableSlot', 'BookingController::findAvailableSlot');
+$routes->get('online/lengkapi_data', 'BookingController::lengkapi_data');
+$routes->post('booking/simpan_data_pasien', 'BookingController::simpan_data_pasien');
 
 // Auth Routes
 $routes->get('auth', 'Auth::index');
@@ -121,5 +132,38 @@ $routes->group('booking', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], 
     $routes->get('viewGetPasien', 'BookingController::viewGetPasien');
     $routes->get('getJadwal', 'BookingController::getJadwal');
     $routes->get('viewGetJadwal', 'BookingController::viewGetJadwal');
+    // Check-in routes
+    $routes->get('checkin', 'BookingController::checkin');
+    $routes->get('checkin/(:segment)', 'BookingController::checkin/$1');
+    $routes->post('processCheckin', 'BookingController::processCheckin');
+    $routes->get('getBuktiBooking/(:segment)', 'BookingController::getBuktiBooking/$1');
+    $routes->post('updateStatusBukti/(:segment)', 'BookingController::updateStatusBukti/$1');
+    // Pembayaran routes
+    $routes->get('uploadBukti/(:segment)', 'BookingController::uploadBukti/$1');
+    $routes->post('prosesUploadBukti', 'BookingController::prosesUploadBukti');
+    $routes->get('faktur/(:segment)', 'BookingController::faktur/$1');
 });
+
+// Perawatan routes (protected by auth filter and role filter)
+$routes->group('perawatan', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+    $routes->get('/', 'PerawatanController::index');
+    $routes->get('view', 'PerawatanController::viewPerawatan');
+    $routes->get('formtambah', 'PerawatanController::formtambah');
+    $routes->get('getperawatan', 'PerawatanController::getperawatan');
+    $routes->get('viewgetperawatan', 'PerawatanController::viewgetperawatan');
+    $routes->get('getobat', 'PerawatanController::getobat');
+    $routes->get('viewgetobat', 'PerawatanController::viewgetobat');
+    $routes->get('getpasien', 'PerawatanController::getpasien');
+    $routes->get('viewgetpasien', 'PerawatanController::viewgetpasien');
+    $routes->get('detail/(:segment)', 'PerawatanController::detail/$1');
+    $routes->get('viewtemp', 'PerawatanController::viewTemp');
+    $routes->post('addtemp', 'PerawatanController::addtemp');
+    $routes->post('deletetemp/(:segment)', 'PerawatanController::deleteTemp/$1');
+    $routes->post('deletetempall', 'PerawatanController::deleteAllTemp');
+    $routes->post('save', 'PerawatanController::save');
+    $routes->get('formedit/(:segment)', 'PerawatanController::formedit/$1');
+    $routes->post('updatedata/(:segment)', 'PerawatanController::updatedata/$1');
+    $routes->post('delete', 'PerawatanController::delete');
+});
+
 

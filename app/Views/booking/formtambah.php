@@ -105,20 +105,7 @@
                                     <input type="time" id="waktu_selesai" name="waktu_selesai" class="form-control" readonly>
                                     <div class="invalid-feedback error_waktu_selesai"></div>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group row mb-4">
-                                <label for="status" class="col-sm-3 col-form-label">Status</label>
-                                <div class="col-sm-9">
-                                    <select id="status" name="status" class="form-control">
-                                        <option value="pending">Pending</option>
-                                        <option value="diterima">Diterima</option>
-                                        <option value="ditolak">Ditolak</option>
-                                    </select>
-                                    <div class="invalid-feedback error_status"></div>
-                                </div>
-                            </div>
-                            
+                            </div>                        
                             <div class="form-group row mb-4">
                                 <label for="catatan" class="col-sm-3 col-form-label">Catatan</label>
                                 <div class="col-sm-9">
@@ -399,7 +386,12 @@ $(function() {
         };
         
         const dayNumber = dayMap[hari];
-        if (dayNumber === undefined) return;
+        if (dayNumber === undefined) {
+            console.error('Hari tidak valid:', hari);
+            return;
+        }
+        
+        console.log('Setting up validation for day:', hari, 'day number:', dayNumber);
         
         const tanggalInput = $('#tanggal');
         
@@ -410,6 +402,8 @@ $(function() {
         tanggalInput.on('change', function() {
             const selectedDate = new Date($(this).val());
             if (!selectedDate || isNaN(selectedDate.getTime())) return;
+            
+            console.log('Selected date:', selectedDate, 'day of week:', selectedDate.getDay());
             
             // Cek apakah hari sesuai
             if (selectedDate.getDay() !== dayNumber) {
@@ -437,6 +431,8 @@ $(function() {
                 const currentTime = new Date();
                 const waktuJadwal = $('#infojadwal').val().split('-')[2].trim();
                 const waktuMulai = waktuJadwal.split(' ')[0].trim();
+                
+                console.log('Today check - current time:', currentTime, 'jadwal waktu:', waktuMulai);
                 
                 // Konversi waktu jadwal ke objek Date
                 const [hours, minutes] = waktuMulai.split(':').map(Number);
@@ -469,6 +465,13 @@ $(function() {
         // Set placeholder dengan tanggal valid berikutnya
         const formattedDate = nextValidDate.toISOString().split('T')[0];
         tanggalInput.attr('placeholder', formattedDate);
+        
+        // Isi tanggal otomatis dengan tanggal valid berikutnya untuk memudahkan user
+        tanggalInput.val(formattedDate);
+        // Trigger change event untuk menjalankan validasi
+        tanggalInput.trigger('change');
+        
+        console.log('Next valid date:', formattedDate);
     }
 
     // Cek slot tersedia saat tombol di klik
@@ -503,11 +506,19 @@ $(function() {
             success: function(response) {
                 $('#cekSlotButton').prop('disabled', false).html('<i class="fas fa-search"></i> Cek Slot Tersedia');
                 
+                console.log('Response from server:', response);
+                
                 if (response.success) {
                     // Slot tersedia
                     $('#slotInfo').removeClass('alert-danger').addClass('alert-success').show();
                     $('#slotInfo').html('<strong>Slot tersedia!</strong> ' +
                         'Waktu: ' + response.slot.waktu_mulai.substr(0, 5) + ' - ' + response.slot.waktu_selesai.substr(0, 5));
+                    
+                    // Tambahkan peringatan jika ada
+                    if (response.warning) {
+                        $('#slotInfo').append('<br><span class="text-warning"><i class="fas fa-exclamation-triangle"></i> ' + 
+                            response.warning + '</span>');
+                    }
                     
                     // Isi waktu mulai dan selesai otomatis
                     $('#waktu_mulai').val(response.slot.waktu_mulai.substr(0, 5));
