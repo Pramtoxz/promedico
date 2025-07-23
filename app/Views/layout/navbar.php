@@ -45,7 +45,7 @@
                 </div>
 
             </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right bg-navy">
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right bg-teal">
                 <span class="dropdown-item dropdown-header text-white">Hallo, Admin</span>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item text-white" style="transition: background-color 0.3s;">

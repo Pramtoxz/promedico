@@ -8,61 +8,62 @@
         <div class="row">
             <div class="col-12">
                 <div class="text-center">
-                    <img src="<?= base_url() ?>/assets/img/logo.png" alt="Logo Promedico" class="img-fluid"
-                        style="max-width: 50%;">
+                    <img src="<?= base_url() ?>/assets/img/dashboard.png" alt="Logo Promedico" class="img-fluid"
+                        style="max-width: 100%">
                 </div>
             </div>
         </div>
+        <br>
         <div class="row">
             <div class="col-lg-3 col-6">
-                <div class="small-box bg-danger">
+                <div class="small-box bg-teal">
                     <div class="inner">
-                        <h3>120</h3>
-                        <p>Cucian Masuk</p>
+                        <h3>Dokter</h3>
+                        <p>Pengelolaan Dokter</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person"></i>
+                    </div>
+                    <a href="/dokter" class="small-box-footer">More info <i
+                            class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-teal">
+                    <div class="inner">
+                        <h3>Pasien</h3>
+                        <p>Pengelolaan Pasien</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person"></i>
+                    </div>
+                    <a href="/pasien" class="small-box-footer">More info <i
+                            class="ion ion-person-stalker"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-teal">
+                    <div class="inner">
+                        <h3>Jenis</h3>
+                        <p>Pengelolaan Jenis Perawatan</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person"></i>
+                    </div>
+                    <a href="/jenisperawatan" class="small-box-footer">More info <i
+                            class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-teal">
+                    <div class="inner">
+                        <h3>Jadwal</h3>
+                        <p>Pengelolaan Jadwal Dokter</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-calendar"></i>
                     </div>
-                    <a href="/cucianmasuk" class="small-box-footer">More info <i
-                            class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3>45</h3>
-                        <p>Cucian Yang Di Proses</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-load-a"></i>
-                    </div>
-                    <a href="/cucianmasuk" class="small-box-footer">More info <i
-                            class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-primary">
-                    <div class="inner">
-                        <h3>60</h3>
-                        <p>Cucian Selesai</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-tshirt"></i>
-                    </div>
-                    <a href="/cucianmasuk" class="small-box-footer">More info <i
-                            class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3>30</h3>
-                        <p>Cucian Yang Di Ambil</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-checkmark-circled"></i>
-                    </div>
-                    <a href="/cuciankeluar" class="small-box-footer">More info <i
+                    <a href="/jadwal" class="small-box-footer">More info <i
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
