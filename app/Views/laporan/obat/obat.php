@@ -1,9 +1,9 @@
 <?= $this->extend('layout/main') ?>
 <?= $this->section('content') ?>
 <div class="col-md-12">
-    <div class="card card-navy">
+    <div class="card card-teal">
         <div class="card-header">
-            <h3 class="card-title">Laporan Pelanggan</h3>
+            <h3 class="card-title">Laporan Barang</h3>
             <!-- /.card-tools -->
         </div>
         <!-- /.card-header -->
@@ -23,20 +23,32 @@
 
 
             <div class="row-sm-12" id="printHalaman">
-                <div class="text-center">
-                    <img src="<?= base_url() ?>/assets/img/logo.png" alt="Logo Promedico" style="height: 100px;">
-                    <h4><b>Laporan Pelanggan</b></h4>
+                <div class="d-flex justify-content-center align-items-center text-center">
+                    <div>
+                    </div>
+                    <div>
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px; margin-left: -150px;">
+                            <img src="<?= base_url() ?>/assets/img/promedicotp.png" alt="Logo Klik Promedico" style="height: 100px;">
+                            <div style="text-align: center; margin-left: 60px;">
+                                <p style="font-size: 28px; font-family: 'Times New Roman'; margin-bottom: 0;"><b>Klik Promedico</b></p>
+                                <p style="font-size: 20px; font-family: 'Times New Roman'; margin-bottom: 0;">Kota Pariaman, Sumatera Barat</p>
+                            </div>
+                        </div>
+                        <hr style="border: 2px solid black; width: 68rem;">
+                        <b style="font-size: 20px; font-family: 'Times New Roman'; margin-bottom: 0; text-decoration: underline;">Laporan Obat</b>
+                    </div>
                 </div>
-                <div class="tabelPelanggan">
-
+                <div class="tabelAset">
                 </div>
 
-                <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                <div style="display: flex;
+            justify-content: space-between;
+            margin-top: 20px;">
                     <div></div>
                     <?php $tanggal = date('Y-m-d'); ?>
                     <div style="text-align: center;">
-                        <p>Padang, <?= $tanggal ?></p>
-                        <p style="margin-top: 5rem;">Pimpinan</p>
+                        <p style="font-size: 18px; font-family: 'Times New Roman'; margin-bottom: 0;">Padang <?= $tanggal ?></p>
+                        <p style="margin-top: 5rem; font-size: 18px; font-family: 'Times New Roman'; margin-bottom: 0;">Klik Promedico</p>
                     </div>
                 </div>
             </div>
@@ -52,15 +64,16 @@
     function ViewLaporanSemua() {
         $.ajax({
             type: "get",
-            url: "<?= base_url('laporan/viewall-laporanpelanggan') ?>",
+            url: "<?= base_url('laporan-obat/view') ?>",
             dataType: "JSON",
             success: function(response) {
                 if (response.data) {
-                    $('.tabelPelanggan').html(response.data);
+                    $('.tabelAset').html(response.data);
                 }
             }
         });
     }
+
 
     function PrintLaporan() {
         var printContent = document.getElementById('printHalaman');
@@ -68,28 +81,6 @@
         document.body.innerHTML = printContent.innerHTML;
         window.print();
         document.body.innerHTML = originalContents;
-    }
-
-    function ViewLaporanPertahun() {
-        let tahun = $('#tahun1').val();
-        if (tahun == '') {
-            alert('Tahun Belum Dipilih !!!');
-        } else {
-            $.ajax({
-                type: "POST",
-                url: "<?= base_url('laporan/viewlaporanobatmasuk') ?>",
-                data: {
-                    bulan: bulan,
-                    tahun: tahun,
-                },
-                dataType: "JSON",
-                success: function(response) {
-                    if (response.data) {
-                        $('.tabelperbulan').html(response.data);
-                    }
-                }
-            });
-        }
     }
 </script>
 <?= $this->endSection() ?>

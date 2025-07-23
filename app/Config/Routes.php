@@ -195,3 +195,20 @@ $routes->group('perawatan', ['filter' => ['auth', 'role:admin,dokter,pimpinan']]
 });
 
 
+$routes->group('laporan-obat', ['filter' => ['auth', 'role:admin,pimpinan']], function ($routes) {
+    $routes->get('/', 'Laporan\LaporanObat::LaporanObat');
+    $routes->get('view', 'Laporan\LaporanObat::viewallLaporanObat');
+    $routes->get('masuk', 'Laporan\LaporanObat::LaporanObatMasuk');
+    $routes->get('masuk/view', 'Laporan\LaporanObat::viewallLaporanObatMasuk');
+    $routes->post('masuk/viewtanggal', 'Laporan\LaporanObat::viewallLaporanObatMasukTanggal');
+    $routes->post('masuk/viewbulan', 'Laporan\LaporanObat::viewallLaporanObatMasukBulan');
+});
+
+
+$routes->group('laporan-users', ['filter' => ['auth', 'role:admin,pimpinan']], function ($routes) {
+    $routes->get('pasien', 'Laporan\LaporanUsers::LaporanPasien');
+    $routes->get('pasien/view', 'Laporan\LaporanUsers::viewallLaporanPasien');
+    $routes->get('dokter', 'Laporan\LaporanUsers::LaporanDokter');
+    $routes->get('dokter/view', 'Laporan\LaporanUsers::viewallLaporanDokter');
+});
+

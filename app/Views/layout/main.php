@@ -108,18 +108,14 @@
     <?= $this->renderSection('script') ?>
 
     <script>
-    $(document).ready(function() {
-        var url = window.location.href;
-        var str = url.split('/');
+    // $(document).ready(function() {
+    //     var url = window.location.href;
+    //     var str = url.split('/');
 
-        $('a.nav-link').filter(function() {
-            return this.href == '<?= base_url() ?>' + str[3];
-        }).addClass('active');
-
-
-
-
-    });
+    //     $('a.nav-link').filter(function() {
+    //         return this.href == '<?= base_url() ?>' + str[3];
+    //     }).addClass('active');
+    // });
 
     $(document).on('click', '.btnLogout', function() {
         Swal.fire({

@@ -6,6 +6,14 @@
     <div class="container-fluid">
 
         <div class="row">
+            <div class="col-12">
+                <div class="text-center">
+                    <img src="<?= base_url() ?>/assets/img/logo.png" alt="Logo Promedico" class="img-fluid"
+                        style="max-width: 50%;">
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-danger">
                     <div class="inner">
@@ -59,68 +67,8 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="text-center">
-                    <img src="<?= base_url() ?>/assets/img/logo.png" alt="Logo Promedico" class="img-fluid"
-                        style="max-width: 50%;">
-                </div>
-            </div>
-        </div>
 
-        <!-- KEDUA -->
-        <div class="row">
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-navy">
-                    <div class="inner">
-                        <h3>8</h3>
-                        <p>Jenis Cucian</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                    <a href="/jeniscucian" class="small-box-footer">More info <i
-                            class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-navy">
-                    <div class="inner">
-                        <h3>5</h3>
-                        <p>Satuan</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-tshirt"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-navy">
-                    <div class="inner">
-                        <h3>200</h3>
-                        <p>Pelanggan</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                    <a href="/konsumen" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-navy">
-                    <div class="inner">
-                        <h3>10</h3>
-                        <p>User</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-ios-people"></i>
-                    </div>
-                    <a href="/user" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
-
+     
         <!-- <div class="card bg-gradient-success">
             <div class="card-header border-0">
                 <h3 class="card-title">
