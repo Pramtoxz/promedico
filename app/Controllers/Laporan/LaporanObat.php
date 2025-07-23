@@ -188,4 +188,54 @@ class LaporanObat extends BaseController
 
         echo json_encode($response);
     }
+
+    public function LaporanJenis()
+    {
+        $data['title'] = 'Laporan Jenis Perawatan';
+        return view('laporan/jenis/jenisperawatan', $data);
+    }
+
+    public function viewallLaporanJenis()
+    {
+        $db = db_connect();
+        $jenis = $db
+            ->table('jenis_perawatan')
+            ->select('idjenis, namajenis, estimasi,harga')
+            ->groupBy('jenis_perawatan.idjenis, jenis_perawatan.namajenis, jenis_perawatan.estimasi, jenis_perawatan.harga')
+            ->get()
+            ->getResultArray();
+        $data = [
+            'jenis' => $jenis,
+        ];
+        $response = [
+            'data' => view('laporan/jenis/viewalljenisperawatan', $data),
+        ];
+
+        echo json_encode($response);
+    }
+    public function LaporanJadwal()
+    {
+        $data['title'] = 'Laporan Jadwal Dokter';
+        return view('laporan/jadwal/jadwal', $data);
+    }
+
+    public function viewallLaporanJadwal()
+    {
+        $db = db_connect();
+        $jadwal = $db
+            ->table('jadwal')
+            ->select('jadwal.idjadwal, dokter.nama, jadwal.hari, jadwal.waktu_mulai, jadwal.waktu_selesai')
+            ->join('dokter', 'dokter.id_dokter = jadwal.iddokter')
+            ->groupBy('jadwal.idjadwal, dokter.nama, jadwal.hari, jadwal.waktu_mulai, jadwal.waktu_selesai')
+            ->get()
+            ->getResultArray();
+        $data = [
+            'jadwal' => $jadwal,
+        ];
+        $response = [
+            'data' => view('laporan/jadwal/viewalljadwal', $data),
+        ];
+
+        echo json_encode($response);
+    }
 }

@@ -185,7 +185,7 @@
                         <?php if (!empty($dr['foto']) && file_exists('assets/img/dokter/' . $dr['foto'])): ?>
                             <img src="<?= base_url('assets/img/dokter/' . $dr['foto']) ?>" alt="<?= $dr['nama'] ?>" class="w-full h-full object-cover">
                         <?php else: ?>
-                            <img src="<?= base_url('assets/img/default.jpg') ?>" alt="<?= $dr['nama'] ?>" class="w-full h-full object-cover">
+                            <img src="<?= base_url('assets/img/dokter.png') ?>" alt="<?= $dr['nama'] ?>" class="w-full h-full object-cover">
                         <?php endif; ?>
                     </div>
                     <div class="p-6">

@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\Pasien as ModelsPasien;
+use App\Models\Pasien as ModelPasien;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use Hermawan\DataTables\DataTable;
@@ -130,9 +130,9 @@ class PasienController extends BaseController
             } else {
                 if ($foto->isValid() && !$foto->hasMoved()) {
                     $newName = 'foto-' . date('Ymd') . '-' . $id_pasien . '.' . $foto->getClientExtension();
-                    $foto->move('assets/img/pasien', $newName);
+                    $foto->move('assets/img/pasien/', $newName);
 
-                    $modelPasien = new ModelsPasien();
+                    $modelPasien = new ModelPasien();
                     $modelPasien->insert([
                         'id_pasien' => $id_pasien,
                         'nama' => $nama,
@@ -161,7 +161,7 @@ class PasienController extends BaseController
         if ($this->request->isAJAX()) {
             $id_pasien = $this->request->getPost('id_pasien');
 
-            $model = new ModelsPasien();
+            $model = new ModelPasien();
             $model->where('id_pasien', $id_pasien)->delete();
 
             $json = [
@@ -173,7 +173,7 @@ class PasienController extends BaseController
 
     public function formedit($id_pasien)
     {
-        $model = new ModelsPasien();
+        $model = new ModelPasien();
         $pasien = $model->find($id_pasien);
 
         if (!$pasien) {
@@ -270,12 +270,13 @@ class PasienController extends BaseController
                     'error' => $errors
                 ];
             } else {
-                $model = new ModelsPasien();
+                $model = new ModelPasien();
                 $dataPasien = $model->where('id_pasien', $id_pasien)->first();
                 
                 if ($foto->isValid() && !$foto->hasMoved()) {
-                    $newName = 'foto-' . date('Ymd') . '-' . $id_pasien . '.' . $foto->getClientExtension();
-                    $foto->move('assets/img/pasien', $newName);
+                    $random = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+                    $newName = 'foto-' . date('Ymd') . '-' . $id_pasien . '.' . $random . $foto->getClientExtension();
+                    $foto->move('assets/img/pasien/', $newName);
 
                     // Hapus foto lama jika ada
                     if (!empty($dataPasien['foto']) && file_exists('assets/img/pasien/' . $dataPasien['foto'])) {
@@ -350,7 +351,7 @@ class PasienController extends BaseController
             ]);
         }
         
-        $pasienModel = new ModelsPasien();
+        $pasienModel = new ModelPasien();
         $userModel = new \App\Models\UserModel();
         $pasien = $pasienModel->find($id_pasien);
         
@@ -426,7 +427,7 @@ class PasienController extends BaseController
             ]);
         }
         
-        $pasienModel = new ModelsPasien();
+        $pasienModel = new ModelPasien();
         $userModel = new \App\Models\UserModel();
         $pasien = $pasienModel->find($id_pasien);
         

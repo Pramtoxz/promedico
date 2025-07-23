@@ -122,6 +122,22 @@
                          </a>
                      </li>
                      <li class="nav-item">
+                         <a href="<?= base_url('laporan-jadwal') ?>" class="nav-link <?= (current_url() == base_url('laporan-jadwal')) ? 'active' : '' ?>">
+                             <i class="nav-icon fas fa-paperclip"></i>
+                             <p>
+                                 Laporan Jadwal Dokter
+                             </p>
+                         </a>
+                     </li>
+                     <li class="nav-item">
+                         <a href="<?= base_url('laporan-jenis') ?>" class="nav-link <?= (current_url() == base_url('laporan-jenis')) ? 'active' : '' ?>">
+                             <i class="nav-icon fas fa-paperclip"></i>
+                             <p>
+                                 Laporan Jenis Perawatan
+                             </p>
+                         </a>
+                     </li>
+                     <li class="nav-item">
                          <a href="<?= base_url('laporan-obat') ?>" class="nav-link <?= (current_url() == base_url('laporan-obat') || current_url() == base_url('laporan-obat/view')) ? 'active' : '' ?>">
                              <i class="nav-icon fas fa-paperclip"></i>
                              <p>

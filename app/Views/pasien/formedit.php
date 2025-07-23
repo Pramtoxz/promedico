@@ -114,13 +114,13 @@
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="cover" name="cover" accept="image/*"
                         onchange="previewCover()">
-                    <label class="custom-file-label" for="cover">Pilih File</label>
+                    <label class="custom-file-label" for="cover"><?= !empty($pasien['foto']) ? $pasien['foto'] : 'Pilih foto' ?></label>
                     <div class="invalid-feedback error_cover"></div>
                 </div>
             </div>
             <div class="card-body" style="overflow: hidden;">
-                <img id="coverPreview" src="<?= base_url('assets/img/' . $pasien['foto']) ?>" alt="Preview Cover" class="img-fluid"
-                    style="max-width: 100%; max-height: 100%; display: none;">
+                  <img id="coverPreview" src="<?= !empty($pasien['foto']) ? base_url('assets/img/pasien/' . $pasien['foto']) : base_url('assets/img/pasien.png') ?>" alt="Preview Cover" class="img-fluid"
+                    style="max-width: 100%; max-height: 100%;">
             </div>
         </div>
         <div class="card"
@@ -276,15 +276,16 @@ function previewCover() {
     const coverPreview = document.querySelector('#coverPreview');
     const coverLabel = document.querySelector('label[for="cover"]');
 
-    coverPreview.style.display = 'block';
-    const oFReader = new FileReader();
-    oFReader.readAsDataURL(cover.files[0]);
+    if (cover.files && cover.files[0]) {
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(cover.files[0]);
 
-    oFReader.onload = function(oFREvent) {
-        coverPreview.src = oFREvent.target.result;
-    };
+        oFReader.onload = function(oFREvent) {
+            coverPreview.src = oFREvent.target.result;
+        };
 
-    coverLabel.textContent = cover.files[0].name;
+        coverLabel.textContent = cover.files[0].name;
+    }
 }
 </script>
 <?= $this->endSection() ?>

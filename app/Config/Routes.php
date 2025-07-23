@@ -212,3 +212,13 @@ $routes->group('laporan-users', ['filter' => ['auth', 'role:admin,pimpinan']], f
     $routes->get('dokter/view', 'Laporan\LaporanUsers::viewallLaporanDokter');
 });
 
+
+$routes->group('laporan-jenis', ['filter' => ['auth', 'role:admin,pimpinan']], function ($routes) {
+    $routes->get('/', 'Laporan\LaporanObat::LaporanJenis');
+    $routes->get('view', 'Laporan\LaporanObat::viewallLaporanJenis');
+});
+$routes->group('laporan-jadwal', ['filter' => ['auth', 'role:admin,pimpinan']], function ($routes) {
+    $routes->get('/', 'Laporan\LaporanObat::LaporanJadwal');
+    $routes->get('view', 'Laporan\LaporanObat::viewallLaporanJadwal');
+});
+

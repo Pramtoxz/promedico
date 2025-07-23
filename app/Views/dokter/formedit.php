@@ -114,13 +114,13 @@
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="cover" name="cover" accept="image/*"
                         onchange="previewCover()">
-                    <label class="custom-file-label" for="cover">Pilih File</label>
+                    <label class="custom-file-label" for="cover"><?= !empty($dokter['foto']) ? $dokter['foto'] : 'Pilih foto' ?></label>
                     <div class="invalid-feedback error_cover"></div>
                 </div>
             </div>
             <div class="card-body" style="overflow: hidden;">
-                <img id="coverPreview" src="<?= base_url('assets/img/' . $dokter['foto']) ?>" alt="Preview Cover" class="img-fluid"
-                    style="max-width: 100%; max-height: 100%; display: none;">
+                <img id="coverPreview" src="<?= !empty($dokter['foto']) ? base_url('assets/img/dokter/' . $dokter['foto']) : base_url('assets/img/dokter.png') ?>" alt="Preview Cover" class="img-fluid"
+                    style="max-width: 100%; max-height: 100%;">
             </div>
         </div>
         <div class="card"
