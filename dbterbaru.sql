@@ -55,9 +55,12 @@ CREATE TABLE `detail_perawatan` (
   `qty` int DEFAULT NULL,
   `total` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `detail_perawatan` */
+
+insert  into `detail_perawatan`(`id`,`idperawatan`,`idobat`,`qty`,`total`) values 
+(4,'PRW0001','BK0001',10,50000);
 
 /*Table structure for table `dokter` */
 
@@ -245,12 +248,13 @@ CREATE TABLE `pasien` (
 /*Data for the table `pasien` */
 
 insert  into `pasien`(`id_pasien`,`nama`,`alamat`,`tgllahir`,`nohp`,`jenkel`,`foto`,`iduser`,`created_at`,`updated_at`,`deleted_at`) values 
-('PS0001','Pramudito Metra','Jl. Padang','2025-07-03','08129323923','','foto-20250722-PS0001.png',3,'2025-07-03 06:30:48','2025-07-22 01:28:15',NULL),
+('PS0001','Pramudito Metra','Jl. Padang','2025-07-03','08129323923','L','foto-20250722-PS0001.png',3,'2025-07-03 06:30:48','2025-07-22 01:28:15',NULL),
 ('PS0002','Cimul','ss','2025-07-09','081234256734','P',NULL,5,'2025-07-09 02:20:38','2025-07-15 14:32:09',NULL),
 ('PS0003','Tari','asdasd','2025-07-15','08743557687','L','foto-20250723-PS0003.png',NULL,'2025-07-15 16:16:54','2025-07-23 00:44:18',NULL),
 ('PS0004','Agus Saputra','asdasd','2025-07-15','06754343212','L',NULL,17,'2025-07-15 16:25:30','2025-07-22 02:05:44',NULL),
 ('PS0005','Taris','sdsds','2025-07-16','08123123123123','P',NULL,16,'2025-07-16 14:10:56','2025-07-16 14:46:45',NULL),
-('PS0006','Agus Saputra','Amerika','2025-07-22','08743557687','',NULL,NULL,'2025-07-21 18:10:29','2025-07-21 18:10:29',NULL);
+('PS0006','Agus Saputra','Amerika','2025-07-22','08743557687','L',NULL,NULL,'2025-07-21 18:10:29','2025-07-21 18:10:29',NULL),
+('PS0007','Tessa','asdad','2025-07-23','081234','','foto-20250723-PS0007.739png',NULL,'2025-07-23 10:58:43','2025-07-23 11:20:17',NULL);
 
 /*Table structure for table `perawatan` */
 
@@ -268,7 +272,7 @@ CREATE TABLE `perawatan` (
 /*Data for the table `perawatan` */
 
 insert  into `perawatan`(`idperawatan`,`idbooking`,`tanggal`,`resep`,`total`) values 
-('PRW0001','BK0001','2025-07-23','sdasdadad',NULL);
+('PRW0001','BK0001','2025-07-23','sdasdadad',50000);
 
 /*Table structure for table `temp` */
 
@@ -324,7 +328,7 @@ CREATE TABLE `users` (
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`username`,`email`,`password`,`role`,`status`,`last_login`,`remember_token`,`created_at`,`updated_at`,`deleted_at`) values 
-(1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-23 01:00:34',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
+(1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-23 14:53:24',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
 (3,'pramudito','pramuditometra2@gmail.com','$2y$10$/sKJ3nocDTaEBZwfqWvNj.H08jfcrWSolaA7F6buM7Tq2hYdwg.cK','user','active','2025-06-14 22:14:59',NULL,'2025-06-14 22:14:50','2025-06-14 22:14:50',NULL),
 (4,'boss','bossrentalpadang@gmail.com','$2y$10$x1Sb65DdkNNlpU02EiOHcuP.YW1BbF29e4HB8LD14jMqbnV8k4vpG','user','active',NULL,NULL,'2025-06-14 22:20:22','2025-06-14 22:20:22',NULL),
 (5,'cimul','srimulyarni2@gmail.com','$2y$10$qLdPOp12x6mohcK9q3FG1.5l/pymdxPRhOVTSuf7PWKDHjuiEZ6Fm','user','active','2025-06-14 22:46:26',NULL,'2025-06-14 22:45:35','2025-06-14 22:45:35',NULL),

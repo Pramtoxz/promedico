@@ -227,6 +227,10 @@ $routes->group('laporan-transaksi', ['filter' => ['auth', 'role:admin,pimpinan']
     $routes->get('booking/view', 'Laporan\LaporanTransaksi::viewallLaporanBooking');
     $routes->post('booking/viewtanggal', 'Laporan\LaporanTransaksi::viewallLaporanBookingTanggal');
     $routes->post('booking/viewbulan', 'Laporan\LaporanTransaksi::viewallLaporanBookingBulan');
+    $routes->get('perawatan', 'Laporan\LaporanTransaksi::LaporanPerawatan');
+    $routes->get('perawatan/view', 'Laporan\LaporanTransaksi::viewallLaporanPerawatan');
+    $routes->post('perawatan/viewtanggal', 'Laporan\LaporanTransaksi::viewallLaporanPerawatanTanggal');
+    $routes->post('perawatan/viewbulan', 'Laporan\LaporanTransaksi::viewallLaporanPerawatanBulan');
 });
 
 

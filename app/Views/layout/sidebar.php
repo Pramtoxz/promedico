@@ -162,6 +162,15 @@
                              </p>
                          </a>
                      </li>
+                     
+                     <li class="nav-item">
+                         <a href="<?= base_url('laporan-transaksi/perawatan') ?>" class="nav-link <?= (current_url() == base_url('laporan-transaksi/perawatan')) ? 'active' : '' ?>">
+                             <i class="nav-icon fas fa-paperclip"></i>
+                             <p>
+                                 Laporan Perawatan
+                             </p>
+                         </a>
+                     </li>
              </ul>
          </nav>
          <!-- /.sidebar-menu -->
