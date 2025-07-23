@@ -11,7 +11,7 @@
             <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
                 <b style="font-size: 18px;">Booking Receipt #<?= $booking['idbooking'] ?></b><br>
                 <small><strong>Status: </strong>
-                    <span class="badge <?= ($booking['status'] == 'pending') ? 'badge-warning' : (($booking['status'] == 'diterima') ? 'badge-success' : 'badge-danger') ?>">
+                    <span class="badge <?= ($booking['status'] == 'diproses') ? 'badge-warning' : (($booking['status'] == 'diterima') ? 'badge-success' : 'badge-danger') ?>">
                         <?= ucfirst($booking['status']) ?>
                     </span>
                 </small>

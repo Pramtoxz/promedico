@@ -80,6 +80,9 @@
         <div class="container mx-auto px-4 text-center">
             <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Lengkapi Data Pasien</h1>
             <p class="text-white text-lg max-w-xl mx-auto opacity-90">Sebelum melakukan booking, silakan lengkapi data diri Anda terlebih dahulu</p>
+            <div class="mt-4 bg-white/20 rounded-lg p-4 inline-block">
+                <p class="text-white flex items-center"><i class="fas fa-info-circle mr-2"></i> Data ini diperlukan untuk keperluan medis dan administrasi</p>
+            </div>
         </div>
     </header>
 
@@ -100,7 +103,7 @@
                     </div>
                     <?php endif; ?>
 
-                    <form action="<?= base_url('booking/simpan_data_pasien') ?>" method="post">
+                    <form action="<?= base_url('online/simpan_data_pasien') ?>" method="post">
                         <?= csrf_field() ?>
                         <div class="space-y-4">
                             <div>
@@ -196,7 +199,7 @@
             maxDate: "today" // Tanggal lahir tidak boleh masa depan
         });
         
-        // Form submission dengan konfirmasi SweetAlert
+        // Form submission dengan AJAX dan konfirmasi SweetAlert
         document.querySelector('form').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -234,7 +237,63 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.submit();
+                    // Gunakan AJAX untuk submit form
+                    const formData = new FormData(this);
+                    
+                    // Tampilkan loading
+                    const submitBtn = document.querySelector('button[type="submit"]');
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Menyimpan...';
+                    submitBtn.disabled = true;
+                    
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Server response:", data); // Tambahkan ini
+                        if (data.error) {
+                            // Tampilkan error jika ada
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: Object.values(data.error).join('\n')
+                            });
+                        }
+                        
+                        if (data.success || data.sukses) {
+                            // Tampilkan sukses
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: data.success || data.sukses,
+                                timer: 1500,
+                                timerProgressBar: true
+                            });
+                            
+                            // Redirect ke halaman booking
+                            setTimeout(() => {
+                                window.location.href = '<?= base_url('online/booking') ?>';
+                            }, 1500);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Terjadi kesalahan. Silakan coba lagi.'
+                        });
+                    })
+                    .finally(() => {
+                        // Reset tombol submit
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                    });
                 }
             });
         });

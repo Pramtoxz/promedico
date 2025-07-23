@@ -196,8 +196,8 @@ $(document).ready(function() {
     
     // Display booking details
     function displayBookingDetails(booking) {
-        const statusClass = booking.status === 'diperiksa' ? 'badge-success' : 
-                          (booking.status === 'pending' ? 'badge-warning' : 
+        const statusClass = booking.status === 'diproses' ? 'badge-warning' : 
+                          (booking.status === 'diterima' ? 'badge-success' : 
                           (booking.status === 'ditolak' ? 'badge-danger' : 'badge-info'));
         
         const html = `

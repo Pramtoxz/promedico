@@ -293,12 +293,12 @@
                                     $ext = pathinfo($booking['bukti_bayar'], PATHINFO_EXTENSION);
                                     if (in_array(strtolower($ext), ['jpg', 'jpeg', 'png'])):
                                 ?>
-                                <img src="<?= base_url('uploads/bukti_bayar/'.$booking['bukti_bayar']) ?>" alt="Bukti Pembayaran" class="max-w-xs mx-auto my-2 preview-image">
+                                <img src="<?= base_url('uploads/buktibayar/'.$booking['bukti_bayar']) ?>" alt="Bukti Pembayaran" class="max-w-xs mx-auto my-2 preview-image">
                                 <?php else: ?>
                                 <div class="text-center py-4">
                                     <i class="far fa-file-pdf text-red-500 text-5xl"></i>
                                     <p class="mt-2">File PDF</p>
-                                    <a href="<?= base_url('uploads/bukti_bayar/'.$booking['bukti_bayar']) ?>" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
+                                    <a href="<?= base_url('uploads/buktibayar/'.$booking['bukti_bayar']) ?>" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
                                         Lihat File
                                     </a>
                                 </div>
@@ -319,7 +319,7 @@
                             </div>
                             
                             <div class="mt-4 text-center">
-                                <a href="<?= base_url('booking/faktur/'.$booking['idbooking']) ?>" class="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                <a href="<?= base_url('cek/faktur/'.$booking['idbooking']) ?>" class="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
                                     <i class="fas fa-file-invoice mr-2"></i> Lihat Faktur
                                 </a>
                             </div>

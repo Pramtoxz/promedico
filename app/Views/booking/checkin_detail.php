@@ -44,9 +44,9 @@
                                                 <label>Status:</label>
                                                 <p>
                                                     <span class="badge 
-                                                        <?= ($booking['status'] == 'pending') ? 'badge-warning' : 
+                                                        <?= ($booking['status'] == 'diproses') ? 'badge-warning' : 
                                                             (($booking['status'] == 'diterima') ? 'badge-success' : 
-                                                            (($booking['status'] == 'diperiksa') ? 'badge-info' : 'badge-danger')) ?>">
+                                                            (($booking['status'] == 'ditolak') ? 'badge-danger' : 'badge-info')) ?>">
                                                         <?= ucfirst($booking['status']) ?>
                                                     </span>
                                                 </p>
@@ -64,7 +64,7 @@
                                     <div class="alert alert-success mt-4">
                                         <i class="fas fa-check-circle"></i> Pasien sudah check-in dan sedang dalam proses pemeriksaan.
                                     </div>
-                                    <?php elseif ($booking['status'] == 'pending'): ?>
+                                    <?php elseif ($booking['status'] == 'diproses'): ?>
                                     <div class="alert alert-warning mt-4">
                                         <i class="fas fa-exclamation-circle"></i> Booking ini masih dalam status pending. Harap konfirmasi terlebih dahulu sebelum check-in.
                                     </div>

@@ -377,7 +377,7 @@ function processBookingCheckinModal(bookingId) {
   });
 }
 function displayBookingDetailsModal(booking) {
-  const statusClass = booking.status === 'diperiksa' ? 'badge-success' : (booking.status === 'pending' ? 'badge-warning' : (booking.status === 'ditolak' ? 'badge-danger' : 'badge-info'));
+  const statusClass = booking.status === 'diproses' ? 'badge-warning' : (booking.status === 'diterima' ? 'badge-success' : (booking.status === 'ditolak' ? 'badge-danger' : 'badge-info'));
   const html = `
     <div class="booking-info">
       <h5 class="text-primary">Booking #${booking.idbooking}</h5>

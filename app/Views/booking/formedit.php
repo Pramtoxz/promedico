@@ -111,7 +111,7 @@
                                 <label for="status" class="col-sm-3 col-form-label">Status</label>
                                 <div class="col-sm-9">
                                     <select id="status" name="status" class="form-control">
-                                        <option value="pending" <?= ($booking['status'] == 'pending') ? 'selected' : ''; ?>>Pending</option>
+                                        <option value="diproses" <?= ($booking['status'] == 'diproses') ? 'selected' : ''; ?>>Diproses</option>
                                         <option value="diterima" <?= ($booking['status'] == 'diterima') ? 'selected' : ''; ?>>Diterima</option>
                                         <option value="ditolak" <?= ($booking['status'] == 'ditolak') ? 'selected' : ''; ?>>Ditolak</option>
                                     </select>

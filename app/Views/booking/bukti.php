@@ -103,20 +103,25 @@
     </div>
     <!-- Card Preview -->
     <div class="col-md-4">
-        <div class="card bg-teal" style="padding-left: 10px; padding-right: 10px; height: 362px;">
+        <div class="card bg-teal" style="padding-left: 100px; padding-right: 100px; height: 500px;">
             <div class="card-header ">
-                <h3 class="card-title">Foto Pasien</h3>
-            </div>
-            <div class="form-group">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="cover" name="cover" accept="image/*" disabled>
-                    <label class="custom-file-label" for="cover">Pilih File</label>
-                    <div class="invalid-feedback error_cover"></div>
-                </div>
+                <h3 class="card-title">Bukti Pembayaran</h3>
             </div>
             <div class="card-body" style="overflow: hidden;">
-                <img id="coverPreview" src="<?= base_url('assets/img/' . $booking['bukti_bayar']) ?>" alt="Preview Cover" class="img-fluid"
-                    style="max-width: 100%; max-height: 100%; display: block;">
+                <!-- Tombol download -->
+                <div class="mb-2 text-center">
+                    <a href="<?= base_url('uploads/buktibayar/' . $booking['bukti_bayar']) ?>" download class="btn btn-success btn-sm">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+                <!-- Preview Image dengan link untuk membuka di tab baru -->
+                <a href="<?= base_url('uploads/buktibayar/' . $booking['bukti_bayar']) ?>" target="_blank" title="Klik untuk melihat gambar di tab baru">
+                    <img id="coverPreview" src="<?= base_url('uploads/buktibayar/' . $booking['bukti_bayar']) ?>" alt="Preview Cover" class="img-fluid"
+                        style="max-width: 100%; max-height: 100%; display: block; cursor: pointer;">
+                </a>
+                <div class="mt-2 text-center">
+                    <small class="text-muted"><i class="fas fa-info-circle"></i> Klik gambar untuk melihat ukuran penuh di tab baru</small>
+                </div>
             </div>
         </div>
         <div class="card"

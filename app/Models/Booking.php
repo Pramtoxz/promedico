@@ -54,28 +54,40 @@ class Booking extends Model
     // Mencari slot waktu tersedia dalam range waktu tertentu
     public function findAvailableSlot($idjadwal, $tanggal, $blok_waktu, $durasi_menit)
     {
-        // Definisikan waktu blok
-        $waktu_mulai_blok = ($blok_waktu == 'Pagi') ? '08:00:00' : '13:00:00';
-        $waktu_selesai_blok = ($blok_waktu == 'Pagi') ? '12:00:00' : '17:00:00';
+        // Ambil jadwal dokter dari database
+        $db = \Config\Database::connect();
+        $jadwal = $db->table('jadwal')
+                    ->where('idjadwal', $idjadwal)
+                    ->get()
+                    ->getRowArray();
+        
+        if (!$jadwal) {
+            return null; // Jadwal tidak ditemukan
+        }
+        
+        // Gunakan waktu dari jadwal dokter, bukan hardcoded value
+        $waktu_mulai_jadwal = $jadwal['waktu_mulai'];
+        $waktu_selesai_jadwal = $jadwal['waktu_selesai'];
         
         // Ambil semua booking pada jadwal dan tanggal tersebut
         $existing_bookings = $this->where('idjadwal', $idjadwal)
                                  ->where('tanggal', $tanggal)
-                                 ->where('waktu_mulai >=', $waktu_mulai_blok)
-                                 ->where('waktu_selesai <=', $waktu_selesai_blok)
+                                 ->where('waktu_mulai >=', $waktu_mulai_jadwal)
+                                 ->where('waktu_selesai <=', $waktu_selesai_jadwal)
                                  ->where('status !=', 'ditolak')
                                  ->orderBy('waktu_mulai', 'ASC')
                                  ->findAll();
         
         // Buffer time antar pasien (dalam menit)
+        // Ini bisa juga diambil dari konfigurasi atau database jika perlu
         $buffer_time = 10;
         
         // Konversi durasi dan buffer ke format time interval (jam)
         $durasi_jam = $durasi_menit / 60;
         $buffer_jam = $buffer_time / 60;
         
-        // Inisialisasi waktu mulai pencarian dengan waktu mulai blok
-        $current_time = $waktu_mulai_blok;
+        // Inisialisasi waktu mulai pencarian dengan waktu mulai jadwal
+        $current_time = $waktu_mulai_jadwal;
         
         // Iterasi melalui existing bookings untuk menemukan slot kosong
         foreach ($existing_bookings as $booking) {
@@ -95,7 +107,7 @@ class Booking extends Model
         
         // Cek apakah masih ada slot setelah booking terakhir
         $slot_end_time = date('H:i:s', strtotime($current_time) + ($durasi_menit * 60));
-        if (strtotime($slot_end_time) <= strtotime($waktu_selesai_blok)) {
+        if (strtotime($slot_end_time) <= strtotime($waktu_selesai_jadwal)) {
             return [
                 'waktu_mulai' => $current_time,
                 'waktu_selesai' => $slot_end_time
@@ -136,7 +148,7 @@ class Booking extends Model
             return null; // Tanggal tidak sesuai dengan hari jadwal
         }
         
-        // Ambil waktu mulai dan selesai dari jadwal dokter
+        // Ambil waktu mulai dan selesai dari jadwal dokter - GUNAKAN DARI DATABASE
         $waktu_mulai_jadwal = $jadwal['waktu_mulai'];
         $waktu_selesai_jadwal = $jadwal['waktu_selesai'];
         
@@ -157,8 +169,8 @@ class Booking extends Model
         
         log_message('debug', "Jumlah booking yang ada: " . count($existing_bookings));
         
-        // Buffer time antar pasien (dalam menit)
-        $buffer_time = 10;
+        // Buffer time antar pasien (dalam menit) - bisa diambil dari konfigurasi jika perlu
+        $buffer_time = 0;
         
         // Jika ada booking sebelumnya, gunakan waktu selesai booking terakhir + buffer
         if (count($existing_bookings) > 0) {
@@ -184,7 +196,7 @@ class Booking extends Model
                     } else if ($currentTime < $waktu_selesai_jadwal) {
                         // Jika waktu saat ini sudah lewat waktu mulai tapi masih dalam jadwal
                         // Gunakan waktu saat ini (dengan buffer untuk booking online)
-                        $buffer_minutes = $is_walk_in ? 0 : 30;
+                        $buffer_minutes = $is_walk_in ? 0 : 30; // Buffer untuk online vs walk-in (bisa diambil dari konfigurasi)
                         $waktu_mulai_minimal = date('H:i:s', strtotime($currentTime) + ($buffer_minutes * 60));
                         
                         // Waktu mulai adalah waktu saat ini + buffer
@@ -199,8 +211,8 @@ class Booking extends Model
                     // Jika ada booking sebelumnya, logika tetap sama
                     // Jika waktu saat ini masih dalam range jadwal
                     if ($currentTime > $waktu_mulai_jadwal && $currentTime < $waktu_selesai_jadwal) {
-                        // Tambahkan buffer berdasarkan jenis booking
-                        $buffer_minutes = $is_walk_in ? 0 : 30; // Jika walk-in, tidak perlu buffer, jika online perlu 30 menit
+                        // Tambahkan buffer berdasarkan jenis booking (bisa diambil dari konfigurasi)
+                        $buffer_minutes = $is_walk_in ? 0 : 30; 
                         $waktu_mulai_minimal = date('H:i:s', strtotime($currentTime) + ($buffer_minutes * 60));
                         
                         // Waktu mulai adalah waktu saat ini + buffer
@@ -223,7 +235,7 @@ class Booking extends Model
             }
         }
         
-        // PERBAIKAN: Menggunakan fungsi yang konsisten untuk membandingkan waktu
+        // Menggunakan fungsi yang konsisten untuk membandingkan waktu
         // Konversi waktu ke menit sejak tengah malam untuk perhitungan yang lebih akurat
         $current_time_minutes = $this->timeToMinutes($current_time);
         $waktu_selesai_minutes = $this->timeToMinutes($waktu_selesai_jadwal);
@@ -255,7 +267,7 @@ class Booking extends Model
         
         // TAMBAHAN: Coba berikan slot alternatif jika memungkinkan dengan durasi yang lebih pendek
         $remaining_minutes = $waktu_selesai_minutes - $current_time_minutes;
-        if ($remaining_minutes >= 30) { // Minimal 30 menit untuk sesi perawatan
+        if ($remaining_minutes >= 30) { // Minimal 30 menit untuk sesi perawatan (bisa diambil dari konfigurasi)
             log_message('debug', "Mencoba memberikan slot alternatif dengan waktu yang tersisa: $remaining_minutes menit");
             $alt_slot_end_time = $this->minutesToTime($waktu_selesai_minutes);
             

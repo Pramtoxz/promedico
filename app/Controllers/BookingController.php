@@ -73,9 +73,6 @@ class BookingController extends BaseController
             $statusText = ucfirst($row->status);
             
             switch($row->status) {
-                case 'pending':
-                    $statusClass = 'badge badge-warning';
-                    break;
                 case 'diproses':
                     $statusClass = 'badge badge-info';
                     break;
@@ -117,7 +114,7 @@ class BookingController extends BaseController
                 }
             }
 
-            if ($row->status == 'pending') {
+            if ($row->status == 'diproses') {
                 $buttonApprove = '<button type="button" class="btn btn-success btn-sm btn-approve" data-idbooking="' . $row->idbooking . '" style="margin-left: 5px;"><i class="fas fa-check"></i></button>';
                 $buttonReject = '<button type="button" class="btn btn-danger btn-sm btn-reject" data-idbooking="' . $row->idbooking . '" style="margin-left: 5px;"><i class="fas fa-times"></i></button>';
             }
@@ -266,7 +263,7 @@ class BookingController extends BaseController
             $bukti_bayar_name = null;
             if ($bukti_bayar && $bukti_bayar->isValid() && !$bukti_bayar->hasMoved()) {
                 $newName = 'bukti-' . date('Ymd') . '-' . $idbooking . '.' . $bukti_bayar->getClientExtension();
-                $bukti_bayar->move('uploads/bukti_bayar', $newName);
+                $bukti_bayar->move('uploads/buktibayar', $newName);
                 $bukti_bayar_name = $newName;
             }
 
@@ -301,7 +298,7 @@ class BookingController extends BaseController
             // Cek apakah ada file bukti bayar yang perlu dihapus
             $booking = $model->find($idbooking);
             if ($booking && !empty($booking['bukti_bayar'])) {
-                $filePath = 'uploads/bukti_bayar/' . $booking['bukti_bayar'];
+                $filePath = 'uploads/buktibayar/' . $booking['bukti_bayar'];
                 if (file_exists($filePath)) {
                     unlink($filePath);
                 }
@@ -485,12 +482,12 @@ class BookingController extends BaseController
             $bukti_bayar_name = $dataBooking['bukti_bayar']; // Gunakan yang lama jika tidak ada upload baru
             if ($bukti_bayar && $bukti_bayar->isValid() && !$bukti_bayar->hasMoved()) {
                 // Hapus file lama jika ada
-                if (!empty($dataBooking['bukti_bayar']) && file_exists('uploads/bukti_bayar/' . $dataBooking['bukti_bayar'])) {
-                    unlink('uploads/bukti_bayar/' . $dataBooking['bukti_bayar']);
+                if (!empty($dataBooking['bukti_bayar']) && file_exists('uploads/buktibayar/' . $dataBooking['bukti_bayar'])) {
+                    unlink('uploads/buktibayar/' . $dataBooking['bukti_bayar']);
                 }
                 
                 $newName = 'bukti-' . date('Ymd') . '-' . $idbooking . '.' . $bukti_bayar->getClientExtension();
-                $bukti_bayar->move('uploads/bukti_bayar', $newName);
+                $bukti_bayar->move('uploads/buktibayar', $newName);
                 $bukti_bayar_name = $newName;
             }
 
@@ -522,7 +519,7 @@ class BookingController extends BaseController
             $idbooking = $this->request->getPost('idbooking');
             $status = $this->request->getPost('status');
             
-            if (!in_array($status, ['pending', 'diterima', 'ditolak'])) {
+            if (!in_array($status, ['diproses', 'diterima', 'ditolak'])) {
                 return $this->response->setJSON([
                     'error' => 'Status tidak valid'
                 ]);
@@ -990,14 +987,14 @@ class BookingController extends BaseController
             if ($booking['status'] != 'diterima') {
                 $statusMessage = '';
                 switch($booking['status']) {
-                    case 'pending':
+                    case 'diproses':
                         $statusMessage = 'Booking masih dalam status pending. Harap dikonfirmasi terlebih dahulu.';
-                        break;
-                    case 'diperiksa':
-                        $statusMessage = 'Pasien sudah check-in dan sedang diperiksa.';
                         break;
                     case 'ditolak':
                         $statusMessage = 'Booking ini telah ditolak.';
+                        break;
+                    case 'selesai':
+                        $statusMessage = 'Pasien sudah check-in dan sedang diperiksa.';
                         break;
                     default:
                         $statusMessage = 'Status booking tidak valid untuk check-in.';
@@ -1154,13 +1151,13 @@ class BookingController extends BaseController
             }
             
             // Hapus file bukti lama jika ada
-            if (!empty($booking['bukti_bayar']) && file_exists('uploads/bukti_bayar/' . $booking['bukti_bayar'])) {
-                unlink('uploads/bukti_bayar/' . $booking['bukti_bayar']);
+            if (!empty($booking['bukti_bayar']) && file_exists('uploads/buktibayar/' . $booking['bukti_bayar'])) {
+                unlink('uploads/buktibayar/' . $booking['bukti_bayar']);
             }
             
             // Proses upload file baru
             $newName = 'bukti-' . date('Ymd') . '-' . $idbooking . '.' . $bukti_bayar->getClientExtension();
-            $bukti_bayar->move('uploads/bukti_bayar', $newName);
+            $bukti_bayar->move('uploads/buktibayar', $newName);
             
             // Update status menjadi 'diproses', simpan bukti, dan set online menjadi 1
             $model->update($idbooking, [
@@ -1217,7 +1214,7 @@ class BookingController extends BaseController
     {
         if ($this->request->isAJAX()) {
             $status = $this->request->getPost('status');
-            $allowed = ['pending', 'diproses', 'diterima', 'diperiksa', 'ditolak'];
+            $allowed = [ 'diproses', 'diterima', 'diperiksa', 'ditolak'];
             $errors = [];
             if (!$status || !in_array($status, $allowed)) {
                 $errors['error_status'] = 'Status tidak valid.';
@@ -1243,15 +1240,29 @@ class BookingController extends BaseController
             return redirect()->to('auth');
         }
         
-        // Cek apakah user sudah memiliki data pasien
-        $userId = session()->get('id');
-        $db = db_connect();
-        $pasien = $db->table('pasien')->where('iduser', $userId)->get()->getRowArray();
+        // Cek apakah role adalah pasien
+        if (session()->get('role') != 'pasien' && session()->get('role') != 'user') {
+            session()->setFlashdata('error', 'Hanya pasien yang dapat melakukan booking online.');
+            return redirect()->to('/');
+        }
         
-        // Jika belum ada data pasien, tampilkan form untuk melengkapi data pasien
+        // Cek apakah user sudah memiliki data pasien
+        $userId = session()->get('user_id'); // Sesuaikan dengan key yang digunakan di Auth.php
+        $db = db_connect();
+        // Hanya ambil pasien dengan iduser yang sama dan tidak NULL
+        $pasien = $db->table('pasien')
+            ->where('iduser', $userId)
+            ->where('iduser IS NOT NULL')
+            ->get()
+            ->getRowArray();
+
+        // Jika tidak ditemukan, redirect ke lengkapi data
         if (!$pasien) {
             return redirect()->to('online/lengkapi_data');
         }
+        
+        // Log untuk debugging
+        log_message('info', 'User ID: ' . $userId . ' dengan data pasien: ' . json_encode($pasien));
         
         // Jika sudah ada data pasien, lanjutkan booking
         $jadwalModel = new \App\Models\Jadwal();
@@ -1276,15 +1287,25 @@ class BookingController extends BaseController
             return redirect()->to('auth');
         }
         
+        // Cek apakah role adalah pasien
+        if (session()->get('role') != 'pasien' && session()->get('role') != 'user') {
+            session()->setFlashdata('error', 'Hanya pasien yang dapat melakukan booking online.');
+            return redirect()->to('/');
+        }
+        
         // Cek apakah user sudah memiliki data pasien
-        $userId = session()->get('id');
+        $userId = session()->get('user_id'); // Sesuaikan dengan key yang digunakan di Auth.php
         $db = db_connect();
         $pasien = $db->table('pasien')->where('iduser', $userId)->get()->getRowArray();
         
         // Jika belum ada data pasien, redirect ke halaman lengkapi data
         if (!$pasien) {
+            session()->setFlashdata('info', 'Harap lengkapi data pasien terlebih dahulu');
             return redirect()->to('online/lengkapi_data');
         }
+        
+        // Log untuk debugging
+        log_message('info', 'User ID: ' . $userId . ' melakukan booking dengan data pasien: ' . json_encode($pasien));
         
         $bookingModel = new \App\Models\Booking();
         
@@ -1320,10 +1341,15 @@ class BookingController extends BaseController
         $row = $query->getRow();
         $idBooking = $row->next_number;
         
+        // Pastikan menggunakan ID pasien yang benar dari data pasien yang ditemukan
+        $idPasien = $pasien['id_pasien'];
+        
+        log_message('info', 'Booking dibuat untuk ID pasien: ' . $idPasien . ' dengan ID booking: ' . $idBooking);
+        
         // Data booking
         $data = [
             'idbooking' => $idBooking,
-            'id_pasien' => $pasien['id_pasien'],
+            'id_pasien' => $idPasien,
             'tanggal' => $this->request->getPost('tanggal_booking'),
             'idjadwal' => $this->request->getPost('idjadwal'),
             'idjenis' => $this->request->getPost('idjenis'),
@@ -1361,7 +1387,8 @@ class BookingController extends BaseController
         
         session()->set('booking_data', $data);
         
-        return redirect()->to('online/bukti');
+        // Redirect ke uploadBukti dengan membawa idbooking
+        return redirect()->to('online/uploadBukti/' . $idBooking);
     }
 
     public function lengkapi_data()
@@ -1377,8 +1404,16 @@ class BookingController extends BaseController
 
     public function simpan_data_pasien()
     {
+        // Cek apakah request adalah AJAX
+        $isAjax = $this->request->isAJAX();
+        
         // Cek apakah user sudah login
         if (!session()->get('logged_in')) {
+            if ($isAjax) {
+                return $this->response->setJSON([
+                    'error' => ['auth' => 'Anda harus login terlebih dahulu.']
+                ]);
+            }
             session()->setFlashdata('error', 'Anda harus login terlebih dahulu.');
             return redirect()->to('auth');
         }
@@ -1393,47 +1428,94 @@ class BookingController extends BaseController
         ];
         
         if (!$this->validate($rules)) {
+            if ($isAjax) {
+                $errors = [];
+                foreach ($rules as $field => $rule) {
+                    if ($this->validator->hasError($field)) {
+                        $errors["error_$field"] = $this->validator->getError($field);
+                    }
+                }
+                return $this->response->setJSON([
+                    'error' => $errors
+                ]);
+            }
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
         
-        // Generate ID Pasien
+        $userId = session()->get('user_id'); // Sesuaikan dengan key yang digunakan di Auth.php
         $db = db_connect();
-        $query = $db->query("SELECT CONCAT('PS', LPAD(IFNULL(MAX(SUBSTRING(id_pasien, 3)) + 1, 1), 4, '0')) AS next_number FROM pasien");
-        $row = $query->getRow();
-        $idPasien = $row->next_number;
         
-        $userId = session()->get('id');
+        // Cek apakah user sudah memiliki data pasien
+        $existingPasien = $db->table('pasien')->where('iduser', $userId)->get()->getRowArray();
         
-        // Data pasien
-        $data = [
-            'id_pasien' => $idPasien,
-            'iduser' => $userId,
-            'nama' => $this->request->getPost('nama'),
-            'jenkel' => $this->request->getPost('jenkel'),
-            'tgllahir' => $this->request->getPost('tgllahir'),
-            'nohp' => $this->request->getPost('nohp'),
-            'alamat' => $this->request->getPost('alamat'),
-        ];
-        
-        // Simpan data pasien
-        $pasienModel = new \App\Models\Pasien();
-        $pasienModel->insert($data);
-        
-        session()->setFlashdata('success', 'Data pasien berhasil disimpan. Silakan lanjutkan booking.');
-        return redirect()->to('online/booking');
-    }
-
-    public function bukti()
-    {
-        $bookingData = session()->get('booking_data');
-        
-        if (!$bookingData) {
-            return redirect()->to('online/booking');
+        try {
+            if ($existingPasien) {
+                // Jika sudah ada, update data yang sudah ada
+                log_message('info', 'User ID: ' . $userId . ' mengupdate data pasien yang sudah ada: ' . $existingPasien['id_pasien']);
+                
+                $data = [
+                    'nama' => $this->request->getPost('nama'),
+                    'jenkel' => $this->request->getPost('jenkel'),
+                    'tgllahir' => $this->request->getPost('tgllahir'),
+                    'nohp' => $this->request->getPost('nohp'),
+                    'alamat' => $this->request->getPost('alamat'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+                
+                // Simpan data pasien
+                $pasienModel = new \App\Models\Pasien();
+                $pasienModel->update($existingPasien['id_pasien'], $data);
+                
+                $message = 'Data pasien berhasil diperbarui. Silakan lanjutkan booking.';
+            } else {
+                // Generate ID Pasien baru
+                $query = $db->query("SELECT CONCAT('PS', LPAD(IFNULL(MAX(SUBSTRING(id_pasien, 3)) + 1, 1), 4, '0')) AS next_number FROM pasien");
+                $row = $query->getRow();
+                $idPasien = $row->next_number;
+                
+                log_message('info', 'User ID: ' . $userId . ' membuat data pasien baru: ' . $idPasien);
+                
+                // Data pasien baru dengan relasi ke user yang login
+                $data = [
+                    'id_pasien' => $idPasien,
+                    'iduser' => $userId,
+                    'nama' => $this->request->getPost('nama'),
+                    'jenkel' => $this->request->getPost('jenkel'),
+                    'tgllahir' => $this->request->getPost('tgllahir'),
+                    'nohp' => $this->request->getPost('nohp'),
+                    'alamat' => $this->request->getPost('alamat'),
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+                
+                // Simpan data pasien
+                $pasienModel = new \App\Models\Pasien();
+                $pasienModel->insert($data);
+                
+                $message = 'Data pasien berhasil disimpan. Silakan lanjutkan booking.';
+            }
+            
+            // Kembalikan response sesuai tipe request
+            if ($isAjax) {
+                return $this->response->setJSON([
+                    'sukses' => $message
+                ]);
+            } else {
+                session()->setFlashdata('success', $message);
+                return redirect()->to('online/booking');
+            }
+            
+        } catch (\Exception $e) {
+            log_message('error', 'Error saat menyimpan data pasien: ' . $e->getMessage());
+            
+            if ($isAjax) {
+                return $this->response->setJSON([
+                    'error' => ['database' => 'Gagal menyimpan data: ' . $e->getMessage()]
+                ]);
+            } else {
+                session()->setFlashdata('error', 'Gagal menyimpan data: ' . $e->getMessage());
+                return redirect()->back()->withInput();
+            }
         }
-        $data = [
-            'booking' => $bookingData
-        ];
-        
-        return view('online/bukti', $data);
     }
 }

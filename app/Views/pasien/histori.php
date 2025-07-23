@@ -171,11 +171,10 @@
                             <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                             <select id="status" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                                 <option value="">Semua Status</option>
-                                <option value="pending">Pending</option>
                                 <option value="diproses">Diproses</option>
                                 <option value="diterima">Diterima</option>
                                 <option value="ditolak">Ditolak</option>
-                                <option value="diperiksa">Diperiksa</option>
+                                <option value="selesai">Selesai</option>
                             </select>
                         </div>
                         <div class="flex-1">
@@ -228,20 +227,17 @@
                                                 $statusText = ucfirst($booking['status']);
                                                 
                                                 switch($booking['status']) {
-                                                    case 'pending':
-                                                        $statusClass = 'bg-yellow-100 text-yellow-800';
-                                                        break;
                                                     case 'diproses':
                                                         $statusClass = 'bg-blue-100 text-blue-800';
                                                         break;
                                                     case 'diterima':
                                                         $statusClass = 'bg-green-100 text-green-800';
                                                         break;
-                                                    case 'diperiksa':
-                                                        $statusClass = 'bg-indigo-100 text-indigo-800';
-                                                        break;
                                                     case 'ditolak':
                                                         $statusClass = 'bg-red-100 text-red-800';
+                                                        break;
+                                                    case 'selesai':
+                                                        $statusClass = 'bg-green-100 text-green-800';
                                                         break;
                                                     default:
                                                         $statusClass = 'bg-gray-100 text-gray-800';
@@ -254,11 +250,11 @@
                                             Rp <?= number_format($booking['harga'], 0, ',', '.') ?>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <a href="<?= base_url('pasien/booking/' . $booking['idbooking']) ?>" class="text-teal-600 hover:text-teal-800 mr-3">
+                                            <a href="<?= base_url('online/uploadBukti/' . $booking['idbooking']) ?>" class="text-teal-600 hover:text-teal-800 mr-3">
                                                 <i class="fas fa-eye"></i> Detail
                                             </a>
                                             <?php if($booking['status'] == 'diterima'): ?>
-                                            <a href="<?= base_url('pasien/faktur/' . $booking['idbooking']) ?>" class="text-blue-600 hover:text-blue-800">
+                                            <a href="<?= base_url('cek/faktur/' . $booking['idbooking']) ?>" class="text-blue-600 hover:text-blue-800">
                                                 <i class="fas fa-file-invoice"></i> Faktur
                                             </a>
                                             <?php endif; ?>

@@ -238,20 +238,17 @@
                                                 $statusText = ucfirst($booking['status']);
                                                 
                                                 switch($booking['status']) {
-                                                    case 'pending':
-                                                        $statusClass = 'bg-yellow-100 text-yellow-800';
-                                                        break;
                                                     case 'diproses':
                                                         $statusClass = 'bg-blue-100 text-blue-800';
                                                         break;
                                                     case 'diterima':
                                                         $statusClass = 'bg-green-100 text-green-800';
                                                         break;
-                                                    case 'diperiksa':
-                                                        $statusClass = 'bg-indigo-100 text-indigo-800';
-                                                        break;
                                                     case 'ditolak':
                                                         $statusClass = 'bg-red-100 text-red-800';
+                                                        break;
+                                                    case 'selesai':
+                                                        $statusClass = 'bg-green-100 text-green-800';
                                                         break;
                                                     default:
                                                         $statusClass = 'bg-gray-100 text-gray-800';
@@ -261,7 +258,7 @@
                                             <span class="px-2 py-1 rounded-full text-xs font-medium <?= $statusClass ?>"><?= $statusText ?></span>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <a href="<?= base_url('pasien/booking/' . $booking['idbooking']) ?>" class="text-teal-600 hover:text-teal-800">
+                                            <a href="<?= base_url('online/booking/' . $booking['idbooking']) ?>" class="text-teal-600 hover:text-teal-800">
                                                 <i class="fas fa-eye"></i> Detail
                                             </a>
                                         </td>

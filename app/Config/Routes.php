@@ -10,15 +10,15 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 $routes->get('online/booking', 'BookingController::booking');
 $routes->post('online/simpanbooking', 'BookingController::simpanbooking');
-$routes->get('online/bukti', 'BookingController::bukti');
-$routes->get('online/bukti/(:segment)', 'BookingController::bukti/$1');
 $routes->get('online/uploadBukti/(:segment)', 'BookingController::uploadBukti/$1');
 $routes->post('online/prosesUploadBukti', 'BookingController::prosesUploadBukti');
 $routes->get('online/faktur/(:segment)', 'BookingController::faktur/$1');
 $routes->post('booking/checkDayMatch', 'BookingController::checkDayMatch');
 $routes->post('booking/findAvailableSlot', 'BookingController::findAvailableSlot');
 $routes->get('online/lengkapi_data', 'BookingController::lengkapi_data');
-$routes->post('booking/simpan_data_pasien', 'BookingController::simpan_data_pasien');
+$routes->post('online/simpan_data_pasien', 'BookingController::simpan_data_pasien');
+$routes->get('cek/faktur/(:segment)', 'PasienDashboardController::detailBooking/$1');
+
 
 // Auth Routes
 $routes->get('auth', 'Auth::index');
@@ -46,11 +46,11 @@ $routes->group('pasien', ['filter' => 'auth'], function ($routes) {
     $routes->get('edit-profil', 'PasienDashboardController::editProfil');
     $routes->post('update-profil', 'PasienDashboardController::updateProfil');
     $routes->get('booking/(:segment)', 'PasienDashboardController::detailBooking/$1');
-    $routes->get('faktur/(:segment)', 'PasienDashboardController::detailBooking/$1');
+    $routes->get('faktur/(:segment)', 'PasienDashboardController::faktur/$1');
 });
 
 // Admin & Dokter & Pimpinan dashboard (protected by auth filter)
-$routes->group('admin', ['filter' => 'auth'], function ($routes) {
+$routes->group('admin', ['filter' => ['auth', 'role:admin']], function ($routes) {
     $routes->get('/', 'Dashboard::index');
 });
 

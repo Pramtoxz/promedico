@@ -1,165 +1,137 @@
-<!doctype html>
-
-<html
-  lang="en"
-  class="layout-wide customizer-hide"
-  data-assets-path="<?= base_url() ?>/assets/"
-  data-template="vertical-menu-template-free">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-
-    <title>Verifikasi OTP - Application</title>
-
-    <meta name="description" content="" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="<?= base_url() ?>/assets/img/favicon/favicon.ico" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&ampdisplay=swap"
-      rel="stylesheet" />
-
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/fonts/iconify-icons.css" />
-
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/libs/node-waves/node-waves.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/css/core.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/css/demo.css" />
-
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-
-    <!-- Page CSS -->
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/css/pages/page-auth.css" />
-
-    <!-- Helpers -->
-    <script src="<?= base_url() ?>/assets/vendor/js/helpers.js"></script>
-    <script src="<?= base_url() ?>/assets/js/config.js"></script>
-    
-    <style>
-        .otp-inputs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi OTP</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        }
+                    }
+                }
+            }
         }
-        .otp-inputs input {
-            width: 50px;
-            height: 60px;
-            margin: 0 8px;
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .bg-gradient-teal {
+                background-image: linear-gradient(to right, #0d9488, #14b8a6, #5eead4);
+            }
+        }
+        
+        .otp-input {
+            width: 3rem;
+            height: 3.5rem;
             text-align: center;
-            font-size: 24px;
+            font-size: 1.5rem;
             font-weight: bold;
-            border-radius: 8px;
-        }
-        .timer {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 16px;
+            border-radius: 0.5rem;
         }
     </style>
-  </head>
-
-  <body>
-    <!-- Content -->
-
-    <div class="position-relative">
-      <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner py-6 mx-4">
-          <!-- Verification -->
-          <div class="card p-sm-7 p-2">
-            <!-- Logo -->
-            <div class="app-brand justify-content-center mt-5">
-              <a href="<?= base_url() ?>" class="app-brand-link gap-3">
-                <span class="app-brand-logo demo">
-                  <span class="text-primary">
-                    <svg width="30" height="24" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <!-- SVG logo code -->
-                    </svg>
-                  </span>
-                </span>
-                <span class="app-brand-text demo text-heading fw-semibold">Materio</span>
-              </a>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+            <!-- Header with Teal Gradient -->
+            <div class="bg-gradient-teal p-6 text-white text-center">
+                <h1 class="text-2xl font-bold">Verifikasi OTP</h1>
+                <p class="mt-2 text-teal-100">Masukkan kode yang dikirimkan ke email Anda</p>
             </div>
-            <!-- /Logo -->
 
-            <div class="card-body mt-1">
-              <h4 class="mb-1">Masukkan Kode Verifikasi 🔒</h4>
-              <p class="mb-5">
-                Kami telah mengirimkan kode verifikasi ke email <strong><?= $email ?></strong>. 
-                <br>Silakan masukkan kode tersebut di bawah ini.
-              </p>
+            <!-- OTP Verification Form -->
+            <div class="p-6">
+                <div class="mb-6 text-center">
+                    <p class="text-gray-700">
+                        Kami telah mengirimkan kode verifikasi ke email <strong><?= $email ?></strong>. 
+                        <br>Silakan masukkan kode tersebut di bawah ini.
+                    </p>
+                </div>
 
-              <form id="formOTP" action="<?= site_url($action) ?>" method="POST">
-                <input type="hidden" name="email" value="<?= $email ?>">
-                <input type="hidden" name="type" value="<?= $type ?>">
-                <?php if (isset($formData) && !empty($formData)): ?>
-                    <?php foreach($formData as $key => $value): ?>
-                        <input type="hidden" name="form_data[<?= $key ?>]" value="<?= $value ?>">
-                    <?php endforeach; ?>
-                <?php endif; ?>
-                
-                <div class="otp-inputs">
-                    <input type="text" class="form-control otp-input" maxlength="1" name="otp[]" data-index="0" autofocus>
-                    <input type="text" class="form-control otp-input" maxlength="1" name="otp[]" data-index="1">
-                    <input type="text" class="form-control otp-input" maxlength="1" name="otp[]" data-index="2">
-                    <input type="text" class="form-control otp-input" maxlength="1" name="otp[]" data-index="3">
-                    <input type="text" class="form-control otp-input" maxlength="1" name="otp[]" data-index="4">
-                    <input type="text" class="form-control otp-input" maxlength="1" name="otp[]" data-index="5">
-                </div>
-                
-                <div class="timer">
-                    <span>Kode berlaku selama: <span id="countdown">10:00</span></span>
-                </div>
-                
-                <div class="mb-5">
-                  <button class="btn btn-primary d-grid w-100" type="submit">Verifikasi</button>
-                </div>
-              </form>
-              
-              <div class="text-center">
-                <p>Tidak menerima kode? <a href="#" id="resendOTP">Kirim ulang</a></p>
-              </div>
+                <form id="formOTP" action="<?= site_url($action) ?>" method="POST" class="space-y-6">
+                    <!-- Hidden Fields -->
+                    <input type="hidden" name="email" value="<?= $email ?>">
+                    <input type="hidden" name="type" value="<?= $type ?>">
+                    <?php if (isset($formData) && !empty($formData)): ?>
+                        <?php foreach($formData as $key => $value): ?>
+                            <input type="hidden" name="form_data[<?= $key ?>]" value="<?= $value ?>">
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    
+                    <!-- Alert Messages -->
+                    <?php if(session()->getFlashdata('error')): ?>
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+                        <p><?= session()->getFlashdata('error'); ?></p>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <div id="alert-message" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 hidden" role="alert">
+                        <!-- Error message will be displayed here -->
+                    </div>
+                    
+                    <?php if(session()->getFlashdata('message')): ?>
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+                        <p><?= session()->getFlashdata('message'); ?></p>
+                    </div>
+                    <?php endif; ?>
 
-              <?php if(session()->getFlashdata('error')): ?>
-              <div class="alert alert-danger" role="alert">
-                <?= session()->getFlashdata('error'); ?>
-              </div>
-              <?php endif; ?>
-              
-              <div id="alert-message" class="alert alert-danger d-none" role="alert">
-                <!-- Error message will be displayed here -->
-              </div>
-              
-              <?php if(session()->getFlashdata('message')): ?>
-              <div class="alert alert-success" role="alert">
-                <?= session()->getFlashdata('message'); ?>
-              </div>
-              <?php endif; ?>
+                    <!-- OTP Input Fields -->
+                    <div class="flex justify-center space-x-2 sm:space-x-4 mb-6">
+                        <input type="text" class="otp-input border border-gray-300 focus:border-teal-500 focus:ring-teal-500" maxlength="1" name="otp[]" data-index="0" autofocus>
+                        <input type="text" class="otp-input border border-gray-300 focus:border-teal-500 focus:ring-teal-500" maxlength="1" name="otp[]" data-index="1">
+                        <input type="text" class="otp-input border border-gray-300 focus:border-teal-500 focus:ring-teal-500" maxlength="1" name="otp[]" data-index="2">
+                        <input type="text" class="otp-input border border-gray-300 focus:border-teal-500 focus:ring-teal-500" maxlength="1" name="otp[]" data-index="3">
+                        <input type="text" class="otp-input border border-gray-300 focus:border-teal-500 focus:ring-teal-500" maxlength="1" name="otp[]" data-index="4">
+                        <input type="text" class="otp-input border border-gray-300 focus:border-teal-500 focus:ring-teal-500" maxlength="1" name="otp[]" data-index="5">
+                    </div>
+
+                    <!-- Timer -->
+                    <div class="text-center text-gray-600">
+                        <p>Kode berlaku selama: <span id="countdown" class="font-semibold">10:00</span></p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button
+                            type="submit"
+                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-teal hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                        >
+                            Verifikasi
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Resend Link -->
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Tidak menerima kode? 
+                        <a href="#" id="resendOTP" class="font-medium text-teal-600 hover:text-teal-500">
+                            Kirim ulang
+                        </a>
+                    </p>
+                </div>
             </div>
-          </div>
-          <!-- /Verification -->
         </div>
-      </div>
     </div>
 
-    <!-- / Content -->
-
-    <!-- Core JS -->
-    <script src="<?= base_url() ?>/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="<?= base_url() ?>/assets/vendor/libs/popper/popper.js"></script>
-    <script src="<?= base_url() ?>/assets/vendor/js/bootstrap.js"></script>
-    <script src="<?= base_url() ?>/assets/vendor/libs/node-waves/node-waves.js"></script>
-    <script src="<?= base_url() ?>/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="<?= base_url() ?>/assets/vendor/js/menu.js"></script>
-    <script src="<?= base_url() ?>/assets/js/main.js"></script>
-
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     $(document).ready(function() {
         // Handle OTP input
@@ -198,7 +170,7 @@
                 clearInterval(countdownInterval);
                 $('#resendOTP').removeClass('disabled');
                 $('.otp-input').prop('disabled', true);
-                $('#alert-message').removeClass('d-none').text('Kode OTP telah kedaluarsa. Silakan kirim ulang kode.');
+                $('#alert-message').removeClass('hidden').text('Kode OTP telah kedaluarsa. Silakan kirim ulang kode.');
             } else {
                 timer--;
             }
@@ -229,26 +201,25 @@
                         $('.otp-input[data-index="0"]').focus();
                         
                         // Hide error message if any
-                        $('#alert-message').addClass('d-none');
+                        $('#alert-message').addClass('hidden');
                         
                         // Show success message
                         const alertHtml = `
-                            <div class="alert alert-success alert-dismissible" role="alert">
-                                ${response.message}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+                                <p>${response.message}</p>
                             </div>
                         `;
-                        $('#formOTP').before(alertHtml);
+                        $('#formOTP').prepend(alertHtml);
                     } else {
-                        $('#alert-message').removeClass('d-none').text(response.message);
+                        $('#alert-message').removeClass('hidden').text(response.message);
                     }
                 },
                 error: function() {
-                    $('#alert-message').removeClass('d-none').text('Terjadi kesalahan. Silakan coba lagi.');
+                    $('#alert-message').removeClass('hidden').text('Terjadi kesalahan. Silakan coba lagi.');
                 }
             });
         });
     });
     </script>
-  </body>
+</body>
 </html> 

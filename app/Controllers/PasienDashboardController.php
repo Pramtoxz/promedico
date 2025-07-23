@@ -18,7 +18,7 @@ class PasienDashboardController extends BaseController
     public function index()
     {
         // Dapatkan data pasien berdasarkan user ID
-        $userId = session()->get('id');
+        $userId = session()->get('user_id');
         $db = db_connect();
         $pasien = $db->table('pasien')->where('iduser', $userId)->get()->getRowArray();
         
@@ -74,7 +74,7 @@ class PasienDashboardController extends BaseController
     public function histori()
     {
         // Dapatkan data pasien berdasarkan user ID
-        $userId = session()->get('id');
+        $userId = session()->get('user_id'); // Sesuaikan dengan key yang digunakan di Auth.php
         $db = db_connect();
         $pasien = $db->table('pasien')->where('iduser', $userId)->get()->getRowArray();
         
@@ -106,7 +106,7 @@ class PasienDashboardController extends BaseController
     public function editProfil()
     {
         // Dapatkan data pasien berdasarkan user ID
-        $userId = session()->get('id');
+        $userId = session()->get('user_id'); // Sesuaikan dengan key yang digunakan di Auth.php
         $db = db_connect();
         $pasien = $db->table('pasien')->where('iduser', $userId)->get()->getRowArray();
         
@@ -125,7 +125,7 @@ class PasienDashboardController extends BaseController
     public function updateProfil()
     {
         // Dapatkan data pasien berdasarkan user ID
-        $userId = session()->get('id');
+        $userId = session()->get('user_id'); // Sesuaikan dengan key yang digunakan di Auth.php
         $db = db_connect();
         $pasien = $db->table('pasien')->where('iduser', $userId)->get()->getRowArray();
         
@@ -182,7 +182,7 @@ class PasienDashboardController extends BaseController
     public function detailBooking($idbooking)
     {
         // Dapatkan data pasien berdasarkan user ID
-        $userId = session()->get('id');
+        $userId = session()->get('user_id');
         $db = db_connect();
         $pasien = $db->table('pasien')->where('iduser', $userId)->get()->getRowArray();
         
@@ -222,6 +222,53 @@ class PasienDashboardController extends BaseController
             'title' => 'Detail Booking'
         ];
         
-        return view('pasien/detail_booking', $data);
+        return view('pasien/faktur', $data);
+    }
+    
+    public function faktur($idbooking)
+    {
+        // Dapatkan data pasien berdasarkan user ID
+        $userId = session()->get('user_id');
+        $db = db_connect();
+        $pasien = $db->table('pasien')->where('iduser', $userId)->get()->getRowArray();
+        
+        if (!$pasien) {
+            return redirect()->to('online/lengkapi_data');
+        }
+        
+        // Ambil data booking
+        $booking = $db->table('booking')
+            ->select('booking.*, jadwal.hari, dokter.nama as nama_dokter, pasien.nama as nama_pasien, jenis_perawatan.namajenis, jenis_perawatan.estimasi, jenis_perawatan.harga')
+            ->join('jadwal', 'jadwal.idjadwal = booking.idjadwal')
+            ->join('dokter', 'dokter.id_dokter = jadwal.iddokter')
+            ->join('pasien', 'pasien.id_pasien = booking.id_pasien')
+            ->join('jenis_perawatan', 'jenis_perawatan.idjenis = booking.idjenis')
+            ->where('booking.idbooking', $idbooking)
+            ->where('booking.id_pasien', $pasien['id_pasien']) // Pastikan booking milik pasien ini
+            ->where('booking.status', 'diterima') // Pastikan status sudah diterima
+            ->get()
+            ->getRowArray();
+            
+        if (!$booking) {
+            return redirect()->to('pasien/histori')->with('error', 'Data faktur tidak ditemukan atau pembayaran belum dikonfirmasi');
+        }
+        
+        // Buat QR Code untuk check-in
+        $qrCode = new \Endroid\QrCode\QrCode($idbooking);
+        $qrCode->setSize(300);
+        $qrCode->setMargin(10);
+
+        $writer = new \Endroid\QrCode\Writer\PngWriter();
+        $qrCodeImage = $writer->write($qrCode)->getDataUri();
+        
+        $data = [
+            'pasien' => $pasien,
+            'booking' => $booking,
+            'qrCodeImage' => $qrCodeImage,
+            'faktur_id' => 'INV-'.date('Ymd', strtotime($booking['created_at'])).'-'.$idbooking,
+            'title' => 'Faktur Pembayaran'
+        ];
+        
+        return view('pasien/faktur', $data);
     }
 } 
