@@ -274,7 +274,8 @@ class DokterController extends BaseController
                 $dataDokter = $model->where('id_dokter', $id_dokter)->first();
                 
                 if ($foto->isValid() && !$foto->hasMoved()) {
-                    $newName = 'foto-' . date('Ymd') . '-' . $id_dokter . '.' . $foto->getClientExtension();
+                    $random = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+                    $newName = 'foto-' . date('Ymd') . '-' . $id_dokter . '.' . $random . '.' . $foto->getClientExtension();
                     $foto->move('assets/img/dokter', $newName);
 
                     // Hapus foto lama jika ada

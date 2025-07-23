@@ -275,7 +275,7 @@ class PasienController extends BaseController
                 
                 if ($foto->isValid() && !$foto->hasMoved()) {
                     $random = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
-                    $newName = 'foto-' . date('Ymd') . '-' . $id_pasien . '.' . $random . $foto->getClientExtension();
+                    $newName = 'foto-' . date('Ymd') . '-' . $id_pasien . '.' . $random . '.' . $foto->getClientExtension();
                     $foto->move('assets/img/pasien/', $newName);
 
                     // Hapus foto lama jika ada
