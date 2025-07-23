@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Klinik Gigi Sehat Bersinar - Kesehatan Gigi Terbaik</title>
+    <title>Klinik Gigi Pro Medico - Kesehatan Gigi Terbaik</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -372,7 +372,7 @@
                             </div>
                             <div class="ml-4">
                                 <h4 class="text-lg font-medium text-teal-800">Alamat</h4>
-                                <p class="text-gray-600">Jl. Kesehatan No. 123, Surabaya, Jawa Timur, Indonesia</p>
+                                <p class="text-gray-600">Jl. Pariaman No. 123, Pariaman, Jawa Timur, Indonesia</p>
                             </div>
                         </div>
                         
@@ -511,7 +511,7 @@
                     <ul class="space-y-3">
                         <li class="flex items-start">
                             <i class="fas fa-map-marker-alt text-teal-400 mt-1 mr-3"></i>
-                            <span class="text-gray-400">Jl. Kesehatan No. 123, Surabaya, Jawa Timur</span>
+                            <span class="text-gray-400">Jl. Pariaman No. 123, Pariaman, Jawa Timur</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-phone-alt text-teal-400 mt-1 mr-3"></i>

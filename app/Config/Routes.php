@@ -19,7 +19,6 @@ $routes->get('online/lengkapi_data', 'BookingController::lengkapi_data');
 $routes->post('online/simpan_data_pasien', 'BookingController::simpan_data_pasien');
 $routes->get('cek/faktur/(:segment)', 'PasienDashboardController::detailBooking/$1');
 
-
 // Auth Routes
 $routes->get('auth', 'Auth::index');
 $routes->post('auth/login', 'Auth::login');
@@ -50,7 +49,7 @@ $routes->group('pasien', ['filter' => 'auth'], function ($routes) {
 });
 
 // Admin & Dokter & Pimpinan dashboard (protected by auth filter)
-$routes->group('admin', ['filter' => ['auth', 'role:admin']], function ($routes) {
+$routes->group('admin', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
     $routes->get('/', 'Dashboard::index');
 });
 

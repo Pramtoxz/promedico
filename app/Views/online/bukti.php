@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bukti Booking - Klinik Gigi Sehat Bersinar</title>
+    <title>Bukti Booking - Klinik Gigi Pro Medico</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -168,8 +168,8 @@
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <div class="flex flex-col md:flex-row justify-between items-center">
                             <div>
-                                <h4 class="font-semibold text-gray-800">Klinik Gigi Sehat Bersinar</h4>
-                                <p class="text-sm text-gray-600">Jl. Kesehatan No. 123, Surabaya</p>
+                                <h4 class="font-semibold text-gray-800">Klinik Gigi Pro Medico</h4>
+                                <p class="text-sm text-gray-600">Jl. Pariaman No. 123, Pariaman</p>
                                 <p class="text-sm text-gray-600">Telp: +62 812-3456-7890</p>
                             </div>
                             <div class="mt-4 md:mt-0">
@@ -245,7 +245,7 @@
                 <i class="fas fa-tooth text-teal-400 text-2xl"></i>
                 <span class="text-xl font-bold ml-2">KlinikGigi</span>
             </div>
-            <p class="text-gray-400">© <?= date('Y') ?> Klinik Gigi Sehat Bersinar. Hak Cipta Dilindungi.</p>
+            <p class="text-gray-400">© <?= date('Y') ?> Klinik Gigi Pro Medico. Hak Cipta Dilindungi.</p>
         </div>
     </footer>
 

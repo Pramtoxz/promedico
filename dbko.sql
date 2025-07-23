@@ -42,11 +42,8 @@ CREATE TABLE `booking` (
 /*Data for the table `booking` */
 
 insert  into `booking`(`idbooking`,`id_pasien`,`idjadwal`,`idjenis`,`tanggal`,`waktu_mulai`,`waktu_selesai`,`status`,`bukti_bayar`,`online`,`bayar`,`catatan`,`created_at`,`updated_at`,`deleted_at`) values 
-('BK0001','PS0002','JD0003','JP0001','2025-07-23','09:00:00','09:30:00','selesai',NULL,0,NULL,'sakit gigi sebelah','2025-07-22 21:51:21','2025-07-23 20:59:02',NULL),
-('BK0002','PS0003','JD0001','JP0001','2025-07-23','14:00:00','14:30:00','diterima','bukti-20250723-BK0002.png',1,NULL,NULL,'2025-07-23 20:34:21','2025-07-23 20:35:34',NULL),
-('BK0003','PS0003','JD0001','JP0001','2025-07-29','14:00:00','14:30:00','diterima',NULL,1,NULL,NULL,'2025-07-23 20:49:00','2025-07-23 22:56:35',NULL),
-('BK0004','PS0002','JD0004','JP0001','2025-07-23','22:07:00','22:37:00','diterima',NULL,0,NULL,'oke','2025-07-23 22:07:50','2025-07-23 22:07:50',NULL),
-('BK0005','PS0003','JD0004','JP0001','2025-07-23','22:37:00','23:07:00','diterima','bukti-20250723-BK0005.png',1,NULL,NULL,'2025-07-23 22:10:01','2025-07-23 22:56:24',NULL);
+('BK0001','PS0003','JD0002','JP0001','2025-07-29','23:00:00','23:30:00','diterima','bukti-20250724-BK0001.png',1,NULL,NULL,'2025-07-24 01:01:31','2025-07-24 01:01:37',NULL),
+('BK0002','PS0003','JD0003','JP0001','2025-07-31','09:00:00','09:30:00','diproses',NULL,1,NULL,NULL,'2025-07-24 01:07:32','2025-07-24 01:07:32',NULL);
 
 /*Table structure for table `detail_perawatan` */
 
@@ -88,7 +85,7 @@ CREATE TABLE `dokter` (
 /*Data for the table `dokter` */
 
 insert  into `dokter`(`id_dokter`,`nama`,`alamat`,`tgllahir`,`nohp`,`jenkel`,`foto`,`iduser`,`created_at`,`updated_at`,`deleted_at`) values 
-('DK0001','Pramtoxz','Jl. Padang','2025-07-03','08129323923','L','foto-20250722-DK0001.png',NULL,'2025-07-03 06:30:48','2025-07-22 02:14:24',NULL);
+('DK0001','Pramtoxz','Jl. Padang','2025-07-03','08129323923','L','foto-20250722-DK0001.png',9,'2025-07-03 06:30:48','2025-07-22 02:14:24',NULL);
 
 /*Table structure for table `jadwal` */
 
@@ -218,18 +215,15 @@ CREATE TABLE `otp_codes` (
   PRIMARY KEY (`id`),
   KEY `email` (`email`),
   KEY `otp_code` (`otp_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `otp_codes` */
 
 insert  into `otp_codes`(`id`,`email`,`otp_code`,`type`,`is_used`,`expires_at`,`created_at`,`updated_at`) values 
-(5,'pramuditometra@gmail.com','411073','register',1,'2025-06-14 22:24:12','2025-06-14 22:14:12','2025-06-14 22:14:50'),
-(7,'bossrentalpadang@gmail.com','377888','register',1,'2025-06-14 22:30:04','2025-06-14 22:20:04','2025-06-14 22:20:22'),
-(9,'srimulyarni2@gmail.com','866665','register',1,'2025-06-14 22:54:28','2025-06-14 22:44:28','2025-06-14 22:45:35'),
-(10,'rindianir573@gmail.com','216643','register',1,'2025-06-28 10:39:30','2025-06-28 10:29:30','2025-06-28 10:30:11'),
-(11,'03xa8cfygp@cross.edu.pl','678301','register',1,'2025-07-03 07:31:50','2025-07-03 07:21:50','2025-07-03 07:22:22'),
-(12,'putrialifianoerbalqis@gmail.com','531028','register',1,'2025-07-03 14:35:06','2025-07-03 14:25:06','2025-07-03 14:26:15'),
-(13,'gamingda273@gmail.com','119943','register',1,'2025-07-16 04:45:40','2025-07-16 04:35:40','2025-07-16 04:36:06');
+(16,'noraja9540@dosonex.com','073406','register',1,'2025-07-24 01:28:30','2025-07-24 01:18:30','2025-07-24 01:18:51'),
+(17,'l4deb85prf@qzueos.com','302690','register',1,'2025-07-24 01:31:17','2025-07-24 01:21:17','2025-07-24 01:21:50'),
+(18,'l4deb85prf@qzueos.com','993650','register',1,'2025-07-24 01:32:09','2025-07-24 01:22:09','2025-07-24 01:22:59'),
+(19,'l4deb85prf@qzueos.com','336715','register',1,'2025-07-24 01:35:45','2025-07-24 01:25:45','2025-07-24 01:26:05');
 
 /*Table structure for table `pasien` */
 
@@ -251,14 +245,6 @@ CREATE TABLE `pasien` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `pasien` */
-
-insert  into `pasien`(`id_pasien`,`nama`,`alamat`,`tgllahir`,`nohp`,`jenkel`,`foto`,`iduser`,`created_at`,`updated_at`,`deleted_at`) values 
-('PS0001','Pramudito Metra','Jl. Padang','2025-07-03','08129323923','L','foto-20250722-PS0001.png',3,'2025-07-03 06:30:48','2025-07-22 01:28:15',NULL),
-('PS0002','Cimul','ss','2025-07-09','081234256734','P',NULL,5,'2025-07-09 02:20:38','2025-07-15 14:32:09',NULL),
-('PS0003','Tari','asdasd','2025-07-15','08743557687','L','foto-20250723-PS0003.png',NULL,'2025-07-15 16:16:54','2025-07-23 00:44:18',NULL),
-('PS0004','Agus Saputra','asdasd','2025-07-15','06754343212','L',NULL,17,'2025-07-15 16:25:30','2025-07-22 02:05:44',NULL),
-('PS0005','Taris','sdsds','2025-07-16','08123123123123','P',NULL,16,'2025-07-16 14:10:56','2025-07-16 14:46:45',NULL),
-('PS0006','Agus Saputra','Amerika','2025-07-22','08743557687','L',NULL,NULL,'2025-07-21 18:10:29','2025-07-21 18:10:29',NULL);
 
 /*Table structure for table `perawatan` */
 
@@ -317,7 +303,7 @@ CREATE TABLE `users` (
   `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `role` enum('admin','dokter','pasien','pimpinan') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pasien',
+  `role` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pasien',
   `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'active' COMMENT 'active, inactive',
   `last_login` datetime DEFAULT NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -327,23 +313,13 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`username`,`email`,`password`,`role`,`status`,`last_login`,`remember_token`,`created_at`,`updated_at`,`deleted_at`) values 
 (1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-23 22:25:50',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
-(3,'pramudito','pramuditometra2@gmail.com','$2y$10$/sKJ3nocDTaEBZwfqWvNj.H08jfcrWSolaA7F6buM7Tq2hYdwg.cK','pasien','active','2025-06-14 22:14:59',NULL,'2025-06-14 22:14:50','2025-06-14 22:14:50',NULL),
-(4,'boss','bossrentalpadang@gmail.com','$2y$10$x1Sb65DdkNNlpU02EiOHcuP.YW1BbF29e4HB8LD14jMqbnV8k4vpG','pasien','active',NULL,NULL,'2025-06-14 22:20:22','2025-06-14 22:20:22',NULL),
-(5,'cimul','srimulyarni2@gmail.com','$2y$10$qLdPOp12x6mohcK9q3FG1.5l/pymdxPRhOVTSuf7PWKDHjuiEZ6Fm','pasien','active','2025-06-14 22:46:26',NULL,'2025-06-14 22:45:35','2025-06-14 22:45:35',NULL),
-(7,'pramtoxz','pramtoxz@gmail.com','$2y$10$/mOhlx0mFM/sLkcdDI7ijOdu48p9dg.j3FZLqtnqZtJawqB24w1le','dokter','active',NULL,NULL,'2025-06-23 19:32:30','2025-06-23 19:32:30',NULL),
-(8,'prarram','pra@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','pasien','active','2025-07-23 23:39:11',NULL,'2025-06-23 19:36:13','2025-06-23 19:36:13',NULL),
-(9,'Rindiani','rindianir573@gmail.com','$2y$10$iF4y9bw3chbQ//818ZYDkuX4JsjHLCqdgP39YZPFRR.oFueUc7vNq','pasien','active','2025-06-28 10:42:11',NULL,'2025-06-28 10:30:11','2025-06-28 10:30:11',NULL),
-(10,'akademis','03xa8cfygp@cross.edu.pl','$2y$10$XDoOZvMEUQ424rV4VXBkhOlbc52IVwTwTJpqzSp5ItkOmk/hmE9ZC','pasien','active','2025-07-03 07:22:37',NULL,'2025-07-03 07:22:22','2025-07-03 07:22:22',NULL),
-(11,'balqisa','putrialifianoerbalqis@gmail.com','$2y$10$LDX08rQsEptfP1g/fp5kGuHBL70c99FOjCJeD0d6RvRm3sxQwR9hW','pasien','active','2025-07-03 14:27:34',NULL,'2025-07-03 14:26:15','2025-07-03 14:26:15',NULL),
-(13,'gaming','gamingda273@gmail.com','$2y$10$lFUjQkkArXn3..WQrXadD.APWNfBnNVN1cWpI/42B1.LktGT55ra.','pasien','active','2025-07-16 04:36:18',NULL,'2025-07-16 04:36:06','2025-07-16 04:36:06',NULL),
-(16,'akademis7','password@gmail.com','$2y$10$Tl4glHJOhYfkWhx6TcA5b.7W/kP2awhhA3CG2VEXlWNnMJ7C6Rq9m','pasien','active',NULL,NULL,'2025-07-16 14:46:45','2025-07-16 14:46:45',NULL),
-(17,'agus123','agus@gmail.com','$2y$10$ZQOTNS/mMwx9Eb9V/Ngir.FxIlwW9AO3x.gPdJi3u.qbgOSLgz5mO','pasien','active',NULL,NULL,'2025-07-22 02:05:44','2025-07-22 02:05:44',NULL);
+(9,'drbalqis','dokterbalqis@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','pasien','active','2025-06-28 10:42:11',NULL,'2025-06-28 10:30:11','2025-06-28 10:30:11',NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -401,7 +401,7 @@ class PasienController extends BaseController
             'username' => $this->request->getPost('username'),
             'email' => $this->request->getPost('email'),
             'password' => $this->request->getPost('password'),
-            'role' => 'user',
+            'role' => 'pasien',
             'status' => 'active'
         ];
         

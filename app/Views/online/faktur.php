@@ -77,7 +77,7 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <h1 class="text-2xl font-bold">FAKTUR PEMBAYARAN</h1>
-                            <p class="opacity-80 mt-1">Klinik Gigi Sehat Bersinar</p>
+                            <p class="opacity-80 mt-1">Klinik Gigi Pro Medico</p>
                         </div>
                         <div class="flex items-center">
                             <i class="fas fa-tooth text-white text-2xl mr-2"></i>
@@ -202,8 +202,8 @@
                     <div class="mt-10 pt-6 border-t border-gray-200">
                         <div class="flex flex-col md:flex-row justify-between items-center">
                             <div>
-                                <h4 class="font-semibold text-gray-800">Klinik Gigi Sehat Bersinar</h4>
-                                <p class="text-sm text-gray-600">Jl. Kesehatan No. 123, Surabaya</p>
+                                <h4 class="font-semibold text-gray-800">Klinik Gigi Pro Medico</h4>
+                                <p class="text-sm text-gray-600">Jl. Pariaman No. 123, Pariaman</p>
                                 <p class="text-sm text-gray-600">Telp: +62 812-3456-7890</p>
                             </div>
                             <div class="mt-6 md:mt-0 text-center">
@@ -236,7 +236,7 @@
                 <i class="fas fa-tooth text-teal-400 text-2xl"></i>
                 <span class="text-xl font-bold ml-2">KlinikGigi</span>
             </div>
-            <p class="text-gray-400">© <?= date('Y') ?> Klinik Gigi Sehat Bersinar. Hak Cipta Dilindungi.</p>
+            <p class="text-gray-400">© <?= date('Y') ?> Klinik Gigi Pro Medico. Hak Cipta Dilindungi.</p>
         </div>
     </footer>
 

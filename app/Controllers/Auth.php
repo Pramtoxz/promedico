@@ -284,8 +284,8 @@ class Auth extends BaseController
             $userData = [
                 'username' => $formData['username'],
                 'email' => $formData['email'],
-                'password' => $formData['password'],
-                'role' => 'user', // Default role
+                'password' => password_hash($formData['password'], PASSWORD_DEFAULT), // Enkripsi password
+                'role' => 'pasien', // Default role
                 'status' => 'active'
             ];
             
