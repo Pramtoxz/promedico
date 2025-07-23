@@ -3,7 +3,7 @@
 <div class="col-md-12">
     <div class="card card-teal">
         <div class="card-header">
-            <h3 class="card-title">Laporan Obat Masuk</h3>
+            <h3 class="card-title">Laporan Booking</h3>
             <!-- /.card-tools -->
         </div>
         <!-- /.card-header -->
@@ -126,7 +126,7 @@
     function ViewLaporanSemua() {
         $.ajax({
             type: "get",
-            url: "<?= base_url('laporan-obat/masuk/view') ?>",
+            url: "<?= base_url('laporan-transaksi/booking/view') ?>",
             dataType: "JSON",
             success: function(response) {
                 if (response.data) {
@@ -146,7 +146,7 @@
         } else {
             $.ajax({
                 type: "POST",
-                url: "<?= base_url('laporan-obat/masuk/viewtanggal') ?>",
+                url: "<?= base_url('laporan-transaksi/booking/viewtanggal') ?>",
                 data: {
                     tglmulai: tglmulai,
                     tglakhir: tglakhir,
@@ -170,7 +170,7 @@
         } else {
             $.ajax({
                 type: "POST",
-                url: "<?= base_url('laporan-obat/masuk/viewbulan') ?>",
+                url: "<?= base_url('laporan-transaksi/booking/viewbulan') ?>",
                 data: {
                     bulan: bulan,
                     tahun: tahun,

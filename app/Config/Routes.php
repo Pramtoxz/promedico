@@ -222,3 +222,11 @@ $routes->group('laporan-jadwal', ['filter' => ['auth', 'role:admin,pimpinan']], 
     $routes->get('view', 'Laporan\LaporanObat::viewallLaporanJadwal');
 });
 
+$routes->group('laporan-transaksi', ['filter' => ['auth', 'role:admin,pimpinan']], function ($routes) {
+    $routes->get('booking', 'Laporan\LaporanTransaksi::LaporanBooking');
+    $routes->get('booking/view', 'Laporan\LaporanTransaksi::viewallLaporanBooking');
+    $routes->post('booking/viewtanggal', 'Laporan\LaporanTransaksi::viewallLaporanBookingTanggal');
+    $routes->post('booking/viewbulan', 'Laporan\LaporanTransaksi::viewallLaporanBookingBulan');
+});
+
+

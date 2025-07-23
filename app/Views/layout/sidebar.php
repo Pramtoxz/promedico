@@ -153,6 +153,15 @@
                              </p>
                          </a>
                      </li>
+                     
+                     <li class="nav-item">
+                         <a href="<?= base_url('laporan-transaksi/booking') ?>" class="nav-link <?= (current_url() == base_url('laporan-transaksi/booking')) ? 'active' : '' ?>">
+                             <i class="nav-icon fas fa-paperclip"></i>
+                             <p>
+                                 Laporan Booking
+                             </p>
+                         </a>
+                     </li>
              </ul>
          </nav>
          <!-- /.sidebar-menu -->
