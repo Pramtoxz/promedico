@@ -52,8 +52,8 @@
                         <div class="form-group">
                             <label for="jenkel">Jenkel</label>
                             <select id="jenkel" name="jenkel" class="form-control">
-                                <option value="Laki-laki" <?= $pasien['jenkel'] == 'Laki-laki' ? 'selected' : '' ?>>Laki-laki</option>
-                                <option value="Perempuan" <?= $pasien['jenkel'] == 'Perempuan' ? 'selected' : '' ?>>Perempuan</option>
+                                <option value="L" <?= $pasien['jenkel'] == 'Laki-laki' ? 'selected' : '' ?>>Laki-laki</option>
+                                <option value="P" <?= $pasien['jenkel'] == 'Perempuan' ? 'selected' : '' ?>>Perempuan</option>
                             </select>
                             <div class="invalid-feedback error_jenkel"></div>
                         </div>

@@ -52,8 +52,8 @@
                         <div class="form-group">
                             <label for="jenkel">Jenkel</label>
                             <select id="jenkel" name="jenkel" class="form-control">
-                                <option value="Laki-laki">Laki-laki</option>
-                                <option value="Perempuan">Perempuan</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
                             </select>
                             <div class="invalid-feedback error_jenkel"></div>
                         </div>
