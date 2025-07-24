@@ -63,17 +63,37 @@ class PerawatanController extends BaseController
         if ($this->request->isAJAX()) {
             $db = db_connect();
             $perawatan = $db->table('perawatan')
-            ->select('perawatan.idperawatan, booking.idbooking, pasien.nama as nama_pasien, perawatan.tanggal, dokter.nama as nama_dokter,perawatan.resep')
-            ->join('booking', 'booking.idbooking = perawatan.idbooking')
-            ->join('pasien', 'pasien.id_pasien = booking.id_pasien')
-            ->join('jadwal', 'jadwal.idjadwal = booking.idjadwal')
-            ->join('dokter', 'dokter.id_dokter = jadwal.iddokter')
-            ->where('booking.status', 'diperiksa');
+                ->select('
+                    perawatan.idperawatan, 
+                    booking.idbooking, 
+                    pasien.nama as nama_pasien, 
+                    perawatan.tanggal, 
+                    dokter.nama as nama_dokter,
+                    perawatan.resep,
+                    booking.konsultasi,
+                    jenis_perawatan.namajenis,
+                    jenis_perawatan.harga as hargajenis
+                ')
+                ->join('booking', 'booking.idbooking = perawatan.idbooking')
+                ->join('pasien', 'pasien.id_pasien = booking.id_pasien')
+                ->join('jenis_perawatan', 'jenis_perawatan.idjenis = booking.idjenis')
+                ->join('jadwal', 'jadwal.idjadwal = booking.idjadwal')
+                ->join('dokter', 'dokter.id_dokter = jadwal.iddokter')
+                ->where('booking.status', 'diperiksa');
             return DataTable::of($perawatan)
                 ->add('action', function ($row) {
-                    $button1 = '<button type="button" class="btn btn-primary btn-pilihperawatan" data-idperawatan="' . $row->idperawatan . '" data-nama_pasien="' . esc($row->nama_pasien) . '"  data-tanggal="' . esc($row->tanggal) . '" data-dokter="' . esc($row->nama_dokter) . '" data-resep="' . esc($row->resep) . '" data-idbooking="' . esc($row->idbooking) . '">
-                                Pilih
-                            </button>';
+                    $button1 = '<button type="button" class="btn btn-primary btn-pilihperawatan" 
+                        data-idperawatan="' . $row->idperawatan . '" 
+                        data-nama_pasien="' . esc($row->nama_pasien) . '"  
+                        data-tanggal="' . esc($row->tanggal) . '" 
+                        data-dokter="' . esc($row->nama_dokter) . '" 
+                        data-resep="' . esc($row->resep) . '" 
+                        data-idbooking="' . esc($row->idbooking) . '" 
+                        data-konsultasi="' . esc($row->konsultasi) . '" 
+                        data-namajenis="' . esc($row->namajenis) . '" 
+                        data-hargajenis="' . esc($row->hargajenis) . '">
+                        Pilih
+                    </button>';
                     return $button1;
                 }, 'last')
                 ->addNumbering()
@@ -468,7 +488,7 @@ class PerawatanController extends BaseController
 
         // Ambil data booking terkait perawatan
         $bookingData = $db->table('booking')
-            ->select('booking.*, jadwal.hari, dokter.nama as nama_dokter, pasien.nama as nama_pasien, pasien.alamat, pasien.nohp, jenis_perawatan.namajenis, jenis_perawatan.estimasi, jenis_perawatan.harga')
+            ->select('booking.*, jadwal.hari, dokter.nama as nama_dokter, pasien.nama as nama_pasien, pasien.alamat, pasien.nohp, jenis_perawatan.namajenis, jenis_perawatan.estimasi, jenis_perawatan.harga as harga')
             ->join('jadwal', 'jadwal.idjadwal = booking.idjadwal')
             ->join('dokter', 'dokter.id_dokter = jadwal.iddokter')
             ->join('pasien', 'pasien.id_pasien = booking.id_pasien')
@@ -492,42 +512,6 @@ class PerawatanController extends BaseController
         ];
 
         return view('perawatan/detail', $data);
-    }
-
-
-    public function DetailBarangMasuk($kdmasuk)
-    {
-        $db = db_connect();
-        $userQuery = $db
-            ->table('detailbarangmasuk')
-            ->select('detailbarangmasuk.kdmasuk,barangmasuk.kdmasuk,barangmasuk.tglmasuk,supplier.namaspl,barangmasuk.grandtotal')
-            ->select('(SELECT count(kdbarang) FROM detailbarangmasuk where detailbarangmasuk.kdmasuk = barangmasuk.kdmasuk) as countItem')
-            ->select('(SELECT sum(jumlah) FROM detailbarangmasuk where detailbarangmasuk.kdmasuk = barangmasuk.kdmasuk) as totaljumlah')
-            ->join('barangmasuk', 'barangmasuk.kdmasuk = detailbarangmasuk.kdmasuk')
-            ->join('supplier', 'supplier.kdspl = barangmasuk.kdspl')
-            ->groupBy('barangmasuk.kdmasuk')
-            ->where('barangmasuk.kdmasuk', $kdmasuk);
-
-        $user = $userQuery->get();
-
-        $detailproduk = $db
-            ->table('detailbarangmasuk')
-            ->select('barang.namabarang,detailbarangmasuk.jumlah,barang.hargabeli,detailbarangmasuk.totalharga')
-            ->join('barang', 'barang.kdbarang = detailbarangmasuk.kdbarang')
-            ->where('kdmasuk', $kdmasuk);
-        $detail = $detailproduk->get();
-
-        $item = $detail->getResultArray();
-        $userData = $user->getRow();
-        if (!$userData) {
-            return redirect()->back();
-        }
-        $data = [
-            'barang' => $userData,
-            'detail' => $item
-        ];
-
-        return view('barangmasuk/detail', $data);
     }
 
 }

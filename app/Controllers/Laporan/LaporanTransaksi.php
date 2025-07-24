@@ -110,14 +110,16 @@ class LaporanTransaksi extends BaseController
         $db = db_connect();
         $perawatan = $db
             ->table('detail_perawatan')
-            ->select('perawatan.idperawatan, booking.idbooking, pasien.nama as nama_pasien, dokter.nama as nama_dokter, perawatan.tanggal as tglperawatan, detail_perawatan.idobat, detail_perawatan.qty, detail_perawatan.total')
+            ->select('perawatan.idperawatan, booking.idbooking, pasien.nama as nama_pasien, dokter.nama as nama_dokter, perawatan.tanggal as tglperawatan, detail_perawatan.idobat, detail_perawatan.qty, detail_perawatan.total, jenis_perawatan.namajenis, jenis_perawatan.harga as hargajenis, booking.konsultasi')
+            ->select('(SELECT SUM(total) FROM detail_perawatan WHERE idperawatan = perawatan.idperawatan) as total')
             ->join('perawatan', 'perawatan.idperawatan = detail_perawatan.idperawatan')
             ->join('booking', 'booking.idbooking = perawatan.idbooking')
             ->join('jadwal', 'jadwal.idjadwal = booking.idjadwal')
             ->join('pasien', 'pasien.id_pasien = booking.id_pasien')
             ->join('dokter', 'dokter.id_dokter = jadwal.iddokter')
             ->join('obat', 'obat.idobat = detail_perawatan.idobat')
-            ->groupBy('perawatan.idperawatan, booking.idbooking, pasien.nama, dokter.nama, perawatan.tanggal, detail_perawatan.idobat, detail_perawatan.qty, detail_perawatan.total')
+            ->join('jenis_perawatan', 'jenis_perawatan.idjenis = booking.idjenis')
+            ->groupBy('perawatan.idperawatan, booking.idbooking, pasien.nama, dokter.nama, perawatan.tanggal, detail_perawatan.idobat, detail_perawatan.qty, detail_perawatan.total, jenis_perawatan.namajenis, jenis_perawatan.harga, booking.konsultasi')
             ->get()
             ->getResultArray();
 

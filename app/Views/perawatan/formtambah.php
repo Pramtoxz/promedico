@@ -38,6 +38,24 @@
                             <input type="text" id="dokter" name="dokter" class="form-control" readonly>
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="konsultasi">Konsultasi</label>
+                            <input type="text" id="konsultasi" name="konsultasi" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="namajenis">Nama Perawatan</label>
+                            <input type="text" id="namajenis" name="namajenis" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="hargajenis">Harga</label>
+                            <input type="text" id="hargajenis" name="hargajenis" class="form-control" readonly>
+                        </div>
+                    </div>
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="resep">Resep</label>
@@ -206,6 +224,15 @@
         // Juga periksa setelah modal perawatan ditutup (karena mungkin ada pemilihan)
         $('#modalPerawatan').on('hidden.bs.modal', function() {
             checkPerawatanSelection();
+            // Hitung ulang grandtotal setelah pemilihan perawatan
+            var totalHargaObat = calculateTotalHargaObat();
+            calculateGrandTotal(totalHargaObat);
+        });
+        
+        // Event listener untuk perubahan nilai hargajenis dan konsultasi
+        $('#hargajenis, #konsultasi').on('change', function() {
+            var totalHargaObat = calculateTotalHargaObat();
+            calculateGrandTotal(totalHargaObat);
         });
         
         $('#formperawatan').submit(function(e) {
@@ -348,6 +375,12 @@
                         $('#idobat').val('');
                         $('#qty').val('');
                         $('#total').val('');
+                        
+                        // Setelah tambah item, hitung ulang total
+                        setTimeout(function() {
+                            var totalHargaObat = calculateTotalHargaObat();
+                            calculateGrandTotal(totalHargaObat);
+                        }, 500); // Delay untuk memastikan DataTable sudah selesai reload
                     }
                 },
 
@@ -369,6 +402,12 @@
                     if (response.sukses) {
 
                         $('#tempTabel').DataTable().ajax.reload();
+                        
+                        // Setelah hapus item, hitung ulang total
+                        setTimeout(function() {
+                            var totalHargaObat = calculateTotalHargaObat();
+                            calculateGrandTotal(totalHargaObat);
+                        }, 500); // Delay untuk memastikan DataTable sudah selesai reload
                     } else {
                         Swal.fire({
                             title: 'Error!',
@@ -413,6 +452,12 @@
                                 });
                                 // Refresh DataTable
                                 $('#tempTabel').DataTable().ajax.reload();
+                                
+                                // Reset grandtotal setelah hapus semua
+                                setTimeout(function() {
+                                    var totalHargaObat = calculateTotalHargaObat();
+                                    calculateGrandTotal(totalHargaObat);
+                                }, 500);
                             } else {
                                 Swal.fire({
                                     title: 'Error!',
@@ -456,17 +501,36 @@
             }],
         });
         table.on('draw', function() {
-            var total = 0;
-            table.column(4, {
-                search: 'applied'
-            }).data().each(function(value, index) {
-                total += parseFloat(value); // Pastikan bahwa kolom total adalah kolom ke-5 (index 4)
-            });
-
-            $('#displayTotal').text('Rp ' + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')); // Menampilkan total di elemen dengan id 'displayTotal' dan format Rupiah
-            $('#grandtotal').val(parseInt(total)); // Memperbarui nilai input grandtotal menjadi integer
+            var total = calculateTotalHargaObat();
+            calculateGrandTotal(total);
         });
     });
+    
+    // Fungsi untuk menghitung total harga obat dari tabel
+    function calculateTotalHargaObat() {
+        var total = 0;
+        var table = $('#tempTabel').DataTable();
+        
+        table.column(4, {
+            search: 'applied'
+        }).data().each(function(value, index) {
+            total += parseFloat(value); // Kolom total harga obat (index 4)
+        });
+        
+        return total;
+    }
+    
+    // Fungsi untuk menghitung grandtotal dari hargajenis + konsultasi + total harga obat
+    function calculateGrandTotal(totalHargaObat) {
+        var hargaJenis = parseFloat($('#hargajenis').val()) || 0;
+        var konsultasi = parseFloat($('#konsultasi').val()) || 0;
+        
+        var grandTotal = hargaJenis + konsultasi + totalHargaObat;
+        
+        // Update tampilan dan nilai input grandtotal
+        $('#displayTotal').text('Rp ' + grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+        $('#grandtotal').val(parseInt(grandTotal));
+    }
 
     function validateJumlah() {
         var jumlah = document.getElementById('qty').value;

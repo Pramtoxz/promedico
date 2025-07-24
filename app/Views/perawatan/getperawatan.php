@@ -8,6 +8,9 @@
                 <th>Nama Pasien</th>
                 <th>Tanggal</th>
                 <th>Dokter</th>
+                <th>Konsultasi</th>
+                <th>Nama Perawatan</th>
+                <th>Harga</th>
                 <th class="no-short">Aksi</th>
             </tr>
         </thead>
@@ -39,12 +42,18 @@
             var dokter = $(this).data('dokter');
             var resep = $(this).data('resep');
             var idbooking = $(this).data('idbooking');
+            var konsultasi = $(this).data('konsultasi');
+            var namajenis = $(this).data('namajenis');
+            var hargajenis = $(this).data('hargajenis');
             $('#idperawatan').val(idperawatan);
             $('#nama_pasien').val(nama_pasien);
             $('#tanggal').val(tanggal);
             $('#dokter').val(dokter);
             $('#resep').val(resep);
             $('#idbooking').val(idbooking);
+            $('#konsultasi').val(konsultasi);
+            $('#namajenis').val(namajenis);
+            $('#hargajenis').val(hargajenis);
             // $('#fasilitas').val(fasilitas); // Menambahkan input fasilitas ke dalam form
             $('#modalPerawatan').modal('hide').on('hidden.bs.modal', function () {
                 $('#idperawatan').focus();

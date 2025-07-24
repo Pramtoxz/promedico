@@ -87,27 +87,24 @@
                     <tr>
                         <th colspan="4" class="text-right">Total Obat</th>
                         <th>Rp <?= number_format(array_sum(array_column($detailObat, 'total')), 0, ',', '.') ?></th>
+                    </tr> 
+                    <tr>
+                        <th colspan="4" class="text-right">Biaya Jenis Perawatan</th>
+                        <th>Rp <?= number_format($booking['harga'], 0, ',', '.') ?></th>
+                    </tr>
+                    <tr>
+                        <th colspan="4" class="text-right">Biaya Konsultasi</th>
+                        <th>Rp <?= number_format($booking['konsultasi'], 0, ',', '.') ?></th>
                     </tr>
                     <tr>
                         <th colspan="4" class="text-right">Total Keseluruhan</th>
-                        <th>Rp <?= number_format($booking['harga'] + array_sum(array_column($detailObat, 'total')), 0, ',', '.') ?></th>
+                        <th>Rp <?= number_format($booking['harga'] + $booking['konsultasi'] + array_sum(array_column($detailObat, 'total')), 0, ',', '.') ?></th>
                     </tr>
                 </tfoot>
             </table>
         </div>
     </div>
-    
-    <?php if (isset($perawatan['resep']) && !empty($perawatan['resep'])): ?>
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="callout callout-info">
-                <h5><i class="fas fa-prescription-bottle-alt"></i> Resep:</h5>
-                <?= $perawatan['resep'] ?>
-            </div>
-        </div>
-    </div>
-    <?php endif; ?>
-    
+
     <!-- this row will not appear when printing -->
     <div class="row no-print mt-4">
         <div class="col-12">

@@ -213,6 +213,8 @@ class LaporanObat extends BaseController
 
         echo json_encode($response);
     }
+
+    
     public function LaporanJadwal()
     {
         $data['title'] = 'Laporan Jadwal Dokter';
