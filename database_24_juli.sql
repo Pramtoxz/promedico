@@ -31,8 +31,8 @@ CREATE TABLE `booking` (
   `status` enum('diproses','diterima','ditolak','diperiksa','selesai') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'diproses',
   `bukti_bayar` varchar(255) DEFAULT NULL,
   `online` tinyint(1) DEFAULT '0',
-  `bayar` double DEFAULT NULL,
-  `catatan` text,
+  `konsultasi` double DEFAULT NULL,
+  `catatan` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
@@ -40,10 +40,6 @@ CREATE TABLE `booking` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `booking` */
-
-insert  into `booking`(`idbooking`,`id_pasien`,`idjadwal`,`idjenis`,`tanggal`,`waktu_mulai`,`waktu_selesai`,`status`,`bukti_bayar`,`online`,`bayar`,`catatan`,`created_at`,`updated_at`,`deleted_at`) values 
-('BK0001','PS0003','JD0002','JP0001','2025-07-29','23:00:00','23:30:00','diterima','bukti-20250724-BK0001.png',1,NULL,NULL,'2025-07-24 01:01:31','2025-07-24 01:01:37',NULL),
-('BK0002','PS0003','JD0003','JP0001','2025-07-31','09:00:00','09:30:00','diproses',NULL,1,NULL,NULL,'2025-07-24 01:07:32','2025-07-24 01:07:32',NULL);
 
 /*Table structure for table `detail_perawatan` */
 
@@ -85,7 +81,7 @@ CREATE TABLE `dokter` (
 /*Data for the table `dokter` */
 
 insert  into `dokter`(`id_dokter`,`nama`,`alamat`,`tgllahir`,`nohp`,`jenkel`,`foto`,`iduser`,`created_at`,`updated_at`,`deleted_at`) values 
-('DK0001','Pramtoxz','Jl. Padang','2025-07-03','08129323923','L','foto-20250722-DK0001.png',9,'2025-07-03 06:30:48','2025-07-22 02:14:24',NULL);
+('DK0001','DR.Balqis','Pariaman','2025-07-03','08129323923','L','foto-20250722-DK0001.png',9,'2025-07-03 06:30:48','2025-07-22 02:14:24',NULL);
 
 /*Table structure for table `jadwal` */
 
@@ -108,7 +104,7 @@ CREATE TABLE `jadwal` (
 
 insert  into `jadwal`(`idjadwal`,`hari`,`waktu_mulai`,`waktu_selesai`,`iddokter`,`is_active`,`created_at`,`updated_at`,`deleted_at`) values 
 ('JD0001','Selasa','14:00:00','17:00:00','DK0001',1,'2025-07-15 15:53:53','2025-07-23 22:00:44',NULL),
-('JD0002','Selasa','23:00:00','23:59:00','DK0001',1,'2025-07-15 16:27:55','2025-07-18 20:07:21',NULL),
+('JD0002','Selasa','10:00:00','13:00:00','DK0001',1,'2025-07-15 16:27:55','2025-07-18 20:07:21',NULL),
 ('JD0003','Kamis','09:00:00','10:00:00','DK0001',1,'2025-07-16 14:51:31','2025-07-16 14:51:31',NULL),
 ('JD0004','Rabu','18:00:00','23:50:00','DK0001',1,'2025-07-23 20:50:04','2025-07-23 22:01:13',NULL);
 
@@ -245,6 +241,9 @@ CREATE TABLE `pasien` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `pasien` */
+
+insert  into `pasien`(`id_pasien`,`nama`,`alamat`,`tgllahir`,`nohp`,`jenkel`,`foto`,`iduser`,`created_at`,`updated_at`,`deleted_at`) values 
+('PS0001','Tessa','asdasd','2025-07-24','081234','L',NULL,21,'2025-07-24 15:49:03','2025-07-24 15:49:03',NULL);
 
 /*Table structure for table `perawatan` */
 

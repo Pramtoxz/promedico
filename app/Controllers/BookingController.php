@@ -85,6 +85,10 @@ class BookingController extends BaseController
                 case 'ditolak':
                     $statusClass = 'badge badge-danger';
                     break;
+                case 'waktuhabis':
+                    $statusClass = 'badge badge-dark';
+                    $statusText = 'Waktu Habis';
+                    break;
                 default:
                     $statusClass = 'badge badge-secondary';
                     break;
@@ -1085,7 +1089,7 @@ class BookingController extends BaseController
     {
         $db = db_connect();
         $booking = $db->table('booking')
-            ->select('booking.*, pasien.nama as pasien_nama, pasien.alamat, pasien.nohp, jenis_perawatan.namajenis, jenis_perawatan.harga, dokter.nama as nama_dokter')
+            ->select('booking.*, booking.created_at, pasien.nama as pasien_nama, pasien.alamat, pasien.nohp, jenis_perawatan.namajenis, jenis_perawatan.harga, dokter.nama as nama_dokter')
             ->join('pasien', 'pasien.id_pasien = booking.id_pasien')
             ->join('jadwal', 'jadwal.idjadwal = booking.idjadwal')
             ->join('dokter', 'dokter.id_dokter = jadwal.iddokter')
@@ -1103,6 +1107,66 @@ class BookingController extends BaseController
         ];
         
         return view('online/upload_bukti', $data);
+    }
+    
+    /**
+     * Update status booking menjadi 'waktuhabis' jika melebihi 15 menit setelah created_at
+     */
+    public function updateStatusBooking()
+    {
+        if ($this->request->isAJAX()) {
+            // Ambil data dari request
+            $json = $this->request->getJSON();
+            $idbooking = $json->idbooking ?? '';
+            $status = $json->status ?? '';
+            
+            if (empty($idbooking) || empty($status)) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Data tidak lengkap'
+                ]);
+            }
+            
+            // Validasi status hanya boleh 'waktuhabis'
+            if ($status !== 'waktuhabis') {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Status tidak valid'
+                ]);
+            }
+            
+            // Update status booking
+            $bookingModel = new \App\Models\Booking();
+            $booking = $bookingModel->find($idbooking);
+            
+            if (!$booking) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Booking tidak ditemukan'
+                ]);
+            }
+            
+            // Jika status sudah diubah sebelumnya, cukup kembalikan sukses
+            if ($booking['status'] === $status) {
+                return $this->response->setJSON([
+                    'success' => true,
+                    'message' => 'Status sudah diperbarui sebelumnya'
+                ]);
+            }
+            
+            // Update status
+            $bookingModel->update($idbooking, ['status' => $status]);
+            
+            // Log aktivitas untuk debugging
+            log_message('info', "Booking ID: {$idbooking} status diperbarui menjadi 'waktuhabis'");
+            
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Status booking berhasil diperbarui'
+            ]);
+        }
+        
+        return $this->response->setStatusCode(403, 'Forbidden');
     }
     
     /**
@@ -1163,6 +1227,7 @@ class BookingController extends BaseController
             $model->update($idbooking, [
                 'bukti_bayar' => $newName,
                 'status' => 'diproses',
+                'konsultasi' => 50000,
                 'online' => 1
             ]);
             
@@ -1214,7 +1279,7 @@ class BookingController extends BaseController
     {
         if ($this->request->isAJAX()) {
             $status = $this->request->getPost('status');
-            $allowed = [ 'diproses', 'diterima', 'diperiksa', 'ditolak'];
+            $allowed = [ 'diproses', 'diterima', 'diperiksa', 'ditolak', 'waktuhabis'];
             $errors = [];
             if (!$status || !in_array($status, $allowed)) {
                 $errors['error_status'] = 'Status tidak valid.';
@@ -1355,7 +1420,7 @@ class BookingController extends BaseController
             'idjenis' => $this->request->getPost('idjenis'),
             'waktu_mulai' => $this->request->getPost('waktu_mulai'),
             'waktu_selesai' => $this->request->getPost('waktu_selesai'),
-            'keluhan' => $this->request->getPost('keluhan'),
+            'catatan' => $this->request->getPost('keluhan'),
             'status' => 'diproses',
             'online' => 1,
             'created_at' => date('Y-m-d H:i:s'),
@@ -1516,6 +1581,87 @@ class BookingController extends BaseController
                 session()->setFlashdata('error', 'Gagal menyimpan data: ' . $e->getMessage());
                 return redirect()->back()->withInput();
             }
+        }
+    }
+
+    /**
+     * Debug endpoint untuk simulasi waktu deadline
+     * Hanya tersedia di development environment
+     */
+    public function simulateDeadline()
+    {
+        // Cek apakah mode development
+        if (ENVIRONMENT !== 'development') {
+            return $this->response->setStatusCode(403, 'Forbidden');
+        }
+        
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403, 'Forbidden');
+        }
+        
+        // Ambil data dari request
+        $json = $this->request->getJSON();
+        $idbooking = $json->idbooking ?? '';
+        $mode = $json->mode ?? '';
+        
+        if (empty($idbooking)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'ID Booking tidak valid'
+            ]);
+        }
+        
+        $bookingModel = new \App\Models\Booking();
+        $booking = $bookingModel->find($idbooking);
+        
+        if (!$booking) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Booking tidak ditemukan'
+            ]);
+        }
+        
+        // Tentukan waktu created_at berdasarkan mode
+        switch ($mode) {
+            case '1min':
+                // 14 menit yang lalu (tersisa 1 menit)
+                $newCreatedAt = date('Y-m-d H:i:s', time() - (14 * 60));
+                $message = 'Created At diatur ke 14 menit yang lalu (tersisa 1 menit)';
+                break;
+                
+            case 'expired':
+                // 16 menit yang lalu (sudah expired)
+                $newCreatedAt = date('Y-m-d H:i:s', time() - (16 * 60));
+                $message = 'Created At diatur ke 16 menit yang lalu (waktu sudah habis)';
+                break;
+                
+            default:
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Mode tidak valid'
+                ]);
+        }
+        
+        // Update created_at di database
+        $db = db_connect();
+        $result = $db->table('booking')
+                   ->where('idbooking', $idbooking)
+                   ->update(['created_at' => $newCreatedAt]);
+                   
+        if ($result) {
+            // Log aktivitas untuk debugging
+            log_message('info', "Debug: Created_at untuk booking ID {$idbooking} diubah menjadi {$newCreatedAt}");
+            
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => $message,
+                'new_created_at' => $newCreatedAt
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Gagal mengubah created_at'
+            ]);
         }
     }
 }

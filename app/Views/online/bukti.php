@@ -151,7 +151,7 @@
                     <div class="mt-6">
                         <h3 class="text-lg font-semibold text-teal-800 mb-2">Keluhan</h3>
                         <div class="bg-gray-50 rounded-lg p-4">
-                            <p class="text-gray-800"><?= $booking['keluhan'] ?></p>
+                            <p class="text-gray-800"><?= $booking['catatan'] ?></p>
                         </div>
                     </div>
                     

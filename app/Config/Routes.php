@@ -12,6 +12,8 @@ $routes->get('online/booking', 'BookingController::booking');
 $routes->post('online/simpanbooking', 'BookingController::simpanbooking');
 $routes->get('online/uploadBukti/(:segment)', 'BookingController::uploadBukti/$1');
 $routes->post('online/prosesUploadBukti', 'BookingController::prosesUploadBukti');
+$routes->post('online/updateStatusBooking', 'BookingController::updateStatusBooking');
+$routes->post('online/simulateDeadline', 'BookingController::simulateDeadline');
 $routes->get('online/faktur/(:segment)', 'BookingController::faktur/$1');
 $routes->post('booking/checkDayMatch', 'BookingController::checkDayMatch');
 $routes->post('booking/findAvailableSlot', 'BookingController::findAvailableSlot');

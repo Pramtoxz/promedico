@@ -14,7 +14,7 @@ class Booking extends Model
     protected $protectFields    = true;
     protected $allowedFields    = [
         'idbooking', 'id_pasien', 'idjadwal', 'idjenis', 'tanggal', 
-        'waktu_mulai', 'waktu_selesai', 'status', 'bukti_bayar', 'catatan', 'online'
+        'waktu_mulai', 'waktu_selesai', 'status', 'bukti_bayar', 'catatan', 'online', 'konsultasi', 'created_at'
     ];
 
     // Dates

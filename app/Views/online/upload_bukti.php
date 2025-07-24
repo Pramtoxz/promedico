@@ -128,6 +128,19 @@
             right: -10px;
             top: 0;
         }
+
+        /* Countdown timer style */
+        .countdown-timer {
+            font-weight: bold;
+            color: #ef4444;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -153,6 +166,25 @@
         <div class="container mx-auto px-4 text-center">
             <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Upload Bukti Pembayaran</h1>
             <p class="text-white text-lg max-w-xl mx-auto opacity-90">Silakan unggah bukti pembayaran Anda untuk melanjutkan proses booking</p>
+            
+            <?php 
+            // Timer hanya ditampilkan jika kondisi sesuai:
+            // 1. bukti_bayar kosong DAN status 'diproses' (awal booking)
+            // 2. bukti_bayar ada DAN status 'ditolak' (bukti ditolak)
+            $showTimer = (empty($booking['bukti_bayar']) && $booking['status'] == 'diproses') || 
+                        (!empty($booking['bukti_bayar']) && $booking['status'] == 'ditolak');
+            
+            if (isset($booking['created_at']) && $booking['status'] !== 'waktuhabis' && $showTimer): 
+            ?>
+            <!-- Countdown Timer -->
+            <div class="mt-4 bg-white bg-opacity-20 p-2 rounded-lg inline-block">
+                <div class="flex items-center">
+                    <i class="fas fa-clock text-white mr-2"></i>
+                    <span class="text-white">Sisa waktu: <span id="countdown" class="countdown-timer">--:--</span></span>
+                </div>
+                <p class="text-white text-sm mt-1">Harap selesaikan pembayaran dalam 15 menit</p>
+            </div>
+            <?php endif; ?>
         </div>
     </header>
 
@@ -171,7 +203,7 @@
                             </div>
                             <div>
                                 <p class="text-gray-600">Status</p>
-                                <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full uppercase"><?= $booking['status'] ?></span>
+                                <span class="inline-block <?= $booking['status'] == 'waktuhabis' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800' ?> text-sm font-medium px-3 py-1 rounded-full uppercase"><?= $booking['status'] ?></span>
                             </div>
                             <div>
                                 <p class="text-gray-600">Pasien</p>
@@ -202,24 +234,42 @@
                                     <p class="font-medium"><?= $booking['namajenis'] ?></p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-gray-700">Biaya</p>
-                                    <p class="font-bold text-xl text-teal-800">Rp <?= number_format($booking['harga'], 0, ',', '.') ?></p>
+                                    <p class="text-gray-700">Biaya Konsultasi</p>
+                                    <p class="font-bold text-xl text-teal-800">Rp <?= number_format(50000, 0, ',', '.') ?></p>
                                 </div>
                             </div>
                             <div class="mt-4 pt-4 border-t border-teal-200">
                                 <div class="flex justify-between items-center">
                                     <p class="font-semibold">Total Pembayaran</p>
-                                    <p class="font-bold text-xl text-teal-800">Rp <?= number_format($booking['harga'], 0, ',', '.') ?></p>
+                                    <p class="font-bold text-xl text-teal-800">Rp <?= number_format(50000, 0, ',', '.') ?></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Upload Section -->
-                    <div>
+                    <div class="upload-section">
                         <h3 class="text-xl font-semibold text-teal-800 mb-4">Upload Bukti Pembayaran</h3>
                         
-                        <?php if ($booking['status'] == 'ditolak' && !empty($booking['bukti_bayar'])): ?>
+                        <?php if ($booking['status'] == 'waktuhabis'): ?>
+                        <!-- Status Waktu Habis -->
+                        <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                            <div class="flex items-start">
+                                <div class="text-red-500 mr-3">
+                                    <i class="fas fa-exclamation-triangle text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-red-800">Waktu Upload Bukti Pembayaran Telah Habis</h4>
+                                    <p class="text-red-700">Batas waktu untuk mengupload bukti pembayaran telah habis. Silakan lakukan booking ulang.</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="<?= base_url('online/booking') ?>" class="inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                    <i class="fas fa-redo-alt mr-2"></i> Booking Ulang
+                                </a>
+                            </div>
+                        </div>
+                        <?php elseif ($booking['status'] == 'ditolak' && !empty($booking['bukti_bayar'])): ?>
                         <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
                             <div class="flex items-start">
                                 <div class="mr-3 text-red-500">
@@ -233,7 +283,7 @@
                         </div>
                         <?php endif; ?>
                         
-                        <?php if ($booking['status'] == 'ditolak' || empty($booking['bukti_bayar'])): ?>
+                        <?php if (($booking['status'] == 'ditolak' || empty($booking['bukti_bayar'])) && $booking['status'] != 'waktuhabis'): ?>
                         <form id="upload-form" enctype="multipart/form-data">
                             <input type="hidden" name="idbooking" value="<?= $booking['idbooking'] ?>">
                             
@@ -346,6 +396,50 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            <?php 
+            // Timer hanya dijalankan jika kondisi sesuai:
+            // 1. bukti_bayar kosong DAN status 'diproses' (awal booking)
+            // 2. bukti_bayar ada DAN status 'ditolak' (bukti ditolak)
+            $showTimer = (empty($booking['bukti_bayar']) && $booking['status'] == 'diproses') || 
+                        (!empty($booking['bukti_bayar']) && $booking['status'] == 'ditolak');
+            
+            if (isset($booking['created_at']) && $booking['status'] !== 'waktuhabis' && $showTimer): 
+            ?>
+            // Set timeout waktu upload bukti - 15 menit dari created_at
+            try {
+                // Format created_at yang benar untuk browser
+                const createdAtString = '<?= $booking['created_at'] ?>';
+                // Pisahkan komponen tanggal dan waktu
+                const parts = createdAtString.split(/[- :]/);
+                // Buat objek Date (bulan dikurangi 1 karena di JavaScript bulan dimulai dari 0)
+                const createdAt = new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]);
+                
+                const idbooking = '<?= $booking['idbooking'] ?>';
+                
+                // Hitung deadline (15 menit dari created_at)
+                const deadlineTime = new Date(createdAt.getTime() + (15 * 60 * 1000)); // 15 menit
+                
+                const now = new Date();
+                
+                // Cek apakah tanggal valid
+                if (isNaN(createdAt.getTime())) {
+                    console.error('Error: Created At tanggal tidak valid');
+                } else {
+                    // Cek apakah masih dalam batas waktu
+                    if (now > deadlineTime) {
+                        // Jika waktu sudah habis, update status booking
+                        updateBookingStatus('<?= $booking['idbooking'] ?>', 'waktuhabis');
+                    } else {
+                        // Jika masih ada waktu, jalankan countdown
+                        startCountdown(deadlineTime);
+                    }
+                }
+            } catch (error) {
+                console.error('Error parsing date:', error);
+                // Jangan update status jika ada error parsing tanggal
+            }
+            <?php endif; ?>
+
             const uploadForm = document.getElementById('upload-form');
             if (!uploadForm) return;
             
@@ -516,6 +610,110 @@
                 });
             });
         });
+
+        // Fungsi untuk menjalankan countdown timer
+        function startCountdown(deadlineTime) {
+            const countdownElement = document.getElementById('countdown');
+            if (!countdownElement) {
+                console.error('Countdown element not found');
+                return;
+            }
+            
+            console.log('Starting countdown to', deadlineTime);
+            
+            // Update timer setiap detik
+            const timer = setInterval(function() {
+                const now = new Date();
+                const diff = deadlineTime - now;
+                
+                // Jika waktu habis
+                if (diff <= 0) {
+                    clearInterval(timer);
+                    countdownElement.textContent = '00:00';
+                    console.log('Countdown finished');
+                    
+                    // Update status booking
+                    updateBookingStatus('<?= $booking['idbooking'] ?>', 'waktuhabis');
+                    
+                    // Tampilkan pesan waktu habis dan reload halaman
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Waktu Upload Habis',
+                        text: 'Batas waktu untuk upload bukti pembayaran telah berakhir. Halaman akan direload.',
+                        allowOutsideClick: false,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                    return;
+                }
+                
+                // Hitung menit dan detik
+                const minutes = Math.floor(diff / 1000 / 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+                
+                // Format timer
+                const formattedMinutes = String(minutes).padStart(2, '0');
+                const formattedSeconds = String(seconds).padStart(2, '0');
+                
+                // Update tampilan timer
+                countdownElement.textContent = `${formattedMinutes}:${formattedSeconds}`;
+                
+                // Jika waktu hampir habis (kurang dari 1 menit), tambah animasi khusus
+                if (minutes < 1) {
+                    countdownElement.classList.add('text-red-600');
+                    countdownElement.classList.add('animate-pulse');
+                }
+            }, 1000);
+        }
+
+        // Fungsi untuk update status booking menjadi waktuhabis
+        function updateBookingStatus(idbooking, status) {
+            console.log('Updating booking status for ID:', idbooking, 'to', status);
+            
+            fetch('<?= base_url('online/updateStatusBooking') ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    idbooking: idbooking,
+                    status: status
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Status updated response:', data);
+                
+                // Reload halaman setelah status diupdate
+                if (data.success) {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    console.error('Error updating status:', data.message);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Perhatian',
+                        text: 'Terjadi kesalahan saat memperbarui status: ' + (data.message || 'Unknown error')
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error updating status:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Terjadi kesalahan saat memperbarui status. Silakan muat ulang halaman.'
+                });
+            });
+        }
     </script>
 </body>
 </html> 

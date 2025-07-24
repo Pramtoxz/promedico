@@ -127,7 +127,7 @@
                             
                             <div>
                                 <label for="nohp" class="block text-gray-700 mb-1">Nomor HP <span class="text-red-500">*</span></label>
-                                <input type="tel" name="nohp" id="nohp" class="w-full px-4 py-2 border border-gray-300 rounded-lg form-input" required value="<?= old('nohp') ?>">
+                                <input type="number" name="nohp" id="nohp" class="w-full px-4 py-2 border border-gray-300 rounded-lg form-input" required value="<?= old('nohp') ?>">
                             </div>
                             
                             <div>
