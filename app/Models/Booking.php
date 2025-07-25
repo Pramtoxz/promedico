@@ -172,61 +172,44 @@ class Booking extends Model
         // Buffer time antar pasien (dalam menit) - bisa diambil dari konfigurasi jika perlu
         $buffer_time = 0;
         
+        // PERBAIKAN LOGIKA: Tentukan waktu mulai berdasarkan kondisi
+        $today = date('Y-m-d');
+        $current_time = $waktu_mulai_jadwal; // Default menggunakan waktu mulai jadwal
+        
         // Jika ada booking sebelumnya, gunakan waktu selesai booking terakhir + buffer
         if (count($existing_bookings) > 0) {
             $lastBooking = end($existing_bookings);
             $current_time = date('H:i:s', strtotime($lastBooking['waktu_selesai']) + ($buffer_time * 60));
             log_message('debug', "Menggunakan waktu selesai booking terakhir + buffer: $current_time");
         } else {
-            // Jika tidak ada booking, perlu tentukan waktu mulai berdasarkan apakah ini tanggal hari ini atau masa depan
-            $today = date('Y-m-d');
-            
-            // Jika tanggal yang dipilih adalah tanggal hari ini
+            // Jika tidak ada booking sebelumnya, tentukan waktu mulai berdasarkan tanggal
             if ($tanggal == $today) {
                 $currentTime = date('H:i:s');
                 log_message('debug', "Tanggal hari ini. Waktu saat ini: $currentTime");
                 
-                // PERBAIKAN: Jika tidak ada booking sebelumnya dan masih dalam jadwal
-                if (count($existing_bookings) == 0) {
-                    // Jika waktu saat ini sebelum jadwal dimulai
-                    if ($currentTime < $waktu_mulai_jadwal) {
-                        // Gunakan waktu mulai jadwal dari database
-                        $current_time = $waktu_mulai_jadwal;
-                        log_message('debug', "Tidak ada booking & waktu saat ini sebelum jadwal. Menggunakan waktu mulai jadwal: $current_time");
-                    } else if ($currentTime < $waktu_selesai_jadwal) {
-                        // Jika waktu saat ini sudah lewat waktu mulai tapi masih dalam jadwal
-                        // Gunakan waktu saat ini (dengan buffer untuk booking online)
-                        $buffer_minutes = $is_walk_in ? 0 : 30; // Buffer untuk online vs walk-in (bisa diambil dari konfigurasi)
-                        $waktu_mulai_minimal = date('H:i:s', strtotime($currentTime) + ($buffer_minutes * 60));
-                        
-                        // Waktu mulai adalah waktu saat ini + buffer
+                // Jika waktu saat ini sebelum jadwal dimulai
+                if ($currentTime < $waktu_mulai_jadwal) {
+                    $current_time = $waktu_mulai_jadwal;
+                    log_message('debug', "Waktu saat ini sebelum jadwal. Menggunakan waktu mulai jadwal: $current_time");
+                } else if ($currentTime < $waktu_selesai_jadwal) {
+                    // PERBAIKAN: Gunakan waktu saat ini dengan buffer minimal
+                    // Buffer yang lebih kecil: 5 menit untuk online, 0 untuk walk-in
+                    $buffer_minutes = $is_walk_in ? 0 : 5;
+                    $waktu_mulai_minimal = date('H:i:s', strtotime($currentTime) + ($buffer_minutes * 60));
+                    
+                    // Pastikan waktu mulai masih dalam rentang jadwal
+                    if (strtotime($waktu_mulai_minimal) < strtotime($waktu_selesai_jadwal)) {
                         $current_time = $waktu_mulai_minimal;
-                        log_message('debug', "Waktu saat ini dalam jadwal. Waktu mulai + buffer: $current_time");
+                        log_message('debug', "Waktu saat ini dalam jadwal. Waktu mulai + buffer {$buffer_minutes} menit: $current_time");
                     } else {
-                        // Jika waktu saat ini sudah melewati jadwal
-                        log_message('error', "Waktu saat ini sudah melewati jadwal: $currentTime > $waktu_selesai_jadwal");
-                        return null; // Tidak ada slot tersedia
+                        // Jika dengan buffer melebihi jadwal, gunakan waktu saat ini
+                        $current_time = $currentTime;
+                        log_message('debug', "Buffer melebihi jadwal. Menggunakan waktu saat ini: $current_time");
                     }
                 } else {
-                    // Jika ada booking sebelumnya, logika tetap sama
-                    // Jika waktu saat ini masih dalam range jadwal
-                    if ($currentTime > $waktu_mulai_jadwal && $currentTime < $waktu_selesai_jadwal) {
-                        // Tambahkan buffer berdasarkan jenis booking (bisa diambil dari konfigurasi)
-                        $buffer_minutes = $is_walk_in ? 0 : 30; 
-                        $waktu_mulai_minimal = date('H:i:s', strtotime($currentTime) + ($buffer_minutes * 60));
-                        
-                        // Waktu mulai adalah waktu saat ini + buffer
-                        $current_time = $waktu_mulai_minimal;
-                        log_message('debug', "Waktu saat ini dalam range jadwal. Waktu mulai + buffer: $current_time");
-                    } else if ($currentTime <= $waktu_mulai_jadwal) {
-                        // Jika waktu saat ini sebelum jadwal dimulai
-                        $current_time = $waktu_mulai_jadwal;
-                        log_message('debug', "Waktu saat ini sebelum jadwal. Menggunakan waktu mulai jadwal: $current_time");
-                    } else {
-                        // Jika waktu saat ini sudah melewati jadwal
-                        log_message('error', "Waktu saat ini sudah melewati jadwal: $currentTime > $waktu_selesai_jadwal");
-                        return null; // Tidak ada slot tersedia
-                    }
+                    // Jika waktu saat ini sudah melewati jadwal
+                    log_message('error', "Waktu saat ini sudah melewati jadwal: $currentTime > $waktu_selesai_jadwal");
+                    return null; // Tidak ada slot tersedia
                 }
             } else {
                 // Jika tanggal di masa depan, gunakan waktu awal jadwal

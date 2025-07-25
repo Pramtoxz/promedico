@@ -96,7 +96,7 @@
                             </div>
                         </div>
                         <hr style="border: 2px solid black; width: 68rem;">
-                        <b style="font-size: 20px; font-family: 'Times New Roman'; margin-bottom: 0; text-decoration: underline;">Laporan Obat Masuk</b>
+                        <b style="font-size: 20px; font-family: 'Times New Roman'; margin-bottom: 0; text-decoration: underline;">Laporan Booking</b>
                     </div>
                 </div>
                 <div class="tabelObat">
@@ -109,7 +109,7 @@
                     <div></div>
                     <?php $tanggal = date('Y-m-d'); ?>
                     <div style="text-align: center;">
-                        <p style="font-size: 18px; font-family: 'Times New Roman'; margin-bottom: 0;">Padang <?= $tanggal ?></p>
+                        <p style="font-size: 18px; font-family: 'Times New Roman'; margin-bottom: 0;">Pariaman <?= $tanggal ?></p>
                         <p style="margin-top: 5rem; font-size: 18px; font-family: 'Times New Roman'; margin-bottom: 0;">Klinik Promedico</p>
                     </div>
                 </div>
