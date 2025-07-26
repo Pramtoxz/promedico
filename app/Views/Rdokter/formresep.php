@@ -9,52 +9,46 @@
                 </div>
 
                 <div class="card-body p-4">
-                    <?= form_open('obat/save', ['id' => 'formtambahobat']) ?>
+                    <?= form_open('rdokter/saveresep', ['id' => 'formresep']) ?>
                     <?= csrf_field() ?>
                     
                     <div class="row justify-content-center">
                         <div class="col-md-8">
                             <div class="form-group row mb-4">
-                                <label for="idobat" class="col-sm-3 col-form-label">Kode Obat</label>
+                                <label for="kode_perawatan" class="col-sm-3 col-form-label">Kode Perawatan</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="idobat" name="idobat" value="<?= $next_number ?>" readonly>
-                                    <div class="invalid-feedback error_idobat"></div>
+                                    <input type="text" class="form-control" id="kode_perawatan" name="kode_perawatan" value="<?= $kode_perawatan ?>" readonly>
+                                    <div class="invalid-feedback error_kode_perawatan"></div>
                                 </div>
                             </div>
                             
                             <div class="form-group row mb-4">
-                                <label for="nama" class="col-sm-3 col-form-label">Nama Obat</label>
+                                <label for="nama_pasien" class="col-sm-3 col-form-label">Nama Pasien</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama obat">
-                                    <div class="invalid-feedback error_nama"></div>
+                                    <input type="text" class="form-control" id="nama_pasien" name="nama_pasien" value="<?= $perawatan['nama_pasien'] ?>" readonly>
+                                    <div class="invalid-feedback error_nama_pasien"></div>
                                 </div>
                             </div>
                             
                             <div class="form-group row mb-4">
-                                <label for="stok" class="col-sm-3 col-form-label">Stok</label>
+                                <label for="tanggal" class="col-sm-3 col-form-label">Tanggal</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" id="stok" name="stok" placeholder="Jumlah stok obat">
-                                    <div class="invalid-feedback error_stok"></div>
+                                    <input type="text" class="form-control" id="tanggal" name="tanggal" value="<?= $perawatan['tanggal'] ?>" readonly>
+                                    <div class="invalid-feedback error_tanggal"></div>
+                                </div>
+                            </div>  
+                            <div class="form-group row mb-4">
+                                <label for="nama_jenis" class="col-sm-3 col-form-label">Jenis Perawatan</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="nama_jenis" name="nama_jenis" value="<?= $perawatan['nama_jenis'] ?>" readonly>
+                                    <div class="invalid-feedback error_nama_jenis"></div>
                                 </div>
                             </div>
-                            
                             <div class="form-group row mb-4">
-                                <label for="jenis" class="col-sm-3 col-form-label">Jenis</label>
+                                <label for="resep" class="col-sm-3 col-form-label">Resep</label>
                                 <div class="col-sm-9">
-                                    <select class="form-control" id="jenis" name="jenis">
-                                        <option value="">Pilih Jenis Obat</option>
-                                        <option value="minum">Minum</option>
-                                        <option value="bahan">Bahan</option>
-                                    </select>
-                                    <div class="invalid-feedback error_jenis"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group row mb-4">
-                                <label for="keterangan" class="col-sm-3 col-form-label">Keterangan</label>
-                                <div class="col-sm-9">
-                                    <textarea class="form-control" id="keterangan" name="keterangan" rows="4" placeholder="Keterangan tambahan (opsional)"></textarea>
-                                    <div class="invalid-feedback error_keterangan"></div>
+                                    <textarea class="form-control" id="resep" name="resep" rows="4"><?= isset($perawatan['resep']) ? $perawatan['resep'] : '' ?></textarea>
+                                    <div class="invalid-feedback error_resep"></div>
                                 </div>
                             </div>
                             
@@ -63,7 +57,7 @@
                                     <button type="submit" class="btn btn-primary btn-lg px-4" id="tombolSimpan">
                                         <i class="fas fa-save mr-1"></i> SIMPAN
                                     </button>
-                                    <a class="btn btn-secondary btn-lg px-4 ml-2" href="<?= base_url('obat') ?>">
+                                    <a class="btn btn-secondary btn-lg px-4 ml-2" href="<?= base_url('rdokter/perawatan') ?>">
                                         <i class="fas fa-arrow-left mr-1"></i> KEMBALI
                                     </a>
                                 </div>
@@ -82,7 +76,7 @@
 <?= $this->section('script') ?>
 <script>
 $(function() {
-    $('#formtambahobat').submit(function(e) {
+    $('#formresep').submit(function(e) {
         e.preventDefault();
 
         $.ajax({
@@ -103,29 +97,19 @@ $(function() {
             success: function(response) {
                 if (response.error) {
                     let err = response.error;
-
-                    if (err.error_nama) {
-                        $('#nama').addClass('is-invalid').removeClass('is-valid');
-                        $('.error_nama').html(err.error_nama);
+                    if(err.error_kode_perawatan) {
+                        $('#kode_perawatan').addClass('is-invalid').removeClass('is-valid');
+                        $('.error_kode_perawatan').html(err.error_kode_perawatan);
                     } else {
-                        $('#nama').removeClass('is-invalid').addClass('is-valid');
-                        $('.error_nama').html('');
+                        $('#kode_perawatan').removeClass('is-invalid').addClass('is-valid');
+                        $('.error_kode_perawatan').html('');
                     }
-                    
-                    if (err.error_stok) {
-                        $('#stok').addClass('is-invalid').removeClass('is-valid');
-                        $('.error_stok').html(err.error_stok);
+                    if (err.error_resep) {
+                        $('#resep').addClass('is-invalid').removeClass('is-valid');
+                        $('.error_resep').html(err.error_resep);
                     } else {
-                        $('#stok').removeClass('is-invalid').addClass('is-valid');
-                        $('.error_stok').html('');
-                    }
-
-                    if (err.error_jenis) {
-                        $('#jenis').addClass('is-invalid').removeClass('is-valid');
-                        $('.error_jenis').html(err.error_jenis);
-                    } else {
-                        $('#jenis').removeClass('is-invalid').addClass('is-valid');
-                        $('.error_jenis').html('');
+                        $('#resep').removeClass('is-invalid').addClass('is-valid');
+                        $('.error_resep').html('');
                     }
                 }
 
@@ -138,7 +122,7 @@ $(function() {
                         timer: 1500
                     });
                     setTimeout(function() {
-                        window.location.href = '<?= site_url('obat') ?>';
+                        window.location.href = '<?= site_url('rdokter/perawatan') ?>';
                     }, 1500);
                 }
             },

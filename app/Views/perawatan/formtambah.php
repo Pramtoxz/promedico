@@ -40,7 +40,7 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <label for="konsultasi">Konsultasi</label>
+                            <label for="konsultasi">Biaya Konsultasi</label>
                             <input type="text" id="konsultasi" name="konsultasi" class="form-control" readonly>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <label for="hargajenis">Harga</label>
+                            <label for="hargajenis">Harga Perawatan</label>
                             <input type="text" id="hargajenis" name="hargajenis" class="form-control" readonly>
                         </div>
                     </div>

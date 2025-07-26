@@ -74,7 +74,7 @@ class BookingController extends BaseController
             
             switch($row->status) {
                 case 'diproses':
-                    $statusClass = 'badge badge-info';
+                    $statusClass = 'badge badge-warning';
                     break;
                 case 'diterima':
                     $statusClass = 'badge badge-success';
@@ -85,9 +85,9 @@ class BookingController extends BaseController
                 case 'ditolak':
                     $statusClass = 'badge badge-danger';
                     break;
-                case 'waktuhabis':
-                    $statusClass = 'badge badge-dark';
-                    $statusText = 'Waktu Habis';
+                case 'selesai':
+                    $statusClass = 'badge badge-success';
+                    $statusText = 'Selesai';
                     break;
                 default:
                     $statusClass = 'badge badge-secondary';
@@ -101,9 +101,6 @@ class BookingController extends BaseController
             $button2 = '<button type="button" class="btn btn-secondary btn-sm btn-edit" data-idbooking="' . $row->idbooking . '" style="margin-left: 5px;"><i class="fas fa-pencil-alt"></i></button>';
             $button3 = '<button type="button" class="btn btn-danger btn-sm btn-delete" data-idbooking="' . $row->idbooking . '" style="margin-left: 5px;"><i class="fas fa-trash"></i></button>';
 
-            // Tombol untuk ubah status
-            $buttonApprove = '';
-            $buttonReject = '';
 
             // Tombol cek bukti booking online
             $buttonCekBukti = '';
@@ -118,12 +115,7 @@ class BookingController extends BaseController
                 }
             }
 
-            if ($row->status == 'diproses') {
-                $buttonApprove = '<button type="button" class="btn btn-success btn-sm btn-approve" data-idbooking="' . $row->idbooking . '" style="margin-left: 5px;"><i class="fas fa-check"></i></button>';
-                $buttonReject = '<button type="button" class="btn btn-danger btn-sm btn-reject" data-idbooking="' . $row->idbooking . '" style="margin-left: 5px;"><i class="fas fa-times"></i></button>';
-            }
-
-            $buttonsGroup = '<div style="display: flex;">' . $button1 . $button2 . $button3 . $buttonCekBukti . $buttonApprove . $buttonReject . '</div>';
+            $buttonsGroup = '<div style="display: flex;">' . $button1 . $button2 . $button3 . $buttonCekBukti . '</div>';
             return $buttonsGroup;
         }, 'last')
         ->edit('tanggal', function ($row) {
@@ -281,6 +273,7 @@ class BookingController extends BaseController
                 'waktu_selesai' => $waktu_selesai,
                 'status' => $status ?? 'diterima',
                 'bukti_bayar' => $bukti_bayar_name,
+                'konsultasi' => '50000',
                 'catatan' => $catatan
             ]);
 
@@ -297,25 +290,20 @@ class BookingController extends BaseController
         if ($this->request->isAJAX()) {
             $idbooking = $this->request->getPost('idbooking');
 
-            $model = new ModelsBooking();
-            
-            // Cek apakah ada file bukti bayar yang perlu dihapus
-            $booking = $model->find($idbooking);
-            if ($booking && !empty($booking['bukti_bayar'])) {
-                $filePath = 'uploads/buktibayar/' . $booking['bukti_bayar'];
-                if (file_exists($filePath)) {
-                    unlink($filePath);
-                }
-            }
-            
-            $model->where('idbooking', $idbooking)->delete();
 
+            $modelDetail = new ModelsBooking();
+            $modelDetail->where('idbooking', $idbooking)->delete();
+
+            $model = new ModelsBooking();
+            $model->where('idbooking', $idbooking)->delete();
             $json = [
-                'sukses' => 'Data Booking berhasil dihapus'
+                'sukses' => 'Data Booking Berhasil Dihapus'
             ];
+
             return $this->response->setJSON($json);
         }
     }
+
 
     public function formedit($idbooking)
     {

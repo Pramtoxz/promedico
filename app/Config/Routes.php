@@ -51,7 +51,7 @@ $routes->group('pasien', ['filter' => 'auth'], function ($routes) {
 });
 
 // Admin & Dokter & Pimpinan dashboard (protected by auth filter)
-$routes->group('admin', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+$routes->group('dashboard', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
     $routes->get('/', 'Dashboard::index');
 });
 
@@ -152,7 +152,7 @@ $routes->group('booking', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], 
     $routes->get('formedit/(:segment)', 'BookingController::formedit/$1');
     $routes->post('updatedata/(:segment)', 'BookingController::updatedata/$1');
     $routes->get('detail/(:segment)', 'BookingController::detail/$1');
-    $routes->post('delete', 'BookingController::delete');
+    $routes->post('delete', 'BookingController::delete', ['as' => 'booking.delete']);
     $routes->post('updateStatus', 'BookingController::updateStatus');
     $routes->post('checkSlotAvailability', 'BookingController::checkSlotAvailability');
     $routes->post('findAvailableSlot', 'BookingController::findAvailableSlot');
@@ -173,8 +173,7 @@ $routes->group('booking', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], 
     $routes->get('faktur/(:segment)', 'BookingController::faktur/$1');
 });
 
-// Perawatan routes (protected by auth filter and role filter)
-$routes->group('perawatan', ['filter' => ['auth', 'role:admin,dokter,pimpinan']], function ($routes) {
+$routes->group('perawatan', ['filter' => ['auth', 'role:admin']], function ($routes) {
     $routes->get('/', 'PerawatanController::index');
     $routes->get('view', 'PerawatanController::viewPerawatan');
     $routes->get('formtambah', 'PerawatanController::formtambah');
@@ -235,3 +234,14 @@ $routes->group('laporan-transaksi', ['filter' => ['auth', 'role:admin,pimpinan']
 });
 
 
+// ----------------------------- Khusus Dokter-Dokter -----------------------------
+$routes->group('rdokter', ['filter' => ['auth', 'role:dokter']], function ($routes) {
+    $routes->get('pasien', 'DokterDashboardController::CekPasien');
+    $routes->get('viewcekpasien', 'DokterDashboardController::ViewCekPasien');
+    $routes->get('detailpasien/(:any)', 'DokterDashboardController::DetailPasien/$1');
+    $routes->get('perawatan', 'DokterDashboardController::CekPerawatan');
+    $routes->get('viewcekperawatan', 'DokterDashboardController::viewCekPerawatan');
+    $routes->get('formresep/(:segment)', 'DokterDashboardController::FormResep/$1');
+    $routes->post('saveresep', 'DokterDashboardController::saveResep');
+    $routes->get('detailperawatan/(:any)', 'DokterDashboardController::DetailPerawatan/$1');
+});

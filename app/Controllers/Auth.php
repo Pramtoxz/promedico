@@ -137,9 +137,9 @@ class Auth extends BaseController
                 if ($user['role'] == 'pasien') {
                     $redirect = site_url('/'); // welcome_message
                 } else if (in_array($user['role'], ['admin', 'dokter', 'pimpinan'])) {
-                    $redirect = site_url('admin'); // dashboard
+                    $redirect = site_url('dashboard'); // dashboard
                 } else {
-                    $redirect = site_url('admin'); // default
+                    $redirect = site_url('dashboard'); // default
                 }
 
                 return $this->response->setJSON([
@@ -217,7 +217,7 @@ class Auth extends BaseController
     {
         // Jika sudah login, redirect ke dashboard
         if (session()->get('logged_in')) {
-            return redirect()->to('admin');
+            return redirect()->to('/');
         }
 
         return view('auth/register');

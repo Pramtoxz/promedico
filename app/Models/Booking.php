@@ -10,7 +10,6 @@ class Booking extends Model
     protected $primaryKey       = 'idbooking';
     protected $useAutoIncrement = false;
     protected $returnType       = 'array';
-    protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
         'idbooking', 'id_pasien', 'idjadwal', 'idjenis', 'tanggal', 

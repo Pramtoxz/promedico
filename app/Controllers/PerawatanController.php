@@ -24,11 +24,12 @@ class PerawatanController extends BaseController
     {
         $db = db_connect();
         $query = $db->table('perawatan')
-                    ->select('perawatan.idperawatan, pasien.nama as nama_pasien, perawatan.tanggal, dokter.nama as nama_dokter')
+                    ->select('perawatan.idperawatan, pasien.nama as nama_pasien, perawatan.tanggal, dokter.nama as nama_dokter, booking.status')
                     ->join('booking', 'booking.idbooking = perawatan.idbooking')
                     ->join('pasien', 'pasien.id_pasien = booking.id_pasien')
                     ->join('jadwal', 'jadwal.idjadwal = booking.idjadwal')
-                    ->join('dokter', 'dokter.id_dokter = jadwal.iddokter');
+                    ->join('dokter', 'dokter.id_dokter = jadwal.iddokter')
+                    ->whereIn('booking.status', ['diperiksa', 'selesai']);
 
         return DataTable::of($query)
         ->add('action', function ($row) {
@@ -36,9 +37,21 @@ class PerawatanController extends BaseController
             $button2 = '<button type="button" class="btn btn-secondary btn-sm btn-edit" data-idperawatan="' . $row->idperawatan . '" style="margin-left: 5px;"><i class="fas fa-pencil-alt"></i></button>';
             $button3 = '<button type="button" class="btn btn-danger btn-sm btn-delete" data-idperawatan="' . $row->idperawatan . '" style="margin-left: 5px;"><i class="fas fa-trash"></i></button>';
             
-            $buttonsGroup = '<div style="display: flex;">' . $button1 . $button2 . $button3 . '</div>';
+            // Aturan: jika status diperiksa sembunyikan tombol edit, jika selesai sembunyikan tombol hapus
+            $buttonsGroup = '<div style="display: flex;">' . $button1;
+            if ($row->status == 'selesai') {
+                // Sembunyikan tombol hapus
+                $buttonsGroup .= $button2;
+            } elseif ($row->status == 'diperiksa') {
+                // Sembunyikan tombol edit
+                $buttonsGroup .= $button3;
+            }
+            $buttonsGroup .= '</div>';
             return $buttonsGroup;
         }, 'last')
+        ->edit('status', function ($row) {
+            return $row->status == 'diperiksa' ? '<span class="badge badge-warning">Diperiksa</span>' : '<span class="badge badge-success">Selesai</span>';
+        })
         ->addNumbering()
         ->toJson();
     }
@@ -343,7 +356,7 @@ class PerawatanController extends BaseController
         $booking = $modelBooking->where('idbooking', $perawatan['idbooking'])->first();
 
         $bookingData = $db->table('booking')
-        ->select('booking.*, jadwal.hari, dokter.nama as nama_dokter, pasien.nama as nama_pasien, jenis_perawatan.namajenis')
+        ->select('booking.*, jadwal.hari, dokter.nama as nama_dokter, pasien.nama as nama_pasien, jenis_perawatan.namajenis, jenis_perawatan.harga as harga, booking.catatan')
         ->join('jadwal', 'jadwal.idjadwal = booking.idjadwal')
         ->join('dokter', 'dokter.id_dokter = jadwal.iddokter')
         ->join('pasien', 'pasien.id_pasien = booking.id_pasien')

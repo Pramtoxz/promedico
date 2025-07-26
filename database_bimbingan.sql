@@ -56,10 +56,6 @@ CREATE TABLE `detail_perawatan` (
 
 /*Data for the table `detail_perawatan` */
 
-insert  into `detail_perawatan`(`id`,`idperawatan`,`idobat`,`qty`,`total`) values 
-(4,'PRW0001','OB0002',4,400),
-(5,'PRW0001','OB0001',2,10000);
-
 /*Table structure for table `dokter` */
 
 DROP TABLE IF EXISTS `dokter`;
@@ -104,10 +100,10 @@ CREATE TABLE `jadwal` (
 /*Data for the table `jadwal` */
 
 insert  into `jadwal`(`idjadwal`,`hari`,`waktu_mulai`,`waktu_selesai`,`iddokter`,`is_active`,`created_at`,`updated_at`,`deleted_at`) values 
-('JD0001','Sabtu','02:00:00','07:00:00','DK0001',1,'2025-07-15 15:53:53','2025-07-23 22:00:44',NULL),
-('JD0002','Selasa','10:00:00','13:00:00','DK0001',1,'2025-07-15 16:27:55','2025-07-18 20:07:21',NULL),
-('JD0003','Kamis','13:00:00','19:00:00','DK0001',1,'2025-07-16 14:51:31','2025-07-16 14:51:31',NULL),
-('JD0004','Rabu','18:00:00','23:50:00','DK0001',1,'2025-07-23 20:50:04','2025-07-23 22:01:13',NULL);
+('JD0001','Senin','08:00:00','10:00:00','DK0001',1,'2025-07-15 15:53:53','2025-07-23 22:00:44',NULL),
+('JD0002','Senin','11:00:00','13:00:00','DK0001',1,'2025-07-15 16:27:55','2025-07-18 20:07:21',NULL),
+('JD0003','Selasa','08:00:00','08:00:00','DK0001',1,'2025-07-16 14:51:31','2025-07-16 14:51:31',NULL),
+('JD0004','Sabtu','18:00:00','23:50:00','DK0001',1,'2025-07-23 20:50:04','2025-07-23 22:01:13',NULL);
 
 /*Table structure for table `jenis_perawatan` */
 
@@ -129,7 +125,7 @@ CREATE TABLE `jenis_perawatan` (
 
 insert  into `jenis_perawatan`(`idjenis`,`namajenis`,`estimasi`,`harga`,`keterangan`,`created_at`,`updated_at`,`deleted_at`) values 
 ('JP0001','Cabut gigi',30,250000,NULL,'2025-07-16 04:03:40','2025-07-16 04:03:40',NULL),
-('JP0002','ssc',45,50000,NULL,'2025-07-16 14:35:19','2025-07-16 14:35:30',NULL);
+('JP0002','Gigi berlubang',45,50000,NULL,'2025-07-16 14:35:19','2025-07-16 14:35:30',NULL);
 
 /*Table structure for table `migrations` */
 
@@ -172,8 +168,7 @@ CREATE TABLE `obat` (
 /*Data for the table `obat` */
 
 insert  into `obat`(`idobat`,`nama`,`stok`,`jenis`,`harga`,`keterangan`,`created_at`,`updated_at`,`deleted_at`) values 
-('OB0001','DELUXE',3,'bahan',5000,'sadasd','2025-07-16 03:53:05','2025-07-24 17:58:04',NULL),
-('OB0002','Migra',8,'minum',100,'sdadad','2025-07-23 02:06:13','2025-07-24 17:57:57',NULL);
+('OB0001','Cetak Gigi',102,'bahan',50000,'Bahan Gigi Depan','2025-07-26 21:47:56','2025-07-27 00:59:02',NULL);
 
 /*Table structure for table `obatmasuk` */
 
@@ -212,16 +207,9 @@ CREATE TABLE `otp_codes` (
   PRIMARY KEY (`id`),
   KEY `email` (`email`),
   KEY `otp_code` (`otp_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `otp_codes` */
-
-insert  into `otp_codes`(`id`,`email`,`otp_code`,`type`,`is_used`,`expires_at`,`created_at`,`updated_at`) values 
-(16,'noraja9540@dosonex.com','073406','register',1,'2025-07-24 01:28:30','2025-07-24 01:18:30','2025-07-24 01:18:51'),
-(17,'l4deb85prf@qzueos.com','302690','register',1,'2025-07-24 01:31:17','2025-07-24 01:21:17','2025-07-24 01:21:50'),
-(18,'l4deb85prf@qzueos.com','993650','register',1,'2025-07-24 01:32:09','2025-07-24 01:22:09','2025-07-24 01:22:59'),
-(19,'l4deb85prf@qzueos.com','336715','register',1,'2025-07-24 01:35:45','2025-07-24 01:25:45','2025-07-24 01:26:05'),
-(20,'noraja9540@dosonex.com','149247','register',1,'2025-07-24 17:43:27','2025-07-24 17:33:27','2025-07-24 17:33:56');
 
 /*Table structure for table `pasien` */
 
@@ -244,10 +232,6 @@ CREATE TABLE `pasien` (
 
 /*Data for the table `pasien` */
 
-insert  into `pasien`(`id_pasien`,`nama`,`alamat`,`tgllahir`,`nohp`,`jenkel`,`foto`,`iduser`,`created_at`,`updated_at`,`deleted_at`) values 
-('PS0001','Tessa','asdasd','2025-07-24','081234','L',NULL,21,'2025-07-24 15:49:03','2025-07-24 15:49:03',NULL),
-('PS0002','tay','adasd\r\n','2025-07-24','12313','L',NULL,19,'2025-07-24 17:34:17','2025-07-24 17:34:17',NULL);
-
 /*Table structure for table `perawatan` */
 
 DROP TABLE IF EXISTS `perawatan`;
@@ -258,13 +242,13 @@ CREATE TABLE `perawatan` (
   `tanggal` date DEFAULT NULL,
   `resep` text,
   `total` double DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`idperawatan`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `perawatan` */
-
-insert  into `perawatan`(`idperawatan`,`idbooking`,`tanggal`,`resep`,`total`) values 
-('PRW0001','BK0001','2025-07-23','sdasdadad',310300);
 
 /*Table structure for table `temp` */
 
@@ -276,7 +260,7 @@ CREATE TABLE `temp` (
   `qty` int DEFAULT NULL,
   `total` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=247 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=262 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `temp` */
 
@@ -315,14 +299,14 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`username`,`email`,`password`,`role`,`status`,`last_login`,`remember_token`,`created_at`,`updated_at`,`deleted_at`) values 
-(1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-25 21:34:50',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
-(9,'drbalqis','dokterbalqis@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','pasien','active','2025-06-28 10:42:11',NULL,'2025-06-28 10:30:11','2025-06-28 10:30:11',NULL),
-(19,'balqis123','noraja9540@dosonex.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','pasien','active','2025-07-26 02:23:12',NULL,'2025-07-24 17:33:56','2025-07-24 17:33:56',NULL);
+(1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-27 01:22:02',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
+(9,'drbalqis','dokterbalqis@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','dokter','active','2025-07-27 01:20:00',NULL,'2025-06-28 10:30:11','2025-06-28 10:30:11',NULL),
+(19,'pimpinan','pimpinan@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','pimpinan','active','2025-07-27 01:24:55',NULL,'2025-07-24 17:33:56','2025-07-24 17:33:56',NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

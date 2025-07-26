@@ -23,6 +23,7 @@
                                     <th>Pasien</th>
                                     <th>Tanggal</th>
                                     <th>Dokter</th>
+                                    <th>Status</th>
                                     <th class="no-short">Aksi</th>
                                 </tr>
                             </thead>

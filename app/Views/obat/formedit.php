@@ -43,13 +43,8 @@
                                 <div class="col-sm-9">
                                     <select class="form-control" id="jenis" name="jenis">
                                         <option value="">Pilih Jenis Obat</option>
-                                        <option value="Tablet" <?= ($obat['jenis'] == 'Tablet') ? 'selected' : '' ?>>Tablet</option>
-                                        <option value="Kapsul" <?= ($obat['jenis'] == 'Kapsul') ? 'selected' : '' ?>>Kapsul</option>
-                                        <option value="Sirup" <?= ($obat['jenis'] == 'Sirup') ? 'selected' : '' ?>>Sirup</option>
-                                        <option value="Salep" <?= ($obat['jenis'] == 'Salep') ? 'selected' : '' ?>>Salep</option>
-                                        <option value="Tetes" <?= ($obat['jenis'] == 'Tetes') ? 'selected' : '' ?>>Tetes</option>
-                                        <option value="Injeksi" <?= ($obat['jenis'] == 'Injeksi') ? 'selected' : '' ?>>Injeksi</option>
-                                        <option value="Lainnya" <?= ($obat['jenis'] == 'Lainnya') ? 'selected' : '' ?>>Lainnya</option>
+                                        <option value="minum" <?= ($obat['jenis'] == 'minum') ? 'selected' : '' ?>>Minum</option>
+                                        <option value="bahan" <?= ($obat['jenis'] == 'bahan') ? 'selected' : '' ?>>Bahan</option>
                                     </select>
                                     <div class="invalid-feedback error_jenis"></div>
                                 </div>

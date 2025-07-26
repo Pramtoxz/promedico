@@ -4,7 +4,7 @@
     <div class="col-md-12">
         <div class="card card-info">
             <div class="card-body">
-                <?= form_open('perawatan/save', ['id' => 'formperawatan']) ?>
+                <?= form_open('perawatan/updatedata/'.$perawatan['idperawatan'], ['id' => 'formperawatan']) ?>
                 <?= csrf_field() ?>
                 <div class="row">
                     <div class="col-sm-2">
@@ -12,7 +12,7 @@
                             <label for="idperawatan">ID Perawatan</label>
                             <div class="input-group">
                                 <input type="text" id="idperawatan" name="idperawatan" class="form-control" value="<?= $perawatan['idperawatan'] ?>" readonly>
-                                <input type="text" id="idbooking" name="idbooking" class="form-control" value="<?= $booking['idbooking'] ?>" readonly>
+                                <input type="hidden" id="idbooking" name="idbooking" class="form-control" value="<?= $booking['idbooking'] ?>" readonly>
                                 <div class="input-group-append">
                                     <button class="btn btn-info" type="button" id="ModalPerawatan" data-toggle="modal" data-target="#modalPerawatan">Cari</button>
                                 </div>
@@ -38,10 +38,28 @@
                             <input type="text" id="dokter" name="dokter" class="form-control" value="<?= $bookingData['nama_dokter'] ?>" readonly>
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="konsultasi">Biaya Konsultasi</label>
+                            <input type="text" id="konsultasi" name="konsultasi" class="form-control" value="<?= $booking['konsultasi'] ?>" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="namajenis">Nama Perawatan</label>
+                            <input type="text" id="namajenis" name="namajenis" class="form-control" value="<?= $bookingData['namajenis'] ?>" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="hargajenis">Harga Perawatan</label>
+                            <input type="text" id="hargajenis" name="hargajenis" class="form-control" value="<?= $bookingData['harga'] ?>" readonly>
+                        </div>
+                    </div>
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="resep">Resep</label>
-                            <textarea id="resep" name="resep" class="form-control" rows="2" readonly><?= $perawatan['resep'] ?></textarea>
+                            <textarea id="resep" name="resep" class="form-control" rows="2" readonly><?= isset($perawatan['resep']) ? $perawatan['resep'] : '' ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -206,6 +224,15 @@
         // Juga periksa setelah modal perawatan ditutup (karena mungkin ada pemilihan)
         $('#modalPerawatan').on('hidden.bs.modal', function() {
             checkPerawatanSelection();
+            // Hitung ulang grandtotal setelah pemilihan perawatan
+            var totalHargaObat = calculateTotalHargaObat();
+            calculateGrandTotal(totalHargaObat);
+        });
+        
+        // Event listener untuk perubahan nilai hargajenis dan konsultasi
+        $('#hargajenis, #konsultasi').on('change', function() {
+            var totalHargaObat = calculateTotalHargaObat();
+            calculateGrandTotal(totalHargaObat);
         });
         
         $('#formperawatan').submit(function(e) {
@@ -348,6 +375,12 @@
                         $('#idobat').val('');
                         $('#qty').val('');
                         $('#total').val('');
+                        
+                        // Setelah tambah item, hitung ulang total
+                        setTimeout(function() {
+                            var totalHargaObat = calculateTotalHargaObat();
+                            calculateGrandTotal(totalHargaObat);
+                        }, 500); // Delay untuk memastikan DataTable sudah selesai reload
                     }
                 },
 
@@ -369,6 +402,12 @@
                     if (response.sukses) {
 
                         $('#tempTabel').DataTable().ajax.reload();
+                        
+                        // Setelah hapus item, hitung ulang total
+                        setTimeout(function() {
+                            var totalHargaObat = calculateTotalHargaObat();
+                            calculateGrandTotal(totalHargaObat);
+                        }, 500); // Delay untuk memastikan DataTable sudah selesai reload
                     } else {
                         Swal.fire({
                             title: 'Error!',
@@ -413,6 +452,12 @@
                                 });
                                 // Refresh DataTable
                                 $('#tempTabel').DataTable().ajax.reload();
+                                
+                                // Reset grandtotal setelah hapus semua
+                                setTimeout(function() {
+                                    var totalHargaObat = calculateTotalHargaObat();
+                                    calculateGrandTotal(totalHargaObat);
+                                }, 500);
                             } else {
                                 Swal.fire({
                                     title: 'Error!',
@@ -456,17 +501,36 @@
             }],
         });
         table.on('draw', function() {
-            var total = 0;
-            table.column(4, {
-                search: 'applied'
-            }).data().each(function(value, index) {
-                total += parseFloat(value); // Pastikan bahwa kolom total adalah kolom ke-5 (index 4)
-            });
-
-            $('#displayTotal').text('Rp ' + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')); // Menampilkan total di elemen dengan id 'displayTotal' dan format Rupiah
-            $('#grandtotal').val(parseInt(total)); // Memperbarui nilai input grandtotal menjadi integer
+            var total = calculateTotalHargaObat();
+            calculateGrandTotal(total);
         });
     });
+    
+    // Fungsi untuk menghitung total harga obat dari tabel
+    function calculateTotalHargaObat() {
+        var total = 0;
+        var table = $('#tempTabel').DataTable();
+        
+        table.column(4, {
+            search: 'applied'
+        }).data().each(function(value, index) {
+            total += parseFloat(value); // Kolom total harga obat (index 4)
+        });
+        
+        return total;
+    }
+    
+    // Fungsi untuk menghitung grandtotal dari hargajenis + konsultasi + total harga obat
+    function calculateGrandTotal(totalHargaObat) {
+        var hargaJenis = parseFloat($('#hargajenis').val()) || 0;
+        var konsultasi = parseFloat($('#konsultasi').val()) || 0;
+        
+        var grandTotal = hargaJenis + konsultasi + totalHargaObat;
+        
+        // Update tampilan dan nilai input grandtotal
+        $('#displayTotal').text('Rp ' + grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+        $('#grandtotal').val(parseInt(grandTotal));
+    }
 
     function validateJumlah() {
         var jumlah = document.getElementById('qty').value;
