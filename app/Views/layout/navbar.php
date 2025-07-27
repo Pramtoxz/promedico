@@ -74,9 +74,9 @@
             </button>
 
             <!-- User Profile Dropdown -->
-            <div class="relative group">
+            <div class="relative" id="userDropdown">
                 <button class="flex items-center space-x-3 text-white hover:text-gray-200 transition-all duration-300 p-2 rounded-lg hover:bg-white/10 focus:outline-none" 
-                        id="userMenuButton">
+                        id="userMenuButton" onclick="toggleUserDropdown()">
                     <img src="<?= base_url() ?>assets/img/dokter.png" 
                          class="w-8 h-8 rounded-full border-2 border-white/30 shadow-lg" 
                          alt="User Image">
@@ -84,13 +84,13 @@
                         <p class="font-semibold text-sm"><?= session('username') ?? 'Admin' ?></p>
                         <p class="text-xs text-gray-200"><?= ucfirst(session('role') ?? 'admin') ?></p>
                     </div>
-                    <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 transition-transform duration-300" id="dropdownArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
 
                 <!-- Dropdown Menu -->
-                <div class="absolute right-0 mt-2 w-56 dropdown-glass rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2 z-50">
+                <div class="absolute right-0 mt-2 w-56 dropdown-glass rounded-2xl shadow-2xl opacity-0 invisible transition-all duration-300 transform translate-y-2 z-50" id="userDropdownMenu">
                     <div class="p-4 border-b border-white/20">
                         <p class="text-white font-semibold">Halo, <?= session('username') ?? 'Admin' ?>! 👋</p>
                         <p class="text-gray-200 text-sm"><?= ucfirst(session('role') ?? 'admin') ?></p>
@@ -305,6 +305,64 @@
 </div>
 
 <script>
+// Dropdown toggle function
+function toggleUserDropdown() {
+    const dropdown = document.getElementById('userDropdownMenu');
+    const arrow = document.getElementById('dropdownArrow');
+    
+    const isHidden = dropdown.classList.contains('opacity-0');
+    
+    if (isHidden) {
+        // Show dropdown
+        dropdown.classList.remove('opacity-0', 'invisible', 'translate-y-2');
+        dropdown.classList.add('opacity-100', 'visible', 'translate-y-0');
+        arrow.style.transform = 'rotate(180deg)';
+    } else {
+        // Hide dropdown
+        dropdown.classList.add('opacity-0', 'invisible', 'translate-y-2');
+        dropdown.classList.remove('opacity-100', 'visible', 'translate-y-0');
+        arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+// Search toggle function
+function toggleSearch() {
+    const searchBlock = document.querySelector('.navbar-search-block');
+    if (searchBlock.classList.contains('hidden')) {
+        searchBlock.classList.remove('hidden');
+        setTimeout(() => {
+            const searchInput = searchBlock.querySelector('input[type="search"]');
+            if (searchInput) searchInput.focus();
+        }, 100);
+    } else {
+        searchBlock.classList.add('hidden');
+    }
+}
+
+// Initialize search buttons
+document.addEventListener('DOMContentLoaded', function() {
+    const searchButtons = document.querySelectorAll('[data-widget="navbar-search"]');
+    searchButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleSearch();
+        });
+    });
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('userDropdown');
+    if (!dropdown.contains(event.target)) {
+        const dropdownMenu = document.getElementById('userDropdownMenu');
+        const arrow = document.getElementById('dropdownArrow');
+        
+        dropdownMenu.classList.add('opacity-0', 'invisible', 'translate-y-2');
+        dropdownMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+        arrow.style.transform = 'rotate(0deg)';
+    }
+});
+
 // Modal Functions
 function openProfileModal() {
     document.getElementById('profileModal').classList.remove('hidden');
@@ -329,19 +387,26 @@ function closeSettingsModal() {
 // Toggle Functions
 function toggleDarkMode() {
     // Implementation for dark mode toggle
-    console.log('Dark mode toggled');
 }
 
 function toggleNotifications() {
     // Implementation for notifications toggle
-    console.log('Notifications toggled');
 }
 
-// Close modals on Escape key
+// Close modals and dropdown on Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeProfileModal();
         closeSettingsModal();
+        
+        // Close dropdown
+        const dropdownMenu = document.getElementById('userDropdownMenu');
+        const arrow = document.getElementById('dropdownArrow');
+        if (dropdownMenu && arrow) {
+            dropdownMenu.classList.add('opacity-0', 'invisible', 'translate-y-2');
+            dropdownMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+            arrow.style.transform = 'rotate(0deg)';
+        }
     }
 });
 </script>
