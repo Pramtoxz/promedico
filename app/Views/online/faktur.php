@@ -57,7 +57,7 @@
             <div class="flex items-center space-x-2">
                 <a href="<?= base_url() ?>" class="flex items-center space-x-2">
                     <i class="fas fa-tooth text-teal-600 text-3xl"></i>
-                    <span class="text-2xl font-bold text-teal-800">KlinikGigi</span>
+                    <span class="text-2xl font-bold text-teal-800">Promedico</span>
                 </a>
             </div>
             <div>
@@ -81,7 +81,7 @@
                         </div>
                         <div class="flex items-center">
                             <i class="fas fa-tooth text-white text-2xl mr-2"></i>
-                            <span class="text-xl font-semibold">KlinikGigi</span>
+                            <span class="text-xl font-semibold">Promedico</span>
                         </div>
                     </div>
                 </div>
@@ -234,7 +234,7 @@
         <div class="container mx-auto px-4 text-center">
             <div class="flex justify-center items-center mb-4">
                 <i class="fas fa-tooth text-teal-400 text-2xl"></i>
-                <span class="text-xl font-bold ml-2">KlinikGigi</span>
+                <span class="text-xl font-bold ml-2">Promedico</span>
             </div>
             <p class="text-gray-400">© <?= date('Y') ?> Klinik Gigi Pro Medico. Hak Cipta Dilindungi.</p>
         </div>

@@ -1,4 +1,463 @@
 <!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klinik Gigi Promedico - Seni Merawat Senyuman Anda</title>
+    
+    <!-- Tailwind CSS & Custom Fonts/Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Alpine.js for interactivity -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f0f7f7; /* A very light teal tint */
+        }
+
+        /* Dominant Teal Gradient Theme */
+        .gradient-bg {
+            background: linear-gradient(135deg, #0d9488, #14b8a6, #2dd4bf);
+            background-size: 200% 200%;
+            animation: gradient-animation 10s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Animation on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body x-data class="text-gray-800">
+
+    <!-- Navbar -->
+    <header class="bg-white/90 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-md shadow-teal-900/5">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-3">
+                <i class="fas fa-tooth text-teal-600 text-3xl"></i>
+                <span class="text-2xl font-extrabold text-teal-800 tracking-tight">Promedico</span>
+            </a>
+            
+            <nav class="hidden lg:flex items-center space-x-10">
+                <a href="#beranda" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Beranda</a>
+                <a href="#layanan" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Layanan</a>
+                <a href="#dokter" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Dokter</a>
+                <a href="#galeri" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Galeri</a>
+                <a href="#faq" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">FAQ</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                 <?php if (session()->get('logged_in')): ?>
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="flex items-center space-x-3 text-teal-800 font-semibold py-2 px-4 rounded-full transition duration-300 hover:bg-teal-50">
+                            <span class="hidden sm:inline"><?= htmlspecialchars(session()->get('nama') ? session()->get('nama') : 'Profil') ?></span>
+                            <i class="fas fa-user-circle text-2xl"></i>
+                        </button>
+                        <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-20 border border-gray-100">
+                            <a href="<?= base_url('online/booking'); ?>" class="flex items-center px-4 py-2 text-gray-700 hover:bg-teal-50">
+                                <i class="fas fa-calendar-plus w-6 text-teal-600"></i> Booking Baru
+                            </a>
+                            <a href="<?= base_url('pasien/histori'); ?>" class="flex items-center px-4 py-2 text-gray-700 hover:bg-teal-50">
+                                <i class="fas fa-history w-6 text-teal-600"></i> Histori Booking
+                            </a>
+                            <a href="<?= base_url('pasien/edit-profil'); ?>" class="flex items-center px-4 py-2 text-gray-700 hover:bg-teal-50">
+                                <i class="fas fa-user-edit w-6 text-teal-600"></i> Edit Profil
+                            </a>
+                            <div class="border-t border-gray-100 my-1"></div>
+                            <a href="<?= base_url('auth/logout'); ?>" class="flex items-center px-4 py-2 text-red-600 hover:bg-red-50">
+                                <i class="fas fa-sign-out-alt w-6"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <a href="<?= base_url('auth'); ?>" class="bg-teal-600 text-white px-6 py-2.5 rounded-full font-bold hover:bg-teal-700 transition duration-300 shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 transform hover:-translate-y-0.5">
+                        Login / Daftar
+                    </a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="relative pt-32 pb-20 gradient-bg overflow-hidden">
+        <div class="container mx-auto px-6 z-10">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="md:w-1/2 text-center md:text-left text-white">
+                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 tracking-tighter">
+                        Seni & Sains dalam Senyuman Sempurna.
+                    </h1>
+                    <p class="text-lg md:text-xl mb-8 opacity-90">
+                        Selamat datang di Promedico, tempat di mana teknologi gigi mutakhir bertemu dengan sentuhan artistik untuk menciptakan senyuman impian Anda di Pariaman.
+                    </p>
+                    <div class="flex justify-center md:justify-start">
+                        <?php if (session()->get('logged_in')): ?>
+                            <a href="<?= base_url('online/booking'); ?>" class="bg-white text-teal-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-teal-100 transition duration-300 shadow-2xl transform hover:scale-105">
+                                Buat Janji Temu
+                            </a>
+                        <?php else: ?>
+                            <a href="<?= base_url('auth'); ?>" class="bg-white text-teal-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-teal-100 transition duration-300 shadow-2xl transform hover:scale-105">
+                                Login untuk Booking
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="relative glass-card rounded-3xl p-4">
+                        <img src="<?= base_url() ?>/assets/img/dashboard.png" alt="Dashboard Klinik Gigi Promedico" class="rounded-2xl shadow-2xl w-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kenapa Memilih Kami Section -->
+    <section id="keunggulan" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-extrabold text-teal-800 mb-4">Kenapa Memilih Promedico?</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Kami tidak hanya merawat gigi, kami menciptakan pengalaman yang nyaman, aman, dan memuaskan untuk Anda.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center p-6 bg-teal-50 rounded-2xl reveal transition-all duration-300 hover:bg-teal-100 hover:shadow-xl hover:-translate-y-2">
+                    <div class="mx-auto w-16 h-16 mb-4 bg-teal-600 text-white rounded-full flex items-center justify-center text-2xl"><i class="fas fa-user-doctor"></i></div>
+                    <h3 class="text-xl font-bold text-teal-900 mb-2">Dokter Profesional</h3>
+                    <p class="text-gray-600">Tim dokter kami berpengalaman dan tersertifikasi untuk hasil terbaik.</p>
+                </div>
+                <div class="text-center p-6 bg-teal-50 rounded-2xl reveal transition-all duration-300 hover:bg-teal-100 hover:shadow-xl hover:-translate-y-2" style="transition-delay: 100ms;">
+                    <div class="mx-auto w-16 h-16 mb-4 bg-teal-600 text-white rounded-full flex items-center justify-center text-2xl"><i class="fas fa-microscope"></i></div>
+                    <h3 class="text-xl font-bold text-teal-900 mb-2">Teknologi Modern</h3>
+                    <p class="text-gray-600">Peralatan canggih untuk diagnosis akurat dan perawatan efektif.</p>
+                </div>
+                <div class="text-center p-6 bg-teal-50 rounded-2xl reveal transition-all duration-300 hover:bg-teal-100 hover:shadow-xl hover:-translate-y-2" style="transition-delay: 200ms;">
+                    <div class="mx-auto w-16 h-16 mb-4 bg-teal-600 text-white rounded-full flex items-center justify-center text-2xl"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h3 class="text-xl font-bold text-teal-900 mb-2">Pelayanan Ramah</h3>
+                    <p class="text-gray-600">Kami melayani dengan hati, membuat Anda merasa seperti di rumah.</p>
+                </div>
+                <div class="text-center p-6 bg-teal-50 rounded-2xl reveal transition-all duration-300 hover:bg-teal-100 hover:shadow-xl hover:-translate-y-2" style="transition-delay: 300ms;">
+                    <div class="mx-auto w-16 h-16 mb-4 bg-teal-600 text-white rounded-full flex items-center justify-center text-2xl"><i class="fas fa-clinic-medical"></i></div>
+                    <h3 class="text-xl font-bold text-teal-900 mb-2">Klinik Nyaman</h3>
+                    <p class="text-gray-600">Ruangan bersih, modern, dan didesain untuk kenyamanan Anda.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Layanan Section -->
+    <section id="layanan" class="py-24" style="background-color: #f0f7f7;">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-extrabold text-teal-800 mb-4">Solusi Perawatan Gigi Komprehensif</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Menawarkan spektrum layanan lengkap, dari pencegahan hingga restorasi senyum yang estetik.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <?php foreach ($jenis as $item): ?>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden group transform transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl reveal border-t-4 border-teal-500">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-teal-800 mb-3"><?= htmlspecialchars($item['namajenis']) ?></h3>
+                        <p class="text-gray-600 mb-6 h-24"><?= isset($item['keterangan']) ? substr(htmlspecialchars($item['keterangan']), 0, 120) . '...' : 'Deskripsi layanan tidak tersedia.' ?></p>
+                        <a href="#" class="font-bold text-teal-600 group-hover:text-teal-800 transition duration-300 inline-flex items-center">
+                            Detail Layanan <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dokter Section -->
+    <section id="dokter" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-extrabold text-teal-800 mb-4">Temui Tim Dokter Gigi Kami</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Para ahli di balik senyuman sehat pasien-pasien kami.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <?php foreach ($dokter as $dr): ?>
+                <div class="rounded-2xl overflow-hidden text-center group reveal shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                    <div class="relative">
+                        <?php if (!empty($dr['foto']) && file_exists(FCPATH . 'assets/img/dokter/' . $dr['foto'])): ?>
+                            <img src="<?= base_url('assets/img/dokter/' . $dr['foto']) ?>" alt="Foto <?= htmlspecialchars($dr['nama']) ?>" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <?php else: ?>
+                            <img src="<?= base_url('assets/img/dokter.png') ?>" alt="<?= htmlspecialchars($dr['nama']) ?>" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <?php endif; ?>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-5 text-left">
+                            <h3 class="text-xl font-bold text-white"><?= htmlspecialchars($dr['nama']) ?></h3>
+                            <p class="text-teal-300 text-sm"><?= htmlspecialchars($dr['spesialis'] ?? 'Dokter Gigi Umum') ?></p>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jadwal Section -->
+    <section id="jadwal" class="py-24" style="background-color: #f0f7f7;">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-extrabold text-teal-800 mb-4">Jadwal Praktik Dokter</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Rencanakan kunjungan Anda dengan mudah. Pilih jadwal yang paling sesuai.</p>
+            </div>
+            
+            <div class="overflow-x-auto bg-white rounded-2xl shadow-xl reveal">
+                <table class="min-w-full text-left">
+                    <thead class="gradient-bg text-white">
+                        <tr>
+                            <th class="py-4 px-6 font-bold tracking-wider">Dokter</th>
+                            <th class="py-4 px-6 font-bold tracking-wider">Hari</th>
+                            <th class="py-4 px-6 font-bold tracking-wider">Jam Praktik</th>
+                            <th class="py-4 px-6 font-bold tracking-wider text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <?php foreach ($jadwal as $jdwl): ?>
+                            <?php
+                            $dokterData = null;
+                            foreach ($dokter as $dr) {
+                                if ($dr['id_dokter'] == $jdwl['iddokter']) {
+                                    $dokterData = $dr;
+                                    break;
+                                }
+                            }
+                            ?>
+                            <tr class="hover:bg-teal-50/50 transition-colors">
+                                <td class="py-4 px-6 font-semibold text-teal-900"><?= $dokterData ? htmlspecialchars($dokterData['nama']) : 'N/A' ?></td>
+                                <td class="py-4 px-6 text-gray-700"><?= htmlspecialchars($jdwl['hari']) ?></td>
+                                <td class="py-4 px-6 text-gray-700 font-mono"><?= htmlspecialchars($jdwl['waktu_mulai']) ?> - <?= htmlspecialchars($jdwl['waktu_selesai']) ?></td>
+                                <td class="py-4 px-6 text-center">
+                                    <?php if (session()->get('logged_in')): ?>
+                                        <a href="<?= base_url('online/booking') ?>" class="bg-teal-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-teal-700 transition duration-300 text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                            Booking
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="<?= base_url('auth') ?>" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full font-semibold hover:bg-teal-700 hover:text-white transition duration-300 text-sm">
+                                            Login
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeri Senyuman Section -->
+    <section id="galeri" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-extrabold text-teal-800 mb-4">Galeri Senyuman Promedico</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Lihat transformasi nyata dan kebahagiaan yang telah kami ciptakan.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 1">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
+                        <h3 class="text-white text-lg font-bold">"Hasilnya alami sekali!"</h3>
+                        <p class="text-teal-200 text-sm">- Anisa R.</p>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal md:col-span-2">
+                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 2">
+                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
+                        <h3 class="text-white text-lg font-bold">"Proses cepat dan tidak sakit."</h3>
+                        <p class="text-teal-200 text-sm">- David L.</p>
+                    </div>
+                </div>
+                 <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal md:col-span-2">
+                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 3">
+                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
+                        <h3 class="text-white text-lg font-bold">"Anak saya jadi tidak takut ke dokter gigi lagi."</h3>
+                        <p class="text-teal-200 text-sm">- Ibu Farah</p>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal">
+                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 4">
+                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
+                        <h3 class="text-white text-lg font-bold">"Gigi lebih putih dan bersih."</h3>
+                        <p class="text-teal-200 text-sm">- Rian S.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24" style="background-color: #f0f7f7;">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-extrabold text-teal-800 mb-4">Pertanyaan Umum (FAQ)</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Menemukan jawaban cepat untuk pertanyaan Anda seputar perawatan di Promedico.</p>
+            </div>
+            <div class="max-w-3xl mx-auto space-y-4 reveal">
+                <div x-data="{ open: false }" class="bg-white rounded-xl shadow-md">
+                    <button @click="open = !open" class="w-full flex justify-between items-center text-left p-5 font-semibold text-teal-900">
+                        <span>Apakah konsultasi pertama berbayar?</span>
+                        <i class="fas fa-chevron-down transition-transform" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" x-collapse class="px-5 pb-5 text-gray-600">
+                        <p>Ya, ada biaya untuk konsultasi awal yang mencakup pemeriksaan menyeluruh oleh dokter gigi kami. Namun, biaya ini dapat dimasukkan ke dalam total biaya perawatan jika Anda memutuskan untuk melanjutkan.</p>
+                    </div>
+                </div>
+                <div x-data="{ open: false }" class="bg-white rounded-xl shadow-md">
+                    <button @click="open = !open" class="w-full flex justify-between items-center text-left p-5 font-semibold text-teal-900">
+                        <span>Berapa lama proses pemasangan behel?</span>
+                        <i class="fas fa-chevron-down transition-transform" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" x-collapse class="px-5 pb-5 text-gray-600">
+                        <p>Durasi pemasangan behel bervariasi tergantung pada kompleksitas kasus, biasanya antara 1 hingga 2 jam untuk sesi pertama. Perawatan lengkapnya sendiri bisa memakan waktu 1.5 hingga 3 tahun.</p>
+                    </div>
+                </div>
+                <div x-data="{ open: false }" class="bg-white rounded-xl shadow-md">
+                    <button @click="open = !open" class="w-full flex justify-between items-center text-left p-5 font-semibold text-teal-900">
+                        <span>Apakah menerima pembayaran dengan asuransi?</span>
+                        <i class="fas fa-chevron-down transition-transform" :class="{'rotate-180': open}"></i>
+                    </button>
+                    <div x-show="open" x-collapse class="px-5 pb-5 text-gray-600">
+                        <p>Kami bekerja sama dengan beberapa penyedia asuransi kesehatan terkemuka. Silakan hubungi administrasi kami dengan detail polis Anda untuk verifikasi cakupan perawatan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 gradient-bg">
+        <div class="container mx-auto px-6 text-center text-white reveal">
+            <h2 class="text-4xl font-extrabold mb-4">Wujudkan Senyum Sehat Impian Anda</h2>
+            <p class="max-w-3xl mx-auto mb-8 text-lg opacity-90">Tim kami siap membantu Anda. Jangan ragu untuk membuat janji temu dan memulai perjalanan Anda menuju senyum yang lebih percaya diri bersama Promedico.</p>
+            <a href="<?= base_url('online/booking'); ?>" class="bg-white text-teal-700 px-10 py-4 rounded-full font-bold text-lg hover:bg-teal-100 transition duration-300 shadow-2xl transform hover:scale-105">
+                <i class="fas fa-calendar-check mr-2"></i> Booking Sekarang
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-teal-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="#" class="flex items-center space-x-3 mb-4">
+                         <i class="fas fa-tooth text-teal-300 text-3xl"></i>
+                         <span class="text-2xl font-extrabold text-white tracking-tight">Promedico</span>
+                    </a>
+                    <p class="text-teal-200 max-w-md">Klinik gigi modern di Pariaman, Sumatera Barat. Mengutamakan kualitas, kenyamanan, dan hasil yang memuaskan untuk setiap pasien.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-4">Navigasi Cepat</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#layanan" class="text-teal-200 hover:text-white">Layanan</a></li>
+                        <li><a href="#dokter" class="text-teal-200 hover:text-white">Dokter</a></li>
+                        <li><a href="#jadwal" class="text-teal-200 hover:text-white">Jadwal</a></li>
+                        <li><a href="#faq" class="text-teal-200 hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-4">Hubungi Kami</h3>
+                    <ul class="space-y-3 text-teal-200">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-teal-300 mt-1 mr-3 w-4"></i>
+                            <span>Jl. Raya Pariaman, Pariaman, Sumatera Barat</span>
+                        </li>
+                        <li class="flex items-start">
+                             <i class="fas fa-phone-alt text-teal-300 mt-1 mr-3 w-4"></i>
+                            <span>+62 812-3456-7890</span>
+                        </li>
+                        <li class="flex items-start">
+                             <i class="fas fa-envelope text-teal-300 mt-1 mr-3 w-4"></i>
+                            <span>info@promedico.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-teal-700 pt-6 flex flex-col sm:flex-row justify-between items-center">
+                <p class="text-center text-teal-300 text-sm">© <?= date('Y') ?> Klinik Gigi Promedico. Didesain dengan ❤️.</p>
+                <div class="flex space-x-4 mt-4 sm:mt-0">
+                    <a href="#" class="text-teal-300 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-teal-300 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-teal-300 hover:text-white"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JS for revealing elements on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const reveals = document.querySelectorAll('.reveal');
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // Optional: unobserve after revealing to save resources
+                        // observer.unobserve(entry.target); 
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            reveals.forEach(reveal => {
+                observer.observe(reveal);
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -58,12 +517,11 @@
     </style>
 </head>
 <body class="bg-white">
-    <!-- Navbar -->
     <nav class="bg-white shadow-md fixed w-full z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <i class="fas fa-tooth text-teal-600 text-3xl"></i>
-                <span class="text-2xl font-bold text-teal-800">KlinikGigi</span>
+                <span class="text-2xl font-bold text-teal-800">Promedico</span>
             </div>
             <div class="hidden md:flex space-x-8">
                 <a href="#beranda" class="text-teal-800 hover:text-teal-600 font-medium">Beranda</a>
@@ -104,8 +562,6 @@
             </div>
         </div>
     </nav>
-
-    <!-- Hero Section -->
     <section id="beranda" class="relative gradient-bg pt-28 pb-20 md:pb-32">
         <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
             <div class="md:w-1/2 text-white mb-10 md:mb-0">
@@ -136,8 +592,6 @@
             </svg>
         </div>
     </section>
-
-    <!-- Layanan Section -->
     <section id="layanan" class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
@@ -169,8 +623,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Dokter Section -->
     <section id="dokter" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
@@ -208,8 +660,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Jadwal Section -->
     <section id="jadwal" class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
@@ -231,7 +681,6 @@
                     <tbody class="divide-y divide-gray-200">
                         <?php foreach ($jadwal as $jdwl): ?>
                             <?php
-                            // Cari dokter yang sesuai dengan id dokter di jadwal
                             $dokterData = null;
                             foreach ($dokter as $dr) {
                                 if ($dr['id_dokter'] == $jdwl['iddokter']) {
@@ -263,8 +712,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Testimonials -->
     <section class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
@@ -336,7 +783,6 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
     <section class="gradient-bg py-16">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Jadwalkan Kunjungan Anda Sekarang!</h2>
@@ -352,8 +798,6 @@
             <?php endif; ?>
         </div>
     </section>
-
-    <!-- Contact Section -->
     <section id="kontak" class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
@@ -392,7 +836,7 @@
                             </div>
                             <div class="ml-4">
                                 <h4 class="text-lg font-medium text-teal-800">Email</h4>
-                                <p class="text-gray-600">info@klinikgigi.com</p>
+                                <p class="text-gray-600">info@Promedico.com</p>
                             </div>
                         </div>
                         
@@ -457,15 +901,13 @@
             </div>
         </div>
     </section>
-
-    <!-- Footer -->
     <footer class="bg-gray-900 text-white pt-16 pb-6">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
                 <div>
                     <div class="flex items-center space-x-2 mb-6">
                         <i class="fas fa-tooth text-teal-400 text-3xl"></i>
-                        <span class="text-2xl font-bold text-white">KlinikGigi</span>
+                        <span class="text-2xl font-bold text-white">Promedico</span>
                     </div>
                     <p class="text-gray-400 mb-6">Kesehatan gigi dan mulut Anda adalah prioritas kami. Kami berkomitmen memberikan pelayanan terbaik dengan teknologi modern.</p>
                     <div class="flex space-x-4">
@@ -519,7 +961,7 @@
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-envelope text-teal-400 mt-1 mr-3"></i>
-                            <span class="text-gray-400">info@klinikgigi.com</span>
+                            <span class="text-gray-400">info@Promedico.com</span>
                         </li>
                     </ul>
                 </div>
@@ -532,7 +974,6 @@
     </footer>
 
     <script>
-        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -543,19 +984,16 @@
             });
         });
 
-        // Handle profile dropdown on mobile
         document.addEventListener('DOMContentLoaded', function() {
             const profileDropdown = document.querySelector('.group button');
             const dropdownMenu = document.querySelector('.group .absolute');
             
             if (profileDropdown && dropdownMenu) {
-                // For mobile - toggle on click
                 profileDropdown.addEventListener('click', function(e) {
                     e.stopPropagation();
                     dropdownMenu.classList.toggle('hidden');
                 });
                 
-                // Close when clicking outside
                 document.addEventListener('click', function(e) {
                     if (!profileDropdown.contains(e.target) && !dropdownMenu.contains(e.target)) {
                         dropdownMenu.classList.add('hidden');
@@ -565,4 +1003,4 @@
         });
     </script>
 </body>
-</html>
+</html> -->

@@ -50,7 +50,7 @@
             <div class="p-6 gradient-bg">
                 <div class="flex items-center space-x-3">
                     <i class="fas fa-tooth text-white text-2xl"></i>
-                    <span class="text-xl font-bold text-white">KlinikGigi</span>
+                    <span class="text-xl font-bold text-white">Promedico</span>
                 </div>
             </div>
             <div class="py-4">
@@ -101,7 +101,7 @@
             <header class="md:hidden bg-white p-4 shadow-md flex justify-between items-center">
                 <div class="flex items-center space-x-3">
                     <i class="fas fa-tooth text-teal-600 text-2xl"></i>
-                    <span class="text-xl font-bold text-teal-800">KlinikGigi</span>
+                    <span class="text-xl font-bold text-teal-800">Promedico</span>
                 </div>
                 <button id="mobile-menu-button" class="text-gray-600 focus:outline-none">
                     <i class="fas fa-bars text-xl"></i>
