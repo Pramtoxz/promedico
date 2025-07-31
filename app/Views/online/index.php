@@ -67,7 +67,7 @@
                 <a href="#beranda" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Beranda</a>
                 <a href="#layanan" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Layanan</a>
                 <a href="#dokter" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Dokter</a>
-                <a href="#galeri" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Galeri</a>
+                <a href="#kisah-sukses" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Testimoni</a>
                 <a href="#faq" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">FAQ</a>
             </nav>
 
@@ -128,7 +128,7 @@
                 </div>
                 <div class="md:w-1/2">
                     <div class="relative glass-card rounded-3xl p-4">
-                        <img src="<?= base_url() ?>/assets/img/dashboard.png" alt="Dashboard Klinik Gigi Promedico" class="rounded-2xl shadow-2xl w-full">
+                        <img src="<?= base_url() ?>/assets/img/klinikku.png" alt="Dashboard Klinik Gigi Promedico" class="rounded-2xl shadow-2xl w-full">
                     </div>
                 </div>
             </div>
@@ -211,7 +211,7 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-5 text-left">
                             <h3 class="text-xl font-bold text-white"><?= htmlspecialchars($dr['nama']) ?></h3>
-                            <p class="text-teal-300 text-sm"><?= htmlspecialchars($dr['spesialis'] ?? 'Dokter Gigi Umum') ?></p>
+                            <p class="text-teal-300 text-sm"><?= htmlspecialchars($dr['spesialis'] ?? 'Dokter Gigi') ?></p>
                         </div>
                     </div>
                 </div>
@@ -272,40 +272,103 @@
         </div>
     </section>
 
-    <!-- Galeri Senyuman Section -->
-    <section id="galeri" class="py-24 bg-white">
+    <!-- Kisah Sukses Pasien Section -->
+    <section id="kisah-sukses" class="py-24 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl font-extrabold text-teal-800 mb-4">Galeri Senyuman Promedico</h2>
-                <p class="text-gray-600 max-w-3xl mx-auto">Lihat transformasi nyata dan kebahagiaan yang telah kami ciptakan.</p>
+                <h2 class="text-4xl font-extrabold text-teal-800 mb-4">Kisah Sukses Pasien Kami</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Pengalaman nyata dari pasien yang telah merasakan perubahan dalam hidup mereka setelah perawatan di Promedico.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal">
-                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 1">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
-                        <h3 class="text-white text-lg font-bold">"Hasilnya alami sekali!"</h3>
-                        <p class="text-teal-200 text-sm">- Anisa R.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-teal-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 reveal">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full bg-teal-600 flex items-center justify-center text-white text-2xl mr-4">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-teal-900">Anisa Rahman</h3>
+                            <p class="text-teal-700">Perawatan Veneer Gigi</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 italic">"Setelah bertahun-tahun merasa tidak percaya diri dengan senyuman saya, akhirnya saya menemukan Promedico. Hasilnya sangat alami dan membuat saya kembali percaya diri. Tim dokternya sangat profesional dan ramah."</p>
+                    <div class="flex items-center">
+                        <div class="text-yellow-500 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600">5 bulan yang lalu</span>
                     </div>
                 </div>
-                <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal md:col-span-2">
-                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 2">
-                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
-                        <h3 class="text-white text-lg font-bold">"Proses cepat dan tidak sakit."</h3>
-                        <p class="text-teal-200 text-sm">- David L.</p>
+                
+                <div class="bg-teal-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 reveal">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full bg-teal-600 flex items-center justify-center text-white text-2xl mr-4">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-teal-900">David Limuardi</h3>
+                            <p class="text-teal-700">Perawatan Saluran Akar</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 italic">"Saya sangat takut dengan prosedur saluran akar, tapi dokter di Promedico sangat sabar dan menjelaskan setiap langkah dengan jelas. Prosesnya cepat dan tidak sakit seperti yang saya bayangkan. Sangat puas dengan pelayanannya!"</p>
+                    <div class="flex items-center">
+                        <div class="text-yellow-500 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600">3 bulan yang lalu</span>
                     </div>
                 </div>
-                 <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal md:col-span-2">
-                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 3">
-                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
-                        <h3 class="text-white text-lg font-bold">"Anak saya jadi tidak takut ke dokter gigi lagi."</h3>
-                        <p class="text-teal-200 text-sm">- Ibu Farah</p>
+                
+                <div class="bg-teal-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 reveal">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full bg-teal-600 flex items-center justify-center text-white text-2xl mr-4">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-teal-900">Ibu Farah Dina</h3>
+                            <p class="text-teal-700">Perawatan Gigi Anak</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 italic">"Anak saya selalu menangis ketika akan ke dokter gigi. Tapi sejak pertama ke Promedico, ia justru senang kembali lagi. Dokternya sangat baik dengan anak-anak dan kliniknya ramah untuk mereka. Anak saya jadi tidak takut ke dokter gigi lagi."</p>
+                    <div class="flex items-center">
+                        <div class="text-yellow-500 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600">1 bulan yang lalu</span>
                     </div>
                 </div>
-                <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal">
-                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 4">
-                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
-                        <h3 class="text-white text-lg font-bold">"Gigi lebih putih dan bersih."</h3>
-                        <p class="text-teal-200 text-sm">- Rian S.</p>
+                
+                <div class="bg-teal-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 reveal">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full bg-teal-600 flex items-center justify-center text-white text-2xl mr-4">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-teal-900">Rian Saputra</h3>
+                            <p class="text-teal-700">Pemutihan Gigi</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 italic">"Saya mencoba banyak produk pemutih gigi, tapi tidak ada yang memberikan hasil maksimal. Setelah satu kali perawatan di Promedico, hasilnya langsung terlihat! Gigi saya lebih putih dan bersih. Terima kasih Promedico!"</p>
+                    <div class="flex items-center">
+                        <div class="text-yellow-500 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600">2 minggu yang lalu</span>
                     </div>
                 </div>
             </div>

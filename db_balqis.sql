@@ -41,17 +41,10 @@ CREATE TABLE `booking` (
   KEY `fk_booking_jadwal` (`idjadwal`),
   KEY `fk_booking_jenis` (`idjenis`),
   KEY `idx_booking_tanggal` (`tanggal`),
-  KEY `idx_booking_status` (`status`),
-  CONSTRAINT `fk_booking_jadwal` FOREIGN KEY (`idjadwal`) REFERENCES `jadwal` (`idjadwal`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_booking_jenis` FOREIGN KEY (`idjenis`) REFERENCES `jenis_perawatan` (`idjenis`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_booking_pasien` FOREIGN KEY (`id_pasien`) REFERENCES `pasien` (`id_pasien`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `idx_booking_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `booking` */
-
-insert  into `booking`(`idbooking`,`id_pasien`,`idjadwal`,`idjenis`,`tanggal`,`waktu_mulai`,`waktu_selesai`,`status`,`bukti_bayar`,`online`,`konsultasi`,`catatan`,`created_at`,`updated_at`,`deleted_at`) values 
-('BK0001','PS0001','JD0001','JP0001','2025-07-28','08:00:00','08:30:00','diterima',NULL,0,250000,'Pasien mengeluh sakit gigi','2025-07-27 08:00:00','2025-07-27 08:00:00',NULL),
-('BK0002','PS0002','JD0002','JP0002','2025-07-28','11:00:00','11:45:00','diproses',NULL,1,50000,'Konsultasi online gigi berlubang','2025-07-27 08:30:00','2025-07-27 08:30:00',NULL);
 
 /*Table structure for table `detail_perawatan` */
 
@@ -68,14 +61,9 @@ CREATE TABLE `detail_perawatan` (
   KEY `fk_detail_obat` (`idobat`),
   CONSTRAINT `fk_detail_obat` FOREIGN KEY (`idobat`) REFERENCES `obat` (`idobat`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_detail_perawatan` FOREIGN KEY (`idperawatan`) REFERENCES `perawatan` (`idperawatan`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `detail_perawatan` */
-
-insert  into `detail_perawatan`(`id`,`idperawatan`,`idobat`,`qty`,`total`) values 
-(1,'PR0001','OB0001',1,50000),
-(2,'PR0001','OB0002',2,10000),
-(3,'PR0001','OB0003',1,15000);
 
 /*Table structure for table `dokter` */
 
@@ -127,9 +115,9 @@ CREATE TABLE `jadwal` (
 /*Data for the table `jadwal` */
 
 insert  into `jadwal`(`idjadwal`,`hari`,`waktu_mulai`,`waktu_selesai`,`iddokter`,`is_active`,`created_at`,`updated_at`,`deleted_at`) values 
-('JD0001','Senin','08:00:00','10:00:00','DK0001',1,'2025-07-15 15:53:53','2025-07-23 22:00:44',NULL),
-('JD0002','Senin','11:00:00','13:00:00','DK0001',1,'2025-07-15 16:27:55','2025-07-18 20:07:21',NULL),
-('JD0003','Selasa','08:00:00','10:00:00','DK0001',1,'2025-07-16 14:51:31','2025-07-16 14:51:31',NULL),
+('JD0001','Rabu','14:00:00','15:00:00','DK0001',1,'2025-07-15 15:53:53','2025-07-23 22:00:44',NULL),
+('JD0002','Rabu','15:00:00','16:00:00','DK0001',1,'2025-07-15 16:27:55','2025-07-18 20:07:21',NULL),
+('JD0003','Rabu','01:00:00','03:00:00','DK0001',1,'2025-07-16 14:51:31','2025-07-16 14:51:31',NULL),
 ('JD0004','Sabtu','18:00:00','23:50:00','DK0001',1,'2025-07-23 20:50:04','2025-07-23 22:01:13',NULL),
 ('JD0005','Rabu','09:00:00','12:00:00','DK0002',1,'2025-07-27 08:00:00','2025-07-27 08:00:00',NULL);
 
@@ -198,9 +186,9 @@ CREATE TABLE `obat` (
 /*Data for the table `obat` */
 
 insert  into `obat`(`idobat`,`nama`,`stok`,`jenis`,`harga`,`keterangan`,`created_at`,`updated_at`,`deleted_at`) values 
-('OB0001','Cetak Gigi',102,'bahan',50000,'Bahan Gigi Depan','2025-07-26 21:47:56','2025-07-27 00:59:02',NULL),
-('OB0002','Paracetamol',50,'minum',5000,'Obat pereda nyeri','2025-07-27 08:00:00','2025-07-27 08:00:00',NULL),
-('OB0003','Amoxicillin',30,'minum',15000,'Antibiotik untuk infeksi','2025-07-27 08:00:00','2025-07-27 08:00:00',NULL);
+('OB0001','Cetak Gigi',103,'bahan',50000,'Bahan Gigi Depan','2025-07-26 21:47:56','2025-07-30 00:07:08',NULL),
+('OB0002','Paracetamol',52,'minum',5000,'Obat pereda nyeri','2025-07-27 08:00:00','2025-07-30 00:07:08',NULL),
+('OB0003','Amoxicillin',30,'minum',15000,'Antibiotik untuk infeksi','2025-07-27 08:00:00','2025-07-30 01:25:57',NULL);
 
 /*Table structure for table `obatmasuk` */
 
@@ -271,8 +259,10 @@ CREATE TABLE `pasien` (
 
 insert  into `pasien`(`id_pasien`,`nama`,`alamat`,`tgllahir`,`nohp`,`jenkel`,`foto`,`iduser`,`created_at`,`updated_at`,`deleted_at`) values 
 ('PS0001','Ahmad Rizki','Jl. Sudirman No. 123','1990-01-15','08111234567','L',NULL,20,'2025-07-27 08:00:00','2025-07-27 08:00:00',NULL),
-('PS0002','Siti Aminah','Jl. Merdeka No. 456','1995-03-20','08221234567','P',NULL,21,'2025-07-27 08:00:00','2025-07-27 08:00:00',NULL),
-('PS0003','Jokowi','Jawa','2025-07-27','081234567','L','foto-20250727-PS0003.png',22,'2025-07-27 01:55:57','2025-07-27 01:56:16',NULL);
+('PS0002','Siti Aminah','Jl. Merdeka No. 456','1995-03-20','08221234567','L',NULL,22,'2025-07-27 08:00:00','2025-07-30 00:47:41',NULL),
+('PS0003','Jokowi','Jawa','2025-07-27','081234567','L','foto-20250727-PS0003.png',NULL,'2025-07-27 01:55:57','2025-07-30 00:47:49',NULL),
+('PS0004','Penggaris Joyko','sadad','2025-07-29','123213','L','foto-20250729-PS0004.png',NULL,'2025-07-29 23:52:49','2025-07-30 00:47:58',NULL),
+('PS0005','tes','padang','2025-07-30','0812155','L',NULL,24,'2025-07-30 00:50:16','2025-07-30 00:50:16',NULL);
 
 /*Table structure for table `perawatan` */
 
@@ -295,9 +285,6 @@ CREATE TABLE `perawatan` (
 
 /*Data for the table `perawatan` */
 
-insert  into `perawatan`(`idperawatan`,`idbooking`,`tanggal`,`resep`,`total`,`created_at`,`updated_at`,`deleted_at`) values 
-('PR0001','BK0001','2025-07-28','Paracetamol 3x1 sehari, Amoxicillin 3x1 sehari',270000,'2025-07-28 08:30:00','2025-07-28 08:30:00',NULL);
-
 /*Table structure for table `temp` */
 
 DROP TABLE IF EXISTS `temp`;
@@ -310,7 +297,7 @@ CREATE TABLE `temp` (
   PRIMARY KEY (`id`),
   KEY `fk_temp_obat` (`idobat`),
   CONSTRAINT `fk_temp_obat` FOREIGN KEY (`idobat`) REFERENCES `obat` (`idobat`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `temp` */
 
@@ -353,47 +340,17 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`),
   KEY `idx_users_role` (`role`),
   KEY `idx_users_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`username`,`email`,`password`,`role`,`status`,`last_login`,`remember_token`,`created_at`,`updated_at`,`deleted_at`) values 
-(1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-27 01:55:15',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
-(9,'drbalqis','dokterbalqis@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','dokter','active','2025-07-27 01:20:00',NULL,'2025-06-28 10:30:11','2025-06-28 10:30:11',NULL),
+(1,'balqis','admin@example.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','admin','active','2025-07-31 09:37:35',NULL,'2025-06-14 21:50:56','2025-06-14 21:50:56',NULL),
+(9,'drbalqis','dokterbalqis@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','dokter','active','2025-07-28 21:52:58',NULL,'2025-06-28 10:30:11','2025-06-28 10:30:11',NULL),
 (19,'pimpinan','pimpinan@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','pimpinan','active','2025-07-27 01:24:55',NULL,'2025-07-24 17:33:56','2025-07-24 17:33:56',NULL),
 (20,'pasien01','pasien01@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','pasien','active',NULL,NULL,'2025-07-27 08:00:00','2025-07-27 08:00:00',NULL),
-(21,'pasien02','pasien02@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','pasien','active',NULL,NULL,'2025-07-27 08:00:00','2025-07-27 08:00:00',NULL),
-(22,'jokowi','jokowi@gmail.com','$2y$10$NSOyg6AQeyFOVfVHQ4fcTu4cEcTZMcCEedRoc22.5NvXiQ93O4jc.','pasien','active',NULL,NULL,'2025-07-27 01:56:16','2025-07-27 01:56:16',NULL);
-
-/* Trigger structure for table `detail_perawatan` */
-
-DELIMITER $$
-
-/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `tr_update_stok_obat` */$$
-
-/*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `tr_update_stok_obat` AFTER INSERT ON `detail_perawatan` FOR EACH ROW BEGIN
-    UPDATE obat 
-    SET stok = stok - NEW.qty 
-    WHERE idobat = NEW.idobat;
-END */$$
-
-
-DELIMITER ;
-
-/* Trigger structure for table `obatmasuk` */
-
-DELIMITER $$
-
-/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `tr_tambah_stok_obat` */$$
-
-/*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `tr_tambah_stok_obat` AFTER INSERT ON `obatmasuk` FOR EACH ROW BEGIN
-    UPDATE obat 
-    SET stok = stok + NEW.qty 
-    WHERE idobat = NEW.idobat;
-END */$$
-
-
-DELIMITER ;
+(22,'jokowi','jokowi@gmail.com','$2y$10$NSOyg6AQeyFOVfVHQ4fcTu4cEcTZMcCEedRoc22.5NvXiQ93O4jc.','pasien','active','2025-07-27 06:42:25',NULL,'2025-07-27 01:56:16','2025-07-27 01:56:16',NULL),
+(24,'pasien02','pasien02@gmail.com','$2y$10$hI1mC1S1wh2sz1NqPDgDl.I.ZM9sjbmqm4aiFI6lzzB7XgOvZgnhe','pasien','active','2025-07-30 00:49:06',NULL,'2025-07-27 08:00:00','2025-07-27 08:00:00',NULL);
 
 /*Table structure for table `v_jadwal_dokter` */
 
