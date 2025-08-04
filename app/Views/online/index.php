@@ -51,6 +51,56 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f7f7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #0d9488, #14b8a6);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #115e59, #0d9488);
+        }
+
+        /* Floating elements animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Pulse animation for badges */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(14, 165, 233, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(14, 165, 233, 0.8), 0 0 30px rgba(14, 165, 233, 0.6); }
+        }
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        /* Card hover effects */
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #0d9488, #14b8a6, #2dd4bf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
     </style>
 </head>
 <body x-data class="text-gray-800">
@@ -67,7 +117,7 @@
                 <a href="#beranda" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Beranda</a>
                 <a href="#layanan" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Layanan</a>
                 <a href="#dokter" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Dokter</a>
-                <a href="#galeri" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Galeri</a>
+                <a href="#statistik" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">Pencapaian</a>
                 <a href="#faq" class="text-teal-900 hover:text-teal-600 font-semibold transition duration-300">FAQ</a>
             </nav>
 
@@ -128,7 +178,7 @@
                 </div>
                 <div class="md:w-1/2">
                     <div class="relative glass-card rounded-3xl p-4">
-                        <img src="<?= base_url() ?>/assets/img/dashboard.png" alt="Dashboard Klinik Gigi Promedico" class="rounded-2xl shadow-2xl w-full">
+                        <img src="<?= base_url() ?>/assets/img/dental.jpg" alt="Dashboard Klinik Gigi Promedico" class="rounded-2xl shadow-2xl w-full">
                     </div>
                 </div>
             </div>
@@ -211,7 +261,7 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-5 text-left">
                             <h3 class="text-xl font-bold text-white"><?= htmlspecialchars($dr['nama']) ?></h3>
-                            <p class="text-teal-300 text-sm"><?= htmlspecialchars($dr['spesialis'] ?? 'Dokter Gigi Umum') ?></p>
+                            <p class="text-teal-300 text-sm"><?= htmlspecialchars($dr['spesialis'] ?? 'Dokter Gigi') ?></p>
                         </div>
                     </div>
                 </div>
@@ -272,40 +322,188 @@
         </div>
     </section>
 
-    <!-- Galeri Senyuman Section -->
-    <section id="galeri" class="py-24 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl font-extrabold text-teal-800 mb-4">Galeri Senyuman Promedico</h2>
-                <p class="text-gray-600 max-w-3xl mx-auto">Lihat transformasi nyata dan kebahagiaan yang telah kami ciptakan.</p>
+    <!-- Statistik & Pencapaian Section -->
+    <section id="statistik" class="py-24 bg-white relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-0 left-0 w-96 h-96 bg-teal-500 rounded-full -translate-x-48 -translate-y-48"></div>
+            <div class="absolute bottom-0 right-0 w-96 h-96 bg-teal-300 rounded-full translate-x-48 translate-y-48"></div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal">
-                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 1">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
-                        <h3 class="text-white text-lg font-bold">"Hasilnya alami sekali!"</h3>
-                        <p class="text-teal-200 text-sm">- Anisa R.</p>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-20 reveal">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-teal-100 rounded-full mb-6">
+                    <i class="fas fa-trophy text-teal-600 text-2xl"></i>
                     </div>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-teal-800 mb-6">Pencapaian yang Membanggakan</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg">Kepercayaan ribuan pasien menjadi motivasi kami untuk terus memberikan pelayanan terbaik dalam dunia kedokteran gigi.</p>
                 </div>
-                <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal md:col-span-2">
-                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 2">
-                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
-                        <h3 class="text-white text-lg font-bold">"Proses cepat dan tidak sakit."</h3>
-                        <p class="text-teal-200 text-sm">- David L.</p>
+            
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                <!-- Stat 1 -->
+                <div class="text-center group reveal transform transition-all duration-500 hover:-translate-y-2">
+                    <div class="relative mb-6">
+                        <div class="w-24 h-24 mx-auto bg-gradient-to-br from-teal-500 to-teal-700 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-300">
+                            <i class="fas fa-users text-white text-3xl"></i>
                     </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                            <i class="fas fa-star text-yellow-800 text-sm"></i>
                 </div>
-                 <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal md:col-span-2">
-                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 3">
-                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
-                        <h3 class="text-white text-lg font-bold">"Anak saya jadi tidak takut ke dokter gigi lagi."</h3>
-                        <p class="text-teal-200 text-sm">- Ibu Farah</p>
                     </div>
+                    <div class="text-4xl font-extrabold text-teal-800 mb-2 counter" data-count="5000">0</div>
+                    <h3 class="text-xl font-bold text-teal-900 mb-2">Pasien Terlayani</h3>
+                    <p class="text-gray-600">Lebih dari 5000 pasien telah mempercayakan kesehatan gigi mereka kepada kami</p>
                 </div>
-                <div class="group relative overflow-hidden rounded-2xl shadow-lg reveal">
-                    <img src="<?= base_url() ?>/assets/img/dashboard.png" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Hasil perawatan gigi 4">
-                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
-                        <h3 class="text-white text-lg font-bold">"Gigi lebih putih dan bersih."</h3>
-                        <p class="text-teal-200 text-sm">- Rian S.</p>
+                
+                <!-- Stat 2 -->
+                <div class="text-center group reveal transform transition-all duration-500 hover:-translate-y-2" style="transition-delay: 100ms;">
+                    <div class="relative mb-6">
+                        <div class="w-24 h-24 mx-auto bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-300">
+                            <i class="fas fa-calendar-check text-white text-3xl"></i>
+                    </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-green-400 rounded-full flex items-center justify-center shadow-lg">
+                            <i class="fas fa-check text-green-800 text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-4xl font-extrabold text-teal-800 mb-2 counter" data-count="15000">0</div>
+                    <h3 class="text-xl font-bold text-teal-900 mb-2">Perawatan Berhasil</h3>
+                    <p class="text-gray-600">Puluhan ribu tindakan perawatan gigi telah berhasil kami lakukan dengan sempurna</p>
+                </div>
+                
+                <!-- Stat 3 -->
+                <div class="text-center group reveal transform transition-all duration-500 hover:-translate-y-2" style="transition-delay: 200ms;">
+                    <div class="relative mb-6">
+                        <div class="w-24 h-24 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-300">
+                            <i class="fas fa-award text-white text-3xl"></i>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center shadow-lg">
+                            <i class="fas fa-medal text-blue-800 text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-4xl font-extrabold text-teal-800 mb-2"><span class="counter" data-count="8">0</span>+</div>
+                    <h3 class="text-xl font-bold text-teal-900 mb-2">Tahun Pengalaman</h3>
+                    <p class="text-gray-600">Pengalaman bertahun-tahun dalam memberikan solusi kesehatan gigi terdepan</p>
+                </div>
+                
+                <!-- Stat 4 -->
+                <div class="text-center group reveal transform transition-all duration-500 hover:-translate-y-2" style="transition-delay: 300ms;">
+                    <div class="relative mb-6">
+                        <div class="w-24 h-24 mx-auto bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl transition-all duration-300">
+                            <i class="fas fa-smile text-white text-3xl"></i>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-pink-400 rounded-full flex items-center justify-center shadow-lg">
+                            <i class="fas fa-heart text-pink-800 text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="text-4xl font-extrabold text-teal-800 mb-2"><span class="counter" data-count="98">0</span>%</div>
+                    <h3 class="text-xl font-bold text-teal-900 mb-2">Tingkat Kepuasan</h3>
+                    <p class="text-gray-600">Hampir seluruh pasien kami merasa puas dengan pelayanan yang diberikan</p>
+                </div>
+            </div>
+            
+            <!-- Testimonial Carousel -->
+            <div class="relative reveal">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-teal-800 mb-4">Senyum sehat, hidup lebih indah. Jadikan setiap senyuman pasien sebagai motivasi untuk terus memberikan perawatan terbaik!</h3>
+                    <div class="w-24 h-1 bg-gradient-to-r from-teal-500 to-teal-700 mx-auto rounded-full"></div>
+                </div>
+                
+                <div class="max-w-4xl mx-auto" x-data="testimonialCarousel()">
+                    <div class="relative overflow-hidden rounded-3xl">
+                        <!-- Slide 1 -->
+                        <div class="bg-gradient-to-br from-teal-50 to-white p-8 md:p-12 shadow-xl border border-teal-100" x-show="activeSlide === 0" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-full" x-transition:enter-end="opacity-100 transform translate-x-0">
+                            <div class="flex flex-col md:flex-row items-center gap-8">
+                                <div class="flex-shrink-0">
+                                    <div class="w-24 h-24 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-xl">
+                                        AR
+                                    </div>
+                                </div>
+                                <div class="text-center md:text-left">
+                                    <div class="flex justify-center md:justify-start mb-4">
+                                        <div class="flex space-x-1">
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <blockquote class="text-xl md:text-2xl text-gray-700 font-medium italic mb-4 leading-relaxed">
+                                        "Pelayanan yang luar biasa! Tim medis sangat profesional dan ramah. Hasil perawatan gigi saya sangat memuaskan. Sangat merekomendasikan Promedico!"
+                                    </blockquote>
+                                    <div>
+                                        <cite class="text-teal-800 font-bold text-lg">Anisa Rahma</cite>
+                                        <p class="text-teal-600 text-sm">Pasien Veneer Gigi</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Slide 2 -->
+                        <div class="bg-gradient-to-br from-emerald-50 to-white p-8 md:p-12 shadow-xl border border-emerald-100" x-show="activeSlide === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-full" x-transition:enter-end="opacity-100 transform translate-x-0">
+                            <div class="flex flex-col md:flex-row items-center gap-8">
+                                <div class="flex-shrink-0">
+                                    <div class="w-24 h-24 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-xl">
+                                        DL
+                                    </div>
+                                </div>
+                                <div class="text-center md:text-left">
+                                    <div class="flex justify-center md:justify-start mb-4">
+                                        <div class="flex space-x-1">
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <blockquote class="text-xl md:text-2xl text-gray-700 font-medium italic mb-4 leading-relaxed">
+                                        "Teknologi yang digunakan sangat canggih dan modern. Proses perawatan cepat dan nyaris tanpa rasa sakit. Sangat puas dengan hasilnya!"
+                                    </blockquote>
+                                    <div>
+                                        <cite class="text-teal-800 font-bold text-lg">David Lesmana</cite>
+                                        <p class="text-teal-600 text-sm">Pasien Implan Gigi</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Slide 3 -->
+                        <div class="bg-gradient-to-br from-blue-50 to-white p-8 md:p-12 shadow-xl border border-blue-100" x-show="activeSlide === 2" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-full" x-transition:enter-end="opacity-100 transform translate-x-0">
+                            <div class="flex flex-col md:flex-row items-center gap-8">
+                                <div class="flex-shrink-0">
+                                    <div class="w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-xl">
+                                        IF
+                                    </div>
+                                </div>
+                                <div class="text-center md:text-left">
+                                    <div class="flex justify-center md:justify-start mb-4">
+                                        <div class="flex space-x-1">
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                            <i class="fas fa-star text-yellow-400 text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <blockquote class="text-xl md:text-2xl text-gray-700 font-medium italic mb-4 leading-relaxed">
+                                        "Anak saya yang dulu takut ke dokter gigi, sekarang malah senang datang ke Promedico. Staf sangat sabar dan ramah dengan anak-anak."
+                                    </blockquote>
+                                    <div>
+                                        <cite class="text-teal-800 font-bold text-lg">Ibu Farah</cite>
+                                        <p class="text-teal-600 text-sm">Orang Tua Pasien Anak</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Dots -->
+                    <div class="flex justify-center mt-8 space-x-3">
+                        <template x-for="slide in slides" :key="slide">
+                            <button @click="goToSlide(slide - 1)" class="w-4 h-4 rounded-full transition-all duration-300" :class="activeSlide === slide - 1 ? 'bg-teal-600 scale-125' : 'bg-teal-200 hover:bg-teal-400'"></button>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -380,6 +578,7 @@
                         <li><a href="#layanan" class="text-teal-200 hover:text-white">Layanan</a></li>
                         <li><a href="#dokter" class="text-teal-200 hover:text-white">Dokter</a></li>
                         <li><a href="#jadwal" class="text-teal-200 hover:text-white">Jadwal</a></li>
+                        <li><a href="#statistik" class="text-teal-200 hover:text-white">Pencapaian</a></li>
                         <li><a href="#faq" class="text-teal-200 hover:text-white">FAQ</a></li>
                     </ul>
                 </div>
@@ -423,6 +622,15 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
+                        
+                        // Trigger counter animation for statistics
+                        if (entry.target.querySelector('.counter')) {
+                            const counters = entry.target.querySelectorAll('.counter');
+                            counters.forEach(counter => {
+                                animateCounter(counter);
+                            });
+                        }
+                        
                         // Optional: unobserve after revealing to save resources
                         // observer.unobserve(entry.target); 
                     }
@@ -431,6 +639,77 @@
 
             reveals.forEach(reveal => {
                 observer.observe(reveal);
+            });
+        });
+
+        // Counter Animation Function
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-count'));
+            const duration = 2000; // 2 seconds
+            const increment = target / (duration / 16); // 60fps
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString();
+            }, 16);
+        }
+
+        // Auto-rotate testimonial carousel
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('testimonialCarousel', () => ({
+                activeSlide: 0,
+                slides: 3,
+                autoRotate: true,
+                
+                init() {
+                    if (this.autoRotate) {
+                        setInterval(() => {
+                            this.nextSlide();
+                        }, 5000); // Change slide every 5 seconds
+                    }
+                },
+                
+                nextSlide() {
+                    this.activeSlide = (this.activeSlide + 1) % this.slides;
+                },
+                
+                goToSlide(index) {
+                    this.activeSlide = index;
+                }
+            }));
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Enhanced hover effects for stats cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const statCards = document.querySelectorAll('.group');
+            
+            statCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
             });
         });
     </script>
