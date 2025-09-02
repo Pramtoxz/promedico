@@ -50,7 +50,7 @@ class JadwalController extends BaseController
     {
 
         $db = db_connect();
-        $query = $db->query("SELECT CONCAT('JW', LPAD(IFNULL(MAX(SUBSTRING(idjadwal, 3)) + 1, 1), 4, '0')) AS next_number FROM jadwal");
+        $query = $db->query("SELECT CONCAT('JD', LPAD(IFNULL(MAX(SUBSTRING(idjadwal, 3)) + 1, 1), 4, '0')) AS next_number FROM jadwal");
         $row = $query->getRow();
         $next_number = $row->next_number;
         $dokterModel = new Dokter();
@@ -66,6 +66,7 @@ class JadwalController extends BaseController
     public function save()
     {
         if ($this->request->isAJAX()) {
+            $idjadwal = $this->request->getPost('idjadwal');
             $iddokter = $this->request->getPost('iddokter');
             $hari = $this->request->getPost('hari');
             $waktu_mulai = $this->request->getPost('waktu_mulai');
@@ -115,6 +116,7 @@ class JadwalController extends BaseController
             } else {
                 $modelJadwal = new ModelsJadwal();
                 $modelJadwal->insert([
+                    'idjadwal' => $idjadwal,
                     'iddokter' => $iddokter,
                     'hari' => $hari,
                     'waktu_mulai' => $waktu_mulai,
@@ -168,6 +170,7 @@ class JadwalController extends BaseController
     public function updatedata($idjadwal)
     {
         if ($this->request->isAJAX()) {
+            $idjadwal = $this->request->getPost('idjadwal');
             $iddokter = $this->request->getPost('iddokter');
             $hari = $this->request->getPost('hari');
             $waktu_mulai = $this->request->getPost('waktu_mulai');
@@ -216,23 +219,22 @@ class JadwalController extends BaseController
                 ];
             } else {
                 $model = new ModelsJadwal();
-                $dataUpdate = [
+                $model->update($idjadwal, [  
                     'iddokter' => $iddokter,
                     'hari' => $hari,
                     'waktu_mulai' => $waktu_mulai,
                     'waktu_selesai' => $waktu_selesai,
-                    'is_active' => $is_active
-                ];
-                
-                $model->update($idjadwal, $dataUpdate);
-                
+                    'is_active' => $is_active,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+    
                 $json = [
-                    'sukses' => 'Jadwal berhasil diupdate'
+                    'sukses' => 'Data Jadwal Berhasil Di Update'
                 ];
             }
             return $this->response->setJSON($json);
+            }
         }
-    }
     
     public function detail($idjadwal)
     {

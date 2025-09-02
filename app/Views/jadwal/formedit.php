@@ -15,6 +15,13 @@
                     <div class="row justify-content-center">
                         <div class="col-md-8">
                             <div class="form-group row mb-4">
+                                <label for="idjadwal" class="col-sm-3 col-form-label">ID Jadwal</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="idjadwal" name="idjadwal" value="<?= $jadwal['idjadwal'] ?>" readonly>
+                                    <div class="invalid-feedback error_idjadwal"></div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-4">
                                 <label for="iddokter" class="col-sm-3 col-form-label">Dokter</label>
                                 <div class="col-sm-9">
                                     <select id="iddokter" name="iddokter" class="form-control select2" style="width: 100%;">
