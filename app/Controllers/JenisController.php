@@ -41,7 +41,7 @@ class JenisController extends BaseController
     public function formtambah()
     {
         $db = db_connect();
-        $query = $db->query("SELECT CONCAT('JN', LPAD(IFNULL(MAX(SUBSTRING(idjenis, 3)) + 1, 1), 4, '0')) AS next_number FROM jenis_perawatan");
+        $query = $db->query("SELECT CONCAT('JP', LPAD(IFNULL(MAX(SUBSTRING(idjenis, 3)) + 1, 1), 4, '0')) AS next_number FROM jenis_perawatan");
         $row = $query->getRow();
         $next_number = $row->next_number;
         
