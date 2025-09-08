@@ -227,21 +227,117 @@
                     <!-- Payment Information -->
                     <div class="mb-8 pb-6 border-b border-gray-200">
                         <h3 class="text-xl font-semibold text-teal-800 mb-4">Informasi Pembayaran</h3>
-                        <div class="bg-teal-50 p-4 rounded-lg">
-                            <div class="flex justify-between items-center">
+                        
+                        <!-- Payment Summary -->
+                        <div class="bg-gradient-to-r from-teal-50 to-emerald-50 p-6 rounded-xl border border-teal-200 mb-6">
+                            <div class="flex justify-between items-center mb-4">
                                 <div>
-                                    <p class="text-gray-700">Jenis Perawatan</p>
-                                    <p class="font-medium"><?= $booking['namajenis'] ?></p>
+                                    <p class="text-gray-700 text-sm">Jenis Perawatan</p>
+                                    <p class="font-semibold text-lg text-teal-800"><?= $booking['namajenis'] ?></p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-gray-700">Biaya Konsultasi</p>
-                                    <p class="font-bold text-xl text-teal-800">Rp <?= number_format(50000, 0, ',', '.') ?></p>
+                                    <p class="text-gray-700 text-sm">Biaya Konsultasi</p>
+                                    <p class="font-bold text-2xl text-teal-800">Rp <?= number_format(50000, 0, ',', '.') ?></p>
                                 </div>
                             </div>
-                            <div class="mt-4 pt-4 border-t border-teal-200">
+                            <div class="pt-4 border-t border-teal-200">
                                 <div class="flex justify-between items-center">
-                                    <p class="font-semibold">Total Pembayaran</p>
-                                    <p class="font-bold text-xl text-teal-800">Rp <?= number_format(50000, 0, ',', '.') ?></p>
+                                    <p class="font-bold text-lg text-gray-800">Total Pembayaran</p>
+                                    <p class="font-bold text-3xl text-teal-800">Rp <?= number_format(50000, 0, ',', '.') ?></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bank Transfer Information -->
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border-2 border-blue-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-university text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-blue-800">Transfer Bank</h4>
+                                    <p class="text-blue-600 text-sm">Gunakan informasi rekening di bawah ini</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <!-- BCA Information -->
+                                <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
+                                    <div class="flex items-center mb-4">
+                                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                                            <span class="text-white font-bold text-sm">BCA</span>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-bold text-gray-800">Bank Central Asia</h5>
+                                            <p class="text-gray-600 text-sm">Rekening Utama</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
+                                            <span class="text-gray-600 font-medium">Nomor Rekening</span>
+                                            <span class="font-mono font-bold text-lg text-gray-800">1234567890</span>
+                                        </div>
+                                        
+                                        <div class="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
+                                            <span class="text-gray-600 font-medium">Atas Nama</span>
+                                            <span class="font-bold text-gray-800">PROMEDICO</span>
+                                        </div>
+                                        
+                                        <div class="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
+                                            <span class="text-gray-600 font-medium">Cabang</span>
+                                            <span class="font-medium text-gray-800">Pariaman</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                        <div class="flex items-start">
+                                            <i class="fas fa-exclamation-triangle text-yellow-600 mr-2 mt-0.5"></i>
+                                            <p class="text-yellow-800 text-sm font-medium">
+                                                <strong>PENTING:</strong> Transfer sesuai nominal yang tertera. Jika berbeda, booking akan dibatalkan otomatis.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Payment Instructions -->
+                                <div class="bg-white p-5 rounded-lg border border-blue-200 shadow-sm">
+                                    <h5 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <i class="fas fa-list-ol text-blue-600 mr-2"></i>
+                                        Cara Pembayaran
+                                    </h5>
+                                    
+                                    <div class="space-y-3">
+                                        <div class="flex items-start">
+                                            <div class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">1</div>
+                                            <p class="text-gray-700 text-sm">Transfer ke rekening BCA di atas</p>
+                                        </div>
+                                        
+                                        <div class="flex items-start">
+                                            <div class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">2</div>
+                                            <p class="text-gray-700 text-sm">Sesuaikan nominal dengan total pembayaran</p>
+                                        </div>
+                                        
+                                        <div class="flex items-start">
+                                            <div class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">3</div>
+                                            <p class="text-gray-700 text-sm">Upload bukti transfer di bawah ini</p>
+                                        </div>
+                                        
+                                        <div class="flex items-start">
+                                            <div class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-0.5">4</div>
+                                            <p class="text-gray-700 text-sm">Tunggu konfirmasi dari admin (max 15 menit)</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                        <div class="flex items-start">
+                                            <i class="fas fa-clock text-red-600 mr-2 mt-0.5"></i>
+                                            <div>
+                                                <p class="text-red-800 text-sm font-bold">Batas Waktu Transfer</p>
+                                                <p class="text-red-700 text-xs">Selesaikan pembayaran dalam 15 menit atau booking akan dibatalkan otomatis</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -249,7 +345,19 @@
                     
                     <!-- Upload Section -->
                     <div class="upload-section">
-                        <h3 class="text-xl font-semibold text-teal-800 mb-4">Upload Bukti Pembayaran</h3>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-semibold text-teal-800">Upload Bukti Pembayaran</h3>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="copyAccountNumber()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                    <i class="fas fa-copy mr-2"></i>
+                                    Copy No. Rekening
+                                </button>
+                                <button onclick="copyAmount()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                    <i class="fas fa-copy mr-2"></i>
+                                    Copy Nominal
+                                </button>
+                            </div>
+                        </div>
                         
                         <?php if ($booking['status'] == 'waktuhabis'): ?>
                         <!-- Status Waktu Habis -->
@@ -288,38 +396,43 @@
                             <input type="hidden" name="idbooking" value="<?= $booking['idbooking'] ?>">
                             
                             <div class="mb-6">
-                                <div class="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-8 text-center" id="upload-area">
+                                <div class="bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-teal-400 hover:bg-gradient-to-br hover:from-teal-50 hover:to-emerald-50 transition-all duration-300" id="upload-area">
                                     <div id="upload-prompt">
-                                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
-                                        <h4 class="font-medium text-gray-700 mb-2 required-field">Unggah Bukti Pembayaran</h4>
-                                        <p class="text-sm text-gray-500 mb-4">File gambar (JPG, PNG) atau PDF. Maks 2MB</p>
-                                        <label for="bukti_bayar" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-md cursor-pointer transition-all hover:shadow-lg hover:shadow-teal-500/30 inline-block">
+                                        <div class="w-20 h-20 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                            <i class="fas fa-cloud-upload-alt text-white text-2xl"></i>
+                                        </div>
+                                        <h4 class="font-bold text-gray-800 mb-2 text-lg required-field">Unggah Bukti Pembayaran</h4>
+                                        <p class="text-gray-600 mb-6">Drag & drop file atau klik tombol di bawah</p>
+                                        <p class="text-sm text-gray-500 mb-4">Format: JPG, PNG, PDF | Maksimal: 2MB</p>
+                                        <label for="bukti_bayar" class="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white px-8 py-3 rounded-lg cursor-pointer transition-all hover:shadow-xl hover:shadow-teal-500/30 inline-flex items-center font-semibold">
                                             <i class="fas fa-file-upload mr-2"></i>Pilih File
                                         </label>
                                         <input type="file" name="bukti_bayar" id="bukti_bayar" class="hidden" accept="image/jpeg,image/jpg,image/png,application/pdf" required>
-                                        <p class="text-red-500 text-sm mt-2">* Bukti pembayaran wajib diupload</p>
+                                        <p class="text-red-500 text-sm mt-3 font-medium">* Bukti pembayaran wajib diupload</p>
                                     </div>
                                     
                                     <div id="preview-container" class="hidden">
-                                        <div class="mb-4">
-                                            <img id="image-preview" class="mx-auto preview-image hidden border border-gray-200 rounded-lg shadow-sm">
+                                        <div class="mb-6">
+                                            <img id="image-preview" class="mx-auto preview-image hidden border-2 border-gray-200 rounded-xl shadow-lg">
                                             <div id="pdf-preview" class="hidden">
-                                                <i class="far fa-file-pdf text-red-500 text-5xl"></i>
-                                                <p class="mt-2 font-medium" id="pdf-filename">filename.pdf</p>
+                                                <div class="w-24 h-24 bg-red-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                                                    <i class="far fa-file-pdf text-red-500 text-4xl"></i>
+                                                </div>
+                                                <p class="mt-2 font-semibold text-gray-800" id="pdf-filename">filename.pdf</p>
                                             </div>
                                         </div>
                                         <div class="text-center">
-                                            <button type="button" id="change-file" class="text-teal-600 hover:text-teal-800 underline text-sm">
-                                                Ganti File
+                                            <button type="button" id="change-file" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                <i class="fas fa-edit mr-2"></i>Ganti File
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="error_bukti_bayar" class="text-red-500 text-sm mt-2 bg-red-50 p-2 rounded-md hidden"></div>
+                                <div id="error_bukti_bayar" class="text-red-500 text-sm mt-3 bg-red-50 p-3 rounded-lg border border-red-200 hidden"></div>
                             </div>
                             
                             <div class="text-center">
-                                <button type="submit" id="submit-button" class="gradient-bg text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-all">
+                                <button type="submit" id="submit-button" class="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-1">
                                     <i class="fas fa-paper-plane mr-2"></i> Kirim Bukti Pembayaran
                                 </button>
                             </div>
@@ -714,6 +827,99 @@
                 });
             });
         }
+
+        // Fungsi untuk copy nomor rekening
+        function copyAccountNumber() {
+            const accountNumber = '1234567890';
+            navigator.clipboard.writeText(accountNumber).then(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Nomor rekening BCA berhasil disalin ke clipboard',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }).catch(function(err) {
+                console.error('Error copying account number: ', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Gagal menyalin nomor rekening'
+                });
+            });
+        }
+
+        // Fungsi untuk copy nominal pembayaran
+        function copyAmount() {
+            const amount = '50000';
+            navigator.clipboard.writeText(amount).then(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Nominal pembayaran berhasil disalin ke clipboard',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }).catch(function(err) {
+                console.error('Error copying amount: ', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Gagal menyalin nominal pembayaran'
+                });
+            });
+        }
+
+        // Drag and drop functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('upload-area');
+            const fileInput = document.getElementById('bukti_bayar');
+            
+            if (uploadArea && fileInput) {
+                // Prevent default drag behaviors
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, preventDefaults, false);
+                    document.body.addEventListener(eventName, preventDefaults, false);
+                });
+
+                // Highlight drop area when item is dragged over it
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, highlight, false);
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, unhighlight, false);
+                });
+
+                // Handle dropped files
+                uploadArea.addEventListener('drop', handleDrop, false);
+
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                function highlight(e) {
+                    uploadArea.classList.add('border-teal-400', 'bg-gradient-to-br', 'from-teal-50', 'to-emerald-50');
+                }
+
+                function unhighlight(e) {
+                    uploadArea.classList.remove('border-teal-400', 'bg-gradient-to-br', 'from-teal-50', 'to-emerald-50');
+                }
+
+                function handleDrop(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    
+                    if (files.length > 0) {
+                        fileInput.files = files;
+                        // Trigger change event
+                        const event = new Event('change', { bubbles: true });
+                        fileInput.dispatchEvent(event);
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html> 
